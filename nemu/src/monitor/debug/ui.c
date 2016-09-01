@@ -85,7 +85,7 @@ static int cmd_si(char *args) {
     if(arg != NULL) {
         uint32_t getNum = (uint32_t) strtol(arg, NULL, 0);
         if (getNum <= 0) {
-            fputs("[n] should a number and greater than 0.\n", stderr);
+            fputs("expected a number greater than 0.\n", stderr);
             return -1;
         }
         n = getNum;
