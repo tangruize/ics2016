@@ -24,11 +24,12 @@ typedef union {
 	/* Do NOT change the order of the GPRs' definitions. */
 
     struct {
-	uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+	    uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
     };
-	//uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 
-	swaddr_t eip;
+    struct {
+    	swaddr_t eip;
+    };
 
 } CPU_state;
 
