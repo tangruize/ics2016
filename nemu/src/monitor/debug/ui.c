@@ -38,6 +38,8 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -46,6 +48,7 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
+    { "si", "Step one instruction exactly.", cmd_si }
 
 	/* TODO: Add more commands */
 
@@ -74,6 +77,16 @@ static int cmd_help(char *args) {
 		printf("Unknown command '%s'\n", arg);
 	}
 	return 0;
+}
+
+static int cmd_si(char *args) {
+   // int n = 1;
+	char *arg = strtok(NULL, " ");
+    if(arg != NULL) {
+        int getNum = (int) strtol(arg, NULL, 0);
+        printf("%d\n", getNum);
+    }
+    return 0;
 }
 
 void ui_mainloop() {
