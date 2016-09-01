@@ -80,12 +80,17 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
-   // int n = 1;
+    uint32_t n = 1;
 	char *arg = strtok(NULL, " ");
     if(arg != NULL) {
-        int getNum = (int) strtol(arg, NULL, 0);
-        printf("%d\n", getNum);
+        uint32_t getNum = (uint32_t) strtol(arg, NULL, 0);
+        if (getNum <= 0) {
+            fputs("[n] should a number and greater than 0.\n", stderr);
+            return -1;
+        }
+        n = getNum;
     }
+    cpu_exec(n);
     return 0;
 }
 
