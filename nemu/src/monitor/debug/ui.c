@@ -166,7 +166,7 @@ static int print_addr(int n, swaddr_t addr) {
         }
         addr += 4;
     }
-    if (i % 4 != 3) {
+    if (i % 4 != 0) {
         fputc('\n', stdout);
     }
     return 0;
