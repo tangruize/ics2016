@@ -154,22 +154,17 @@ static int cmd_info(char *args) {
     return 0;
 }
 
-typedef union {
-    uint32_t address;
-    uint32_t *addr_p;
-} addr;
-
-static int print_addr(int n, addr p) {
+static int print_addr(int n, swaddr_t addr) {
     int i;
     for (i = 0; i < n; ++i) {
         if (i % 4 == 0) {
-           printf("0x%x:\t", (uint32_t)p.address);
+           printf("0x%x:\t", (uint32_t)addr);
         }
-        printf("0x%x\t", (uint32_t)*(p.addr_p));
+        printf("0x%x\t", (uint32_t)swaddr_read(addr, 4));
         if (i % 4 == 3) {
             fputc('\n', stdout);
         }
-        p.addr_p += 4;
+        addr += 4;
     }
     if (i % 4 != 3) {
         fputc('\n', stdout);
@@ -180,27 +175,26 @@ static int print_addr(int n, addr p) {
 static int cmd_x(char *args) {
 	char *arg1 = strtok(NULL, " /");
     char *arg2 = strtok(args + strlen(arg1) + 1, " ");
-    printf("%s\n%s\n", arg1, arg2);
     int n = 1;
-    addr getAddr;
+    uint32_t getAddr;
     if (arg1 == NULL) {
         my_help("x");
         return 1;
     }
     else if (arg2 != NULL)
     {
-        int getNum1 = (int) strtol(arg1, NULL, 0);
-        getAddr.address  = (uint32_t) strtol(arg2, NULL, 0);
-        if (getNum1 <= 0 || (int)getAddr.address <= 0) {
+        int getNum = (int) strtol(arg1, NULL, 0);
+        getAddr = (uint32_t) strtol(arg2, NULL, 0);
+        if (getNum <= 0 || (int)getAddr <= 0) {
             fputs("expected numbers greater than 0.\n", stderr);
             return 1;
         }
-        n = getNum1;
+        n = getNum;
     }
     else
     {
-        getAddr.address  = (uint32_t) strtol(arg1, NULL, 0);
-        if ((int)getAddr.address <= 0) {
+        getAddr  = (uint32_t) strtol(arg1, NULL, 0);
+        if ((int)getAddr <= 0) {
             fputs("expected a valid address.\n", stderr);
             return 1;
         }
