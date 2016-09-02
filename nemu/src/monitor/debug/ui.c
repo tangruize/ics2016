@@ -42,6 +42,8 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+//static int cmd_x(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -51,7 +53,8 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
     { "si", "Step one instruction exactly.", cmd_si },
-    { "info", "Generic command for showing things about the program being debugged.", cmd_info }
+    { "info", "Generic command for showing things about the program being debugged.", cmd_info },
+ //   { "x", "Examine memory: x/FMT ADDRESS.", cmd_x }
 
 	/* TODO: Add more commands */
 
@@ -59,7 +62,7 @@ static struct {
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 
-int my_help(const char *args) {
+static int my_help(const char *args) {
     int i;
     for(i = 0; i < NR_CMD; i ++) {
         if(strcmp(args, cmd_table[i].name) == 0) {
@@ -74,7 +77,6 @@ int my_help(const char *args) {
 static int cmd_help(char *args) {
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
-    printf("debug: %s\n", arg);
 	int i;
 
 	if(arg == NULL) {
@@ -112,7 +114,7 @@ static int cmd_si(char *args) {
 
 char *cpu_name[]={"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"};
 
-int print_cpu(int reg) {
+static int print_cpu(int reg) {
     if (reg < 0 || reg > 8) {
         return 1;
     }
@@ -151,7 +153,32 @@ static int cmd_info(char *args) {
     }
     return 0;
 }
+/*
+static int print_addr(int n, uint32_t addr) {
+}
 
+static int cmd_x(char *args) {
+	char *arg1 = strtok(NULL, " /");
+    char *arg2 = strtok(NULL, " ");
+    int n = 1;
+    if (arg1 == NULL) {
+        my_help("x");
+        return 1;
+    }
+    else if (arg2 != NULL)
+    {
+        int getNum1 = (int) strtol(arg1, NULL, 0);
+        int getNum2 = (int) strtol(arg2, NULL, 0);
+        if (getNum1 <= 0 || getNum2 <= 0) {
+            fputs("expected numbers greater than 0.\n", stderr);
+            return 1;
+        }
+        n = getNum2;
+
+    }
+    return 0;
+}
+*/
 void ui_mainloop() {
 	while(1) {
 		char *str = rl_gets();
