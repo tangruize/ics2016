@@ -179,7 +179,7 @@ static int print_addr(int n, addr p) {
 
 static int cmd_x(char *args) {
 	char *arg1 = strtok(NULL, " /");
-    char *arg2 = strtok(NULL, " ");
+    char *arg2 = strtok(args + strlen(arg1) + 1, " ");
     int n = 1;
     addr getAddr;
     if (arg1 == NULL) {
