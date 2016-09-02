@@ -40,6 +40,8 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -48,7 +50,8 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-    { "si", "Step one instruction exactly.", cmd_si }
+    { "si", "Step one instruction exactly.", cmd_si },
+    { "info", "Generic command for showing things about the program being debugged.", cmd_info }
 
 	/* TODO: Add more commands */
 
@@ -91,6 +94,48 @@ static int cmd_si(char *args) {
         n = getNum;
     }
     cpu_exec(n);
+    return 0;
+}
+
+char *cpu_name[]={"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"};
+
+int print_cpu(int reg) {
+    if (reg < 0 || reg > 8) {
+        return -1;
+    }
+    else if (reg == 8) {
+        printf("%-12s0x%x\t%x", cpu_name[reg], (unsigned)cpu.eip, (unsigned)cpu.eip);
+    }
+    else if (reg == R_ESP || reg == R_EBP) {
+        printf("%-12s0x%x\t%x", cpu_name[reg], (unsigned)cpu.gpr[reg]._32, (unsigned)cpu.gpr[reg]._32);
+    }
+    else {
+        printf("%-12s0x%x\t%d", cpu_name[reg], (unsigned)cpu.gpr[reg]._32, (unsigned)cpu.gpr[reg]._32);
+    }
+    return 0;
+}
+
+static int cmd_info(char *args) {
+	char *arg = strtok(NULL, " ");
+    if (arg != NULL) {
+        if (strcmp("r", arg) == 0 || strcmp("registers", arg) == 0) {
+            int i;
+            for (i = 0; i < 9; ++i) {
+                print_cpu(i);
+            }
+        }
+        else if (strcmp("w", arg) == 0 || strcmp("watchpoints", arg) == 0) {
+            // TODO print watchpoints
+        }
+        else {
+            cmd_help("cmd_info");
+            return -1;
+        }
+    }
+    else {
+        cmd_help("cmd_info");
+        return -1;
+    }
     return 0;
 }
 
