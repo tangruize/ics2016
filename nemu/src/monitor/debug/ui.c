@@ -42,7 +42,7 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
-//static int cmd_x(char *args);
+static int cmd_x(char *args);
 
 static struct {
 	char *name;
@@ -54,7 +54,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
     { "si", "Step one instruction exactly.", cmd_si },
     { "info", "Generic command for showing things about the program being debugged.", cmd_info },
- //   { "x", "Examine memory: x/FMT ADDRESS.", cmd_x }
+    { "x", "Examine memory: x/FMT ADDRESS.", cmd_x }
 
 	/* TODO: Add more commands */
 
@@ -153,14 +153,35 @@ static int cmd_info(char *args) {
     }
     return 0;
 }
-/*
-static int print_addr(int n, uint32_t addr) {
+
+typedef union {
+    uint32_t address;
+    uint32_t *addr_p;
+} addr;
+
+static int print_addr(int n, addr p) {
+    int i;
+    for (i = 0; i < n; ++i) {
+        if (i % 4 == 0) {
+           printf("0x%x:\t", (uint32_t)p.address);
+        }
+        printf("0x%x\t", (uint32_t)*(p.addr_p));
+        if (i % 4 == 3) {
+            fputc('\n', stdout);
+        }
+        p.addr_p += 4;
+    }
+    if (i % 4 != 3) {
+        fputc('\n', stdout);
+    }
+    return 0;
 }
 
 static int cmd_x(char *args) {
 	char *arg1 = strtok(NULL, " /");
     char *arg2 = strtok(NULL, " ");
     int n = 1;
+    addr getAddr;
     if (arg1 == NULL) {
         my_help("x");
         return 1;
@@ -168,17 +189,25 @@ static int cmd_x(char *args) {
     else if (arg2 != NULL)
     {
         int getNum1 = (int) strtol(arg1, NULL, 0);
-        int getNum2 = (int) strtol(arg2, NULL, 0);
-        if (getNum1 <= 0 || getNum2 <= 0) {
+        getAddr.address  = (uint32_t) strtol(arg2, NULL, 0);
+        if (getNum1 <= 0 || (int)getAddr.address <= 0) {
             fputs("expected numbers greater than 0.\n", stderr);
             return 1;
         }
-        n = getNum2;
-
+        n = getNum1;
     }
+    else
+    {
+        getAddr.address  = (uint32_t) strtol(arg1, NULL, 0);
+        if ((int)getAddr.address <= 0) {
+            fputs("expected a valid address.\n", stderr);
+            return 1;
+        }
+    }
+    print_addr(n, getAddr);
     return 0;
 }
-*/
+
 void ui_mainloop() {
 	while(1) {
 		char *str = rl_gets();
