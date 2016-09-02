@@ -58,17 +58,19 @@ static struct {
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
-/*
+
 int my_help(const char *args) {
+    int i;
     for(i = 0; i < NR_CMD; i ++) {
         if(strcmp(args, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
 				return 0;
-			}
 		}
-		printf("Unknown command '%s'\n", arg);
+	}
+	printf("Unknown command '%s'\n", args);
+    return 0;
 }
-*/
+
 static int cmd_help(char *args) {
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
