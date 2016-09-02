@@ -141,12 +141,12 @@ static int cmd_info(char *args) {
             // TODO print watchpoints
         }
         else {
-            cmd_help("help info");
+            my_help("info");
             return 1;
         }
     }
     else {
-        cmd_help("help info");
+        my_help("info");
         return 1;
     }
     return 0;
