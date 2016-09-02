@@ -102,7 +102,7 @@ static int cmd_si(char *args) {
 	char *arg = strtok(NULL, " ");
     if(arg != NULL) {
         uint32_t getNum = (uint32_t) strtol(arg, NULL, 0);
-        if (getNum <= 0) {
+        if ((int)getNum <= 0) {
             fputs("expected a number greater than 0.\n", stderr);
             return 1;
         }
