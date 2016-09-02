@@ -104,13 +104,13 @@ int print_cpu(int reg) {
         return -1;
     }
     else if (reg == 8) {
-        printf("%-12s0x%x\t%x", cpu_name[reg], (unsigned)cpu.eip, (unsigned)cpu.eip);
+        printf("%-12s0x%x\t%x", cpu_name[reg], cpu.eip, cpu.eip);
     }
     else if (reg == R_ESP || reg == R_EBP) {
-        printf("%-12s0x%x\t%x", cpu_name[reg], (unsigned)cpu.gpr[reg]._32, (unsigned)cpu.gpr[reg]._32);
+        printf("%-12s0x%x\t%x", cpu_name[reg], cpu.gpr[reg]._32, cpu.gpr[reg]._32);
     }
     else {
-        printf("%-12s0x%x\t%d", cpu_name[reg], (unsigned)cpu.gpr[reg]._32, (unsigned)cpu.gpr[reg]._32);
+        printf("%-12s0x%x\t%d", cpu_name[reg], cpu.gpr[reg]._32, cpu.gpr[reg]._32);
     }
     return 0;
 }
