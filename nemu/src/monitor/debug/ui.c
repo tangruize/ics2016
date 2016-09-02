@@ -160,7 +160,7 @@ static int print_addr(int n, swaddr_t addr) {
         if (i % 4 == 0) {
            printf("0x%x:\t", (uint32_t)addr);
         }
-        printf("0x%x\t", (uint32_t)swaddr_read(addr, 4));
+        printf("0x%8x\t", (uint32_t)swaddr_read(addr, 4));
         if (i % 4 == 3) {
             fputc('\n', stdout);
         }
