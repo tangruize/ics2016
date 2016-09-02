@@ -101,7 +101,7 @@ char *cpu_name[]={"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"}
 
 int print_cpu(int reg) {
     if (reg < 0 || reg > 8) {
-        return -1;
+        return 1;
     }
     else if (reg == 8) {
         printf("%-12s0x%x\t%x\n", cpu_name[reg], cpu.eip, cpu.eip);
@@ -129,12 +129,12 @@ static int cmd_info(char *args) {
         }
         else {
             cmd_help("help info");
-            return -1;
+            return 1;
         }
     }
     else {
         cmd_help("help info");
-        return -1;
+        return 1;
     }
     return 0;
 }
