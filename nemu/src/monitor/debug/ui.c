@@ -188,7 +188,7 @@ static int cmd_x(char *args) {
     {
         int getNum = (int) strtol(arg1, NULL, 0);
         getAddr = (uint32_t) strtol(arg2, NULL, 0);
-        if (getNum <= 0 || (int)getAddr <= 0) {
+        if (getNum <= 0 || (int)getAddr < 0) {
             fputs("expected numbers greater than 0.\n", stderr);
             return 1;
         }
@@ -197,7 +197,7 @@ static int cmd_x(char *args) {
     else
     {
         getAddr  = (uint32_t) strtol(arg1, NULL, 0);
-        if ((int)getAddr <= 0) {
+        if ((int)getAddr < 0) {
             fputs("expected a valid address.\n", stderr);
             return 1;
         }
