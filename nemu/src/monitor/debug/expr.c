@@ -97,7 +97,13 @@ static bool make_token(char *e) {
 
 				switch(rules[i].token_type) {
                     case NOTYPE:break;
-                    //case 
+                    case EQ:break;
+                    case '+':break;
+                    case EXPR_SUB:break;
+                    case EXPR_MUL:break;
+                    case EXPR_DIV:break;
+                    case EXPR_BRA_L:break;
+                    case EXPR_BRA_R:break;
 					default: panic("please implement me");
 				}
 
