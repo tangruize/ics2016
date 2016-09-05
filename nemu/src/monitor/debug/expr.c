@@ -7,11 +7,23 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ,
+    EXPR_SUB, EXPR_MUL, EXPR_DIV,
+    EXPR_BRA_L, EXPR_BRA_R
 
 	/* TODO: Add more token types */
 
 };
+
+/* 
+static struct rule {
+	char *regex;
+	int token_type;
+} rules[] = {
+	{" +",	NOTYPE},				// spaces
+	{"\\+", '+'},					// plus
+	{"==", EQ}						// equal
+};*/
 
 static struct rule {
 	char *regex;
@@ -23,7 +35,12 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE},				// spaces
+    {"\\(", EXPR_BRA_L},
+    {"\\)", EXPR_BRA_R},
+    {"\\*", EXPR_MUL},
+    {"\\/", EXPR_DIV},
 	{"\\+", '+'},					// plus
+    {"\\-", EXPR_SUB},
 	{"==", EQ}						// equal
 };
 
