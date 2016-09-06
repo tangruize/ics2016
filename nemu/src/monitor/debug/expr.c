@@ -7,9 +7,10 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ,
-    EXPR_SUB, EXPR_MUL, EXPR_DIV,
-    EXPR_BRA_L, EXPR_BRA_R
+	NOTYPE = 256, RULE_EQ,
+    RULE_ADD, RULE_SUB, RULE_MUL, RULE_DIV,
+    RULE_BRA_L, RULE_BRA_R,
+    RULE_DIGIT, RULE_NE, RULE_ASSIGN
 
 	/* TODO: Add more token types */
 
@@ -34,14 +35,17 @@ static struct rule {
 	 * Pay attention to the precedence level of different rules.
 	 */
 
+    {"[0-9]+", RULE_DIGIT},
 	{" +",	NOTYPE},				// spaces
-    {"\\(", EXPR_BRA_L},
-    {"\\)", EXPR_BRA_R},
-    {"\\*", EXPR_MUL},
-    {"\\/", EXPR_DIV},
-	{"\\+", '+'},					// plus
-    {"\\-", EXPR_SUB},
-	{"==", EQ}						// equal
+	{"\\+", RULE_ADD},              // plus
+    {"-", RULE_SUB},
+    {"\\*", RULE_MUL},
+    {"/", RULE_DIV},
+    {"\\(", RULE_BRA_L},
+    {"\\)", RULE_BRA_R},
+    {"!=", RULE_NE},
+	{"==", RULE_EQ},						// equal
+    {"\\=", RULE_ASSIGN}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -96,17 +100,19 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
-                    case NOTYPE:break;
-                    case EQ:break;
-                    case '+':break;
-                    case EXPR_SUB:break;
-                    case EXPR_MUL:break;
-                    case EXPR_DIV:break;
-                    case EXPR_BRA_L:break;
-                    case EXPR_BRA_R:break;
-					default: panic("please implement me");
+		    case NOTYPE:--nr_token;break;
+                    case RULE_ADD:tokens[nr_token].type=RULE_ADD;strcpy(tokens[nr_token].str, "+");break;
+                    case RULE_SUB:tokens[nr_token].type=RULE_SUB;strcpy(tokens[nr_token].str, "-");break;
+                    case RULE_MUL:tokens[nr_token].type=RULE_MUL;strcpy(tokens[nr_token].str, "*");break;
+                    case RULE_DIV:tokens[nr_token].type=RULE_DIV;strcpy(tokens[nr_token].str, "/");break;
+                    case RULE_BRA_L:tokens[nr_token].type=RULE_BRA_L;strcpy(tokens[nr_token].str, "(");break;
+                    case RULE_BRA_R:tokens[nr_token].type=RULE_BRA_R;strcpy(tokens[nr_token].str, ")");break;
+                    case RULE_DIGIT:tokens[nr_token].type=RULE_DIGIT;strncpy(tokens[nr_token].str,substr_start,substr_len);break;
+                    case RULE_EQ:tokens[nr_token].type=RULE_EQ;strcpy(tokens[nr_token].str,"==");break;
+                    case RULE_NE:tokens[nr_token].type=RULE_NE;strcpy(tokens[nr_token].str,"!=");break;
+                    case RULE_ASSIGN:tokens[nr_token].type=RULE_ASSIGN;strcpy(tokens[nr_token].str,"=");break;
 				}
-
+                    ++nr_token;
 				break;
 			}
 		}
