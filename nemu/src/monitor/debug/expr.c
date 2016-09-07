@@ -195,7 +195,7 @@ int eva(int p, int q, int sum) {
             int b=strtol(tokens[p+1].str,NULL,0);
             p+=2;
             printf("b: %d\tsum: %d\tp: %d\tq: %d\n", b,sum,p,q);
-            switch (tokens[p-1].type)
+            switch (tokens[p-2].type)
             {
                 case RULE_ADD:return eva(p,q,sum+b);
                 case RULE_SUB:return eva(p,q,sum-b);
