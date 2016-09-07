@@ -156,8 +156,8 @@ int check_brackets(int p, int q, int *r, int *s) {
 int err_exp=0;
 int eva(int p, int q, int sum) {
     int pp=0,qq=0;
-    Assert(p<=q, "Bad expression.\n");
-    if (p==q) {
+    //Assert(p<=q, "Bad expression.\n");
+    if (p>=q) {
         return sum;//+strtol(tokens[p].str,NULL,0);;
     }
     int check=check_brackets(p,q,&pp,&qq);
@@ -170,23 +170,45 @@ int eva(int p, int q, int sum) {
     }
     else if (check ==0)
     {
-        int a=strtol(tokens[p].str,NULL,0);
-        int b=strtol(tokens[p+2].str,NULL,0);
-        p+=2;
-        //printf("%d\t%d\n", a,b);
-        switch (tokens[p-1].type)
+        if (p==0) {
+            int a=strtol(tokens[p].str,NULL,0);
+            int b=strtol(tokens[p+2].str,NULL,0);
+            p+=3;
+            //printf("%d\t%d\n", a,b);
+            switch (tokens[p-2].type)
+            {
+                case RULE_ADD:return eva(p,q,a+b);
+                case RULE_SUB:return eva(p,q,a-b);
+                case RULE_MUL:return eva(p,q,a*b);
+                case RULE_DIV:if (b==0){
+                    err_exp=1;
+                    fputs("Divisor cannot be zero!\n", stderr);
+                    return -1;
+                    }
+                    return eva(p,q,a/b);
+                case RULE_NE:return eva(p,q,a!=b);
+                case RULE_EQ:return eva(p,q,a==b);
+            }
+        }
+        else 
         {
-            case RULE_ADD:return eva(p,q,a+b);
-            case RULE_SUB:return eva(p,q,a-b);
-            case RULE_MUL:return eva(p,q,a*b);
-            case RULE_DIV:if (b==0){
-                err_exp=1;
-                fputs("Divisor cannot be zero!\n", stderr);
-                return -1;
-                }
-                return eva(p,q,a/b);
-            case RULE_NE:return eva(p,q,a!=b);
-            case RULE_EQ:return eva(p,q,a==b);
+            int b=strtol(tokens[p+1].str,NULL,0);
+            p+=2;
+            //printf("%d\t%d\n", a,b);
+            switch (tokens[p-1].type)
+            {
+                case RULE_ADD:return eva(p,q,sum+b);
+                case RULE_SUB:return eva(p,q,sum-b);
+                case RULE_MUL:return eva(p,q,sum*b);
+                case RULE_DIV:if (b==0){
+                    err_exp=1;
+                    fputs("Divisor cannot be zero!\n", stderr);
+                    return -1;
+                    }
+                    return eva(p,q,sum/b);
+                case RULE_NE:return eva(p,q,sum!=b);
+                case RULE_EQ:return eva(p,q,sum==b);
+            }
         }
     }
     else
