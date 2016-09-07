@@ -1,4 +1,5 @@
 #include "nemu.h"
+#include <stdlib.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -10,7 +11,7 @@ enum {
 	NOTYPE = 256, RULE_EQ,
     RULE_ADD, RULE_SUB, RULE_MUL, RULE_DIV,
     RULE_BRA_L, RULE_BRA_R,
-    RULE_DIGIT, RULE_NE, RULE_ASSIGN
+    RULE_DIGIT, RULE_NE
 
 	/* TODO: Add more token types */
 
@@ -45,7 +46,6 @@ static struct rule {
     {"\\)", RULE_BRA_R},
     {"!=", RULE_NE},
 	{"==", RULE_EQ},						// equal
-    {"\\=", RULE_ASSIGN}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -110,7 +110,7 @@ static bool make_token(char *e) {
                     case RULE_DIGIT:tokens[nr_token].type=RULE_DIGIT;strncpy(tokens[nr_token].str,substr_start,substr_len);break;
                     case RULE_EQ:tokens[nr_token].type=RULE_EQ;strcpy(tokens[nr_token].str,"==");break;
                     case RULE_NE:tokens[nr_token].type=RULE_NE;strcpy(tokens[nr_token].str,"!=");break;
-                    case RULE_ASSIGN:tokens[nr_token].type=RULE_ASSIGN;strcpy(tokens[nr_token].str,"=");break;
+                    //case RULE_ASSIGN:tokens[nr_token].type=RULE_ASSIGN;strcpy(tokens[nr_token].str,"=");break;
 				}
                     ++nr_token;
 				break;
@@ -154,8 +154,7 @@ int check_brackets(int p, int q, int *r, int *s) {
 }
 
 int err_exp=0;
-int eva(int p, int q) {
-    int sum=0;
+int eva(int p, int q, int sum) {
     int pp,qq;
     Assert(p<=q, "Bad expression.\n");
     if (p==q) {
@@ -170,15 +169,27 @@ int eva(int p, int q) {
     }
     else if (check ==0)
     {
+        int a=strtol(tokens[0].str,NULL,0);
+        int b=strtol(tokens[1].str,NULL,0);
+        p-=2;
         switch (tokens[1].type)
         {
-            case RULE_ADD:break;
-            case RULE_SUB:break;
+            case RULE_ADD:return eva(p,q,a+b);
+            case RULE_SUB:return eva(p,q,a-b);
+            case RULE_MUL:return eva(p,q,a*b);
+            case RULE_DIV:if (b==0){
+                err_exp=1;
+                fputs("Divisor cannot be zero!\n", stderr);
+                return -1;
+                }
+                return eva(p,q,a/b);
+            case RULE_NE:return eva(p,q,a!=b);
+            case RULE_EQ:return eva(p,q,a==b);
         }
     }
     else
     {
-        return eva(pp,qq);
+        return eva(pp,qq,sum);
     }
     return 0;
 }
@@ -188,6 +199,7 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
+    printf("%d\n", eva(0,nr_token-1,0));
     
 	/* TODO: Insert codes to evaluate the expression. */
 	panic("please implement me");
