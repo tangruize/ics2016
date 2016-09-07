@@ -158,7 +158,7 @@ int eva(int p, int q, int sum) {
     int pp=0,qq=0;
     Assert(p<=q, "Bad expression.\n");
     if (p==q) {
-        return sum;
+        return sum+strtol(tokens[p].str,NULL,0);;
     }
     int check=check_brackets(p,q,&pp,&qq);
     //printf("check: %d\n",check);
@@ -170,11 +170,11 @@ int eva(int p, int q, int sum) {
     }
     else if (check ==0)
     {
-        int a=strtol(tokens[0].str,NULL,0);
-        int b=strtol(tokens[2].str,NULL,0);
+        int a=strtol(tokens[p].str,NULL,0);
+        int b=strtol(tokens[p+2].str,NULL,0);
         p+=2;
         //printf("%d\t%d\n", a,b);
-        switch (tokens[1].type)
+        switch (tokens[p-1].type)
         {
             case RULE_ADD:return eva(p,q,a+b);
             case RULE_SUB:return eva(p,q,a-b);
