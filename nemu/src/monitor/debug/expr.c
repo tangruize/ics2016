@@ -8,10 +8,12 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, RULE_EQ,
+    RULE_DIGIT=256, RULE_ALPHA, RULE_REG, RULE_NOTYPE,
     RULE_ADD, RULE_SUB, RULE_MUL, RULE_DIV,
-    RULE_BRA_L, RULE_BRA_R,
-    RULE_DIGIT, RULE_NE
+    RULE_BRA_L, RULE_BRA_R, 
+    RULE_NE, RULE_EQ, RULE_ASSIGN,
+    RULE_OR, RULE_AND, RULE_NOT,
+    RULE_DER, RULE_NEG
 
 	/* TODO: Add more token types */
 
@@ -37,15 +39,21 @@ static struct rule {
 	 */
 
     {"[0-9]+", RULE_DIGIT},
-	{" +",	NOTYPE},				// spaces
-	{"\\+", RULE_ADD},              // plus
+    {"[a-zA-Z]+", RULE_ALPHA},
+    {"${\"eax\", \"ecx\", \"edx\", \"ebx\", \"esp\", \"ebp\", \"esi\", \"edi\"}", RULE_REG},
+	{" +",	RULE_NOTYPE},
+	{"\\+", RULE_ADD},
     {"-", RULE_SUB},
     {"\\*", RULE_MUL},
     {"/", RULE_DIV},
     {"\\(", RULE_BRA_L},
     {"\\)", RULE_BRA_R},
     {"!=", RULE_NE},
-	{"==", RULE_EQ},						// equal
+	{"==", RULE_EQ},
+    {"=", RULE_ASSIGN},
+    {"||", RULE_OR},
+    {"&&", RULE_AND},
+    {"\\!", RULE_NOT},
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -100,7 +108,7 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
-		    case NOTYPE:--nr_token;break;
+		    case RULE_NOTYPE:--nr_token;break;
                     case RULE_ADD:tokens[nr_token].type=RULE_ADD;strcpy(tokens[nr_token].str, "+");break;
                     case RULE_SUB:tokens[nr_token].type=RULE_SUB;strcpy(tokens[nr_token].str, "-");break;
                     case RULE_MUL:tokens[nr_token].type=RULE_MUL;strcpy(tokens[nr_token].str, "*");break;
@@ -125,7 +133,37 @@ static bool make_token(char *e) {
 
 	return true; 
 }
+/*
+typedef struct split_expr {
+    int start,end;
+    int sum, is_calc;
+    split_expr *depend;
+    split_expr *next;
+} split_expr; 
 
+split_expr *expr_start;
+
+int analyse_expr() {
+    while (expr_start!=NULL)
+    {
+        split_expr *p=expr->next;
+        free(expr_start);
+        expr_start=p;
+    }
+    int i=0;
+    for (;i!=nr_token;++i)
+    {
+        split_expr *p=new split_expr;
+        p->next=NULL;
+        p->depend=NULL;
+        if (expr_start==NULL) {
+            expr_start=p;
+        }
+
+    }
+}
+*/
+/*
 int check_brackets(int p, int q, int *r, int *s) {
     Assert(p<=q, "Bad expression.\n");
     int i;
@@ -216,14 +254,14 @@ int eva(int p, int q, int sum) {
         return eva(pp,qq,sum);
     }
     return 0;
-}
+}*/
 
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
 	}
-    printf("%d\n", eva(0,nr_token-1,0));
+   // printf("%d\n", eva(0,nr_token-1,0));
     
 	/* TODO: Insert codes to evaluate the expression. */
 	//panic("please implement me");
