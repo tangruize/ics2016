@@ -40,7 +40,7 @@ static struct rule {
 
     {"[0-9]+", RULE_DIGIT},
     {"[a-zA-Z]+", RULE_ALPHA},
-    {"\\${\"eax\", \"ecx\", \"edx\", \"ebx\", \"esp\", \"ebp\", \"esi\", \"edi\"}", RULE_REG},
+    {"\\$(eax)|(ecx)|(edx)|(ebx)|(esp)|(ebp)|(esi)|(edi)}", RULE_REG},
 	{" +",	RULE_NOTYPE},
 	{"\\+", RULE_ADD},
     {"-", RULE_SUB},
