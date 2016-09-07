@@ -171,9 +171,9 @@ int eva(int p, int q, int sum) {
     else if (check ==0)
     {
         int a=strtol(tokens[0].str,NULL,0);
-        int b=strtol(tokens[1].str,NULL,0);
+        int b=strtol(tokens[2].str,NULL,0);
         p+=2;
-            printf("%d\t%d\n", a,b);
+        printf("%d\t%d\n", a,b);
         switch (tokens[1].type)
         {
             case RULE_ADD:return eva(p,q,a+b);
