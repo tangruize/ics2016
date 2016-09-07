@@ -202,7 +202,7 @@ uint32_t expr(char *e, bool *success) {
     printf("%d\n", eva(0,nr_token-1,0));
     
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
+	//panic("please implement me");
 	return 0;
 }
 
