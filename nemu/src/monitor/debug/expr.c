@@ -174,6 +174,7 @@ int eva(int p, int q, int sum) {
         p+=2;
         switch (tokens[1].type)
         {
+            printf("%d\t%d\n", a,b);
             case RULE_ADD:return eva(p,q,a+b);
             case RULE_SUB:return eva(p,q,a-b);
             case RULE_MUL:return eva(p,q,a*b);
