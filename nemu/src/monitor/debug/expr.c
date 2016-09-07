@@ -126,12 +126,69 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+int check_brackets(int p, int q, int *r, int *s) {
+    Assert(p<=q, "Bad expression.\n");
+    int i;
+    for (i=p; i<=q; ++i) {
+        if (tokens[i].type==RULE_BRA_L) {
+            int j=i+i;
+            int cnt=1, cnt2=1;
+            for (;j<=q;++j ) {
+                if (tokens[i].type==RULE_BRA_L) {
+                    ++cnt;
+                    ++cnt2;
+                }
+                else if (tokens[i].type==RULE_BRA_R) {
+                    --cnt;
+                    if (cnt==0) {
+                        *r=i+1;
+                        *s=j-1;
+                        return cnt2;
+                    }
+                }
+            }
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int err_exp=0;
+int eva(int p, int q) {
+    int sum=0;
+    int pp,qq;
+    Assert(p<=q, "Bad expression.\n");
+    if (p==q) {
+        return sum;
+    }
+    int check=check_brackets(p,q,&pp,&qq);
+    if (check==-1)
+    {
+        fputs("The brackets do not match.\n", stderr);
+        err_exp=1;
+        return -1;
+    }
+    else if (check ==0)
+    {
+        switch (tokens[1].type)
+        {
+            case RULE_ADD:break;
+            case RULE_SUB:break;
+        }
+    }
+    else
+    {
+        return eva(pp,qq);
+    }
+    return 0;
+}
+
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
 	}
-
+    
 	/* TODO: Insert codes to evaluate the expression. */
 	panic("please implement me");
 	return 0;
