@@ -44,6 +44,7 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+
 static struct {
 	char *name;
 	char *description;
@@ -54,7 +55,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
     { "si", "Step one instruction exactly.", cmd_si },
     { "info", "Generic command for showing things about the program being debugged.", cmd_info },
-    { "x", "Examine memory: x/FMT ADDRESS.", cmd_x }
+    { "x", "Examine memory: x/FMT ADDRESS.", cmd_x },
 
 	/* TODO: Add more commands */
 
@@ -236,6 +237,13 @@ void ui_mainloop() {
 			}
 		}
 
-		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+		if(i == NR_CMD) {
+            if (strcmp(cmd,"expr")==0) {
+                bool success;
+                expr(args,&success);
+            }
+            else {
+                printf("Unknown command '%s'\n", cmd); }
+            }
 	}
 }
