@@ -155,7 +155,7 @@ int check_brackets(int p, int q, int *r, int *s) {
 
 int err_exp=0;
 int eva(int p, int q, int sum) {
-    int pp,qq;
+    int pp=0,qq=0;
     Assert(p<=q, "Bad expression.\n");
     if (p==q) {
         return sum;
