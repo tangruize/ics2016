@@ -171,7 +171,7 @@ int eva(int p, int q, int sum) {
     {
         int a=strtol(tokens[0].str,NULL,0);
         int b=strtol(tokens[1].str,NULL,0);
-        p-=2;
+        p+=2;
         switch (tokens[1].type)
         {
             case RULE_ADD:return eva(p,q,a+b);
