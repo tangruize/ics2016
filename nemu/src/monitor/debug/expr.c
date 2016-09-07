@@ -161,6 +161,7 @@ int eva(int p, int q, int sum) {
         return sum;
     }
     int check=check_brackets(p,q,&pp,&qq);
+    printf("check: %d\n",check);
     if (check==-1)
     {
         fputs("The brackets do not match.\n", stderr);
