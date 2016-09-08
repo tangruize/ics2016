@@ -157,7 +157,6 @@ static bool make_token(char *e) {
 	int t;
 	switch(rules[i].token_type) {
 	  case RULE_DIGIT:
-	    
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_NEG) {
@@ -220,6 +219,7 @@ static bool make_token(char *e) {
 		printf("cannot find the variable '%s'", tokens[nr_token].str);
 		return false;
 	      }
+	    }
 	      break;
 	  case RULE_REG:
 	    
@@ -237,6 +237,7 @@ static bool make_token(char *e) {
 		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
+	    }
 	      tokens[nr_token].type=RULE_REG;
 	      strncpy(tokens[nr_token].str,substr_start,substr_len);
 	      int gpr_cnt=0;
@@ -482,7 +483,6 @@ static bool make_token(char *e) {
 	     *                    
 	    } 
 	    ++nr_token; */
-	    break;
 	    }
 	}
 	
@@ -491,10 +491,16 @@ static bool make_token(char *e) {
 	  return false;
 	}
       }
+  int t2;
+  if (nr_token>0)
+  {
+    t2=tokens[nr_token-1].type;
+    if (t2!=RULE_DIGIT && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG) {
+      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
+    return false;
     }
   }
-  int t2=tokens[nr_token-1].type;
-  if ((left!=right)||(t2!=RULE_DIGIT && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG)) {
+  if (left!=right) {
     printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
     return false;
   }
