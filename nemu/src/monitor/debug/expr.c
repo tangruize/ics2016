@@ -220,7 +220,7 @@ static bool make_token(char *e) {
 		return false;
 	      }
 	    }
-	      break;
+	    break;
 	  case RULE_REG:
 	    
 	    if (nr_token!=0) {
@@ -238,25 +238,25 @@ static bool make_token(char *e) {
 		return false;
 	      }
 	    }
-	      tokens[nr_token].type=RULE_REG;
-	      strncpy(tokens[nr_token].str,substr_start,substr_len);
-	      int gpr_cnt=0;
-	      for (;gpr_cnt<8;++gpr_cnt) {
-		if (strcmp(tokens[nr_token].str,cpu_name_rule[gpr_cnt])==0) {
-		  tokens[nr_token].value=(long)cpu.gpr[gpr_cnt]._32;
-		  break;
-		}
+	    tokens[nr_token].type=RULE_REG;
+	    strncpy(tokens[nr_token].str,substr_start,substr_len);
+	    int gpr_cnt=0;
+	    for (;gpr_cnt<8;++gpr_cnt) {
+	      if (strcmp(tokens[nr_token].str,cpu_name_rule[gpr_cnt])==0) {
+		tokens[nr_token].value=(long)cpu.gpr[gpr_cnt]._32;
+		break;
 	      }
-	      if (gpr_cnt==8) {
-		tokens[nr_token].value=(long)cpu.eip;
-	      }
-	      if (is_neg_or_der==1) {
-		tokens[nr_token].value=-tokens[nr_token].value;
-	      }
-	      else if(is_neg_or_der==2) {
-		tokens[nr_token].value=(long)swaddr_read((swaddr_t)tokens[nr_token].value,4);
-	      }
-	      break;
+	    }
+	    if (gpr_cnt==8) {
+	      tokens[nr_token].value=(long)cpu.eip;
+	    }
+	    if (is_neg_or_der==1) {
+	      tokens[nr_token].value=-tokens[nr_token].value;
+	    }
+	    else if(is_neg_or_der==2) {
+	      tokens[nr_token].value=(long)swaddr_read((swaddr_t)tokens[nr_token].value,4);
+	    }
+	    break;
 	  case RULE_NOTYPE:break;
 	  case RULE_ADD:
 	    tokens[nr_token].type=RULE_ADD;
@@ -465,23 +465,23 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    break;
-	    }
-	    ++nr_token;
-	    }
 	}
-	
-	if(i == NR_REGEX) {
-	  printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-	  return false;
-	}
+	++nr_token;
+	break;
       }
+    }
+    if(i == NR_REGEX) {
+      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      return false;
+    }
+  }
   int t2;
   if (nr_token>0)
   {
     t2=tokens[nr_token-1].type;
     if (t2!=RULE_DIGIT && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG) {
       printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-    return false;
+      return false;
     }
   }
   if (left!=right) {
