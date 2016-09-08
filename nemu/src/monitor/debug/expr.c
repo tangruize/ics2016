@@ -139,6 +139,7 @@ static bool make_token(char *e) {
   regmatch_t pmatch;
   int left=0,right=0;
   nr_token = 0;
+  int start_alpha=0;
   while(e[position] != '\0') {
     /* Try all rules one by one. */
     for(i = 0; i < NR_REGEX; i ++) {
@@ -155,6 +156,10 @@ static bool make_token(char *e) {
 	 */
 	int is_neg_or_der=0;
 	int t;
+	if (start_alpha&&nr_token==1&&rules[i].token_type!=RULE_ASSIGN) {
+	  printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
+	  return false;
+	 }
 	switch(rules[i].token_type) {
 	  case RULE_DIGIT:
 	    if (nr_token!=0) {
@@ -204,6 +209,7 @@ static bool make_token(char *e) {
 	    //printf("var: %d\n",tmp_var);
 	    if (nr_token==0) {
 	      tmp_var=set_var(tokens[nr_token].str,0);
+	      start_alpha=1;
 	      if (tmp_var==-1) {
 		return false;
 	      }
@@ -215,13 +221,9 @@ static bool make_token(char *e) {
 	      else if(is_neg_or_der==2) {
 		tokens[nr_token].value=(long)swaddr_read((swaddr_t)var[tmp_var].key,4);
 	      }
-	      else {
-		printf("cannot find the variable '%s'", tokens[nr_token].str);
-		return false;
-	      }
 	    }
 	    else {
-	      printf("cannot find the variable '%s'", tokens[nr_token].str);
+		printf("cannot find the variable '%s'\n", tokens[nr_token].str);
 		return false;
 	    }
 	    break;
