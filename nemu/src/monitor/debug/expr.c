@@ -169,7 +169,7 @@ static bool make_token(char *e) {
 		is_neg_or_der=2;
 	      }
 	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -196,7 +196,7 @@ static bool make_token(char *e) {
 		is_neg_or_der=2;
 	      }
 	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -234,7 +234,7 @@ static bool make_token(char *e) {
 		is_neg_or_der=2;
 	      }
 	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	      tokens[nr_token].type=RULE_REG;
@@ -261,14 +261,14 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_ADD;
 	    strcpy(tokens[nr_token].str, "+");
 	    if (nr_token==0) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -288,14 +288,14 @@ static bool make_token(char *e) {
 	    }
 	    if (tokens[nr_token].type!=RULE_NEG) {
 	      if (nr_token==0) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	      else
 	      {
 		t=tokens[nr_token-1].type;
 		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		  printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		  printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		  return false;
 		}
 	      }
@@ -316,14 +316,14 @@ static bool make_token(char *e) {
 	    }
 	    if (tokens[nr_token].type!=RULE_DER) {
 	      if (nr_token==0) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	      else
 	      {
 		t=tokens[nr_token-1].type;
 		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		  printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		  printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		  return false;
 		}
 	      }
@@ -333,7 +333,7 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_DIV;
 	    strcpy(tokens[nr_token].str, "/");
 	    if (nr_token==0) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    else
@@ -352,7 +352,7 @@ static bool make_token(char *e) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
 	      {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -362,18 +362,18 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_BRA_R;
 	    strcpy(tokens[nr_token].str, ")");
 	    if (nr_token==0) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    t=tokens[nr_token-1].type;
 	    if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG)
 	    {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    ++right;
 	    if (right>left) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    break;
@@ -381,14 +381,14 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_NE;
 	    strcpy(tokens[nr_token].str,"!=");
 	    if (nr_token==0) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -397,14 +397,14 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_EQ;
 	    strcpy(tokens[nr_token].str,"==");
 	    if (nr_token==0) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -416,7 +416,7 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_ASSIGN;
 	    strcpy(tokens[nr_token].str,"=");	
 	    if (nr_token!=1||tokens[0].type!=RULE_ALPHA) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    break;
@@ -424,14 +424,14 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_OR;
 	    strcpy(tokens[nr_token].str,"||");
 	    if (nr_token==0) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -440,14 +440,14 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_AND;
 	    strcpy(tokens[nr_token].str,"&&");
 	    if (nr_token==0) {
-	      printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -459,7 +459,7 @@ static bool make_token(char *e) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
 	      {
-		printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 		return false;
 	      }
 	    }
@@ -495,7 +495,7 @@ static bool make_token(char *e) {
   }
   int t2=tokens[nr_token-1].type;
   if ((left!=right)||(t2!=RULE_DIGIT && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG)) {
-    printf("LINE: %d\\n",__LINE__); fputs("Bad expression!\\n", stderr);
+    printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
     return false;
   }
   return true; 
