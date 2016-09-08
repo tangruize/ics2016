@@ -52,7 +52,7 @@ static struct rule {
     {"!=", RULE_NE},
 	{"==", RULE_EQ},
     {"=", RULE_ASSIGN},
-    {"||", RULE_OR},
+    {"\\|\\|", RULE_OR},
     {"&&", RULE_AND},
     {"\\!", RULE_NOT},
 };
