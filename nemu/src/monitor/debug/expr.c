@@ -467,22 +467,6 @@ static bool make_token(char *e) {
 	    break;
 	    }
 	    ++nr_token;
-	    /*
-	     *				switch(rules[i].token_type) {
-	     *		    case RULE_NOTYPE:--nr_token;break;
-	     *                    case RULE_ADD:tokens[nr_token].type=RULE_ADD;strcpy(tokens[nr_token].str, "+");break;
-	     *                    case RULE_SUB:tokens[nr_token].type=RULE_SUB;strcpy(tokens[nr_token].str, "-");break;
-	     *                    case RULE_MUL:tokens[nr_token].type=RULE_MUL;strcpy(tokens[nr_token].str, "*");break;
-	     *                    case RULE_DIV:tokens[nr_token].type=RULE_DIV;strcpy(tokens[nr_token].str, "/");break;
-	     *                    case RULE_BRA_L:tokens[nr_token].type=RULE_BRA_L;strcpy(tokens[nr_token].str, "(");break;
-	     *                    case RULE_BRA_R:tokens[nr_token].type=RULE_BRA_R;strcpy(tokens[nr_token].str, ")");break;
-	     *                    case RULE_DIGIT:tokens[nr_token].type=RULE_DIGIT;strncpy(tokens[nr_token].str,substr_start,substr_len);break;
-	     *                    case RULE_EQ:tokens[nr_token].type=RULE_EQ;strcpy(tokens[nr_token].str,"==");break;
-	     *                    case RULE_NE:tokens[nr_token].type=RULE_NE;strcpy(tokens[nr_token].str,"!=");break;
-	     *                    //case RULE_ASSIGN:tokens[nr_token].type=RULE_ASSIGN;strcpy(tokens[nr_token].str,"=");break;
-	     *                    
-	    } 
-	    ++nr_token; */
 	    }
 	}
 	
