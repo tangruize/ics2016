@@ -113,7 +113,7 @@ static int cmd_si(char *args) {
     return 0;
 }
 
-char *cpu_name[]={"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"};
+static char *cpu_name[]={"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"};
 
 static int print_cpu(int reg) {
     if (reg < 0 || reg > 8) {

@@ -1,4 +1,5 @@
 #include "nemu.h"
+#include "common.h"
 #include <stdlib.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -80,59 +81,424 @@ void init_regex() {
 typedef struct token {
 	int type;
 	char str[32];
+	long int value;
 } Token;
 
 Token tokens[32];
 int nr_token;
 
+typedef struct variables {
+  char str[32];
+  long int key;
+} variables;
+
+#define VAR_MAX 32
+static variables var[VAR_MAX];
+static int var_cnt=0;
+
+static int find_var(char *str) {
+  int i=0;
+  for (;i < var_cnt; ++i) {
+    if (strcmp(var[i].str, str)==0) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+static int set_var(char *str, long int value) {
+  int i=0;
+  if (var_cnt==VAR_MAX) {
+    printf("variables reached limits (%d), please clear!\n", VAR_MAX);
+    return -1;
+  }
+  for (;i < var_cnt; ++i) {
+    if (strcmp(var[i].str, str)==0) {
+      var[i].key=value;
+      return i;
+    }
+  }
+  strcpy(var[var_cnt].str,str);
+  var[var_cnt].key=value;
+  ++var_cnt;
+  return var_cnt;
+}
+
+static int clear_var()
+{
+  var_cnt=0;
+  printf("Ok!\n");
+  return 0;
+}
+
+static char *cpu_name_rule[]={"$eax", "$ecx", "$edx", "$ebx", "$esp", "$ebp", "$esi", "$edi", "$eip"};
+
 static bool make_token(char *e) {
-	int position = 0;
-	int i;
-	regmatch_t pmatch;
+  int position = 0;
+  int i;
+  regmatch_t pmatch;
+  int left=0,right=0;
+  nr_token = 0;
+  while(e[position] != '\0') {
+    /* Try all rules one by one. */
+    for(i = 0; i < NR_REGEX; i ++) {
+      if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+	char *substr_start = e + position;
+	int substr_len = pmatch.rm_eo;
 	
-	nr_token = 0;
-
-	while(e[position] != '\0') {
-		/* Try all rules one by one. */
-		for(i = 0; i < NR_REGEX; i ++) {
-			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-				char *substr_start = e + position;
-				int substr_len = pmatch.rm_eo;
-
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
-				position += substr_len;
-
-				/* TODO: Now a new token is recognized with rules[i]. Add codes
-				 * to record the token in the array `tokens'. For certain types
-				 * of tokens, some extra actions should be performed.
-				 */
-
-				switch(rules[i].token_type) {
-	/*	    case RULE_NOTYPE:--nr_token;break;
-                    case RULE_ADD:tokens[nr_token].type=RULE_ADD;strcpy(tokens[nr_token].str, "+");break;
-                    case RULE_SUB:tokens[nr_token].type=RULE_SUB;strcpy(tokens[nr_token].str, "-");break;
-                    case RULE_MUL:tokens[nr_token].type=RULE_MUL;strcpy(tokens[nr_token].str, "*");break;
-                    case RULE_DIV:tokens[nr_token].type=RULE_DIV;strcpy(tokens[nr_token].str, "/");break;
-                    case RULE_BRA_L:tokens[nr_token].type=RULE_BRA_L;strcpy(tokens[nr_token].str, "(");break;
-                    case RULE_BRA_R:tokens[nr_token].type=RULE_BRA_R;strcpy(tokens[nr_token].str, ")");break;
-                    case RULE_DIGIT:tokens[nr_token].type=RULE_DIGIT;strncpy(tokens[nr_token].str,substr_start,substr_len);break;
-                    case RULE_EQ:tokens[nr_token].type=RULE_EQ;strcpy(tokens[nr_token].str,"==");break;
-                    case RULE_NE:tokens[nr_token].type=RULE_NE;strcpy(tokens[nr_token].str,"!=");break;
-                    //case RULE_ASSIGN:tokens[nr_token].type=RULE_ASSIGN;strcpy(tokens[nr_token].str,"=");break;
-                    */
-				} 
-                    ++nr_token;
-				break;
-			}
+	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+	position += substr_len;
+	
+	/* TODO: Now a new token is recognized with rules[i]. Add codes
+	 * to record the token in the array `tokens'. For certain types
+	 * of tokens, some extra actions should be performed.
+	 */
+	int is_neg_or_der=0;
+	int t;
+	switch(rules[i].token_type) {
+	  case RULE_DIGIT:
+	    
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t==RULE_NEG) {
+		--nr_token;
+		is_neg_or_der=1;
+	      }
+	      else if (t==RULE_DER){
+		--nr_token;
+		is_neg_or_der=2;
+	      }
+	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    tokens[nr_token].type=RULE_DIGIT;
+	    strncpy(tokens[nr_token].str,substr_start,substr_len);
+	    tokens[nr_token].value=strtol(tokens[nr_token].str,NULL,0);
+	    if (is_neg_or_der==1) {
+	      tokens[nr_token].value=-tokens[nr_token].value;
+	    }
+	    else if(is_neg_or_der==2){
+	      tokens[nr_token].value=(long)swaddr_read((swaddr_t)tokens[nr_token].value,4);
+	    }
+	    break;
+	  case RULE_ALPHA:
+	    
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t==RULE_NEG) {
+		--nr_token;
+		is_neg_or_der=1;
+	      }
+	      else if (t==RULE_DER) {
+		--nr_token;
+		is_neg_or_der=2;
+	      }
+	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    tokens[nr_token].type=RULE_ALPHA;
+	    strncpy(tokens[nr_token].str,substr_start,substr_len);
+	    int tmp_var=find_var(tokens[nr_token].str);
+	    if (nr_token==0) {
+	      tmp_var=set_var(tokens[nr_token].str,0);
+	      if (tmp_var==-1) {
+		return false;
+	      }
+	    }
+	    else if (tmp_var!=-1) {
+	      if (is_neg_or_der==1) {
+		tokens[nr_token].value=-var[tmp_var].key;
+	      }
+	      else if(is_neg_or_der==2) {
+		tokens[nr_token].value=(long)swaddr_read((swaddr_t)var[tmp_var].key,4);
+	      }
+	      else {
+		printf("cannot find the variable '%s'", tokens[nr_token].str);
+		return false;
+	      }
+	      break;
+	  case RULE_REG:
+	    
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t==RULE_NEG) {
+		--nr_token;
+		is_neg_or_der=1;
+	      }
+	      else if (t==RULE_DER) {
+		--nr_token;
+		is_neg_or_der=2;
+	      }
+	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	      tokens[nr_token].type=RULE_REG;
+	      strncpy(tokens[nr_token].str,substr_start,substr_len);
+	      int gpr_cnt=0;
+	      for (;gpr_cnt<8;++gpr_cnt) {
+		if (strcmp(tokens[nr_token].str,cpu_name_rule[gpr_cnt])==0) {
+		  tokens[nr_token].value=(long)cpu.gpr[gpr_cnt]._32;
+		  break;
 		}
-
-		if(i == NR_REGEX) {
-			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-			return false;
+	      }
+	      if (gpr_cnt==8) {
+		tokens[nr_token].value=(long)cpu.eip;
+	      }
+	      if (is_neg_or_der==1) {
+		tokens[nr_token].value=-tokens[nr_token].value;
+	      }
+	      else if(is_neg_or_der==2) {
+		tokens[nr_token].value=(long)swaddr_read((swaddr_t)tokens[nr_token].value,4);
+	      }
+	      break;
+	  case RULE_NOTYPE:break;
+	  case RULE_ADD:
+	    tokens[nr_token].type=RULE_ADD;
+	    strcpy(tokens[nr_token].str, "+");
+	    if (nr_token==0) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    break;
+	  case RULE_SUB:
+	    tokens[nr_token].type=RULE_SUB;
+	    strcpy(tokens[nr_token].str, "-");
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R && t!=RULE_ASSIGN)
+	      {
+		tokens[nr_token].type=RULE_NEG;
+	      }
+	    }
+	    else {
+	      tokens[nr_token].type=RULE_NEG;
+	    }
+	    if (tokens[nr_token].type!=RULE_NEG) {
+	      if (nr_token==0) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	      else
+	      {
+		t=tokens[nr_token-1].type;
+		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		  fputs("Bad expression!\n", stderr);
+		  return false;
 		}
+	      }
+	    }
+	    break;
+	  case RULE_MUL:
+	    tokens[nr_token].type=RULE_MUL;
+	    strcpy(tokens[nr_token].str, "*");
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R && t!=RULE_ASSIGN)
+	      {
+		tokens[nr_token].type=RULE_DER;
+	      }
+	    }
+	    else {
+	      tokens[nr_token].type=RULE_DER;
+	    }
+	    if (tokens[nr_token].type!=RULE_DER) {
+	      if (nr_token==0) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	      else
+	      {
+		t=tokens[nr_token-1].type;
+		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		  fputs("Bad expression!\n", stderr);
+		  return false;
+		}
+	      }
+	    }
+	    break;
+	  case RULE_DIV:
+	    tokens[nr_token].type=RULE_DIV;
+	    strcpy(tokens[nr_token].str, "/");
+	    if (nr_token==0) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return false;
+	      }
+	    }
+	    break;
+	  case RULE_BRA_L:
+	    tokens[nr_token].type=RULE_BRA_L;
+	    strcpy(tokens[nr_token].str, "(");
+	    if (nr_token!=0)
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
+	      {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    ++left;
+	    break;
+	  case RULE_BRA_R:
+	    tokens[nr_token].type=RULE_BRA_R;
+	    strcpy(tokens[nr_token].str, ")");
+	    if (nr_token==0) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    t=tokens[nr_token-1].type;
+	    if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG)
+	    {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    ++right;
+	    if (right>left) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    break;
+	  case RULE_NE:
+	    tokens[nr_token].type=RULE_NE;
+	    strcpy(tokens[nr_token].str,"!=");
+	    if (nr_token==0) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    break;
+	  case RULE_EQ:
+	    tokens[nr_token].type=RULE_EQ;
+	    strcpy(tokens[nr_token].str,"==");
+	    if (nr_token==0) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    break;
+	  case RULE_ASSIGN:
+	    if (nr_token!=1 || tokens[0].type!=RULE_ALPHA) {
+	      return false;
+	    }
+	    tokens[nr_token].type=RULE_ASSIGN;
+	    strcpy(tokens[nr_token].str,"=");	
+	    if (nr_token!=1||tokens[0].type!=RULE_ALPHA) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    break;
+	  case RULE_OR:
+	    tokens[nr_token].type=RULE_OR;
+	    strcpy(tokens[nr_token].str,"||");
+	    if (nr_token==0) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    break;
+	  case RULE_AND:
+	    tokens[nr_token].type=RULE_AND;
+	    strcpy(tokens[nr_token].str,"&&");
+	    if (nr_token==0) {
+	      fputs("Bad expression!\n", stderr);
+	      return false;
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    break;
+	  case RULE_NOT:
+	    tokens[nr_token].type=RULE_NOT;
+	    strcpy(tokens[nr_token].str, "!");
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
+	      {
+		fputs("Bad expression!\n", stderr);
+		return false;
+	      }
+	    }
+	    break;
+	    }
+	    ++nr_token;
+	    /*
+	     *				switch(rules[i].token_type) {
+	     *		    case RULE_NOTYPE:--nr_token;break;
+	     *                    case RULE_ADD:tokens[nr_token].type=RULE_ADD;strcpy(tokens[nr_token].str, "+");break;
+	     *                    case RULE_SUB:tokens[nr_token].type=RULE_SUB;strcpy(tokens[nr_token].str, "-");break;
+	     *                    case RULE_MUL:tokens[nr_token].type=RULE_MUL;strcpy(tokens[nr_token].str, "*");break;
+	     *                    case RULE_DIV:tokens[nr_token].type=RULE_DIV;strcpy(tokens[nr_token].str, "/");break;
+	     *                    case RULE_BRA_L:tokens[nr_token].type=RULE_BRA_L;strcpy(tokens[nr_token].str, "(");break;
+	     *                    case RULE_BRA_R:tokens[nr_token].type=RULE_BRA_R;strcpy(tokens[nr_token].str, ")");break;
+	     *                    case RULE_DIGIT:tokens[nr_token].type=RULE_DIGIT;strncpy(tokens[nr_token].str,substr_start,substr_len);break;
+	     *                    case RULE_EQ:tokens[nr_token].type=RULE_EQ;strcpy(tokens[nr_token].str,"==");break;
+	     *                    case RULE_NE:tokens[nr_token].type=RULE_NE;strcpy(tokens[nr_token].str,"!=");break;
+	     *                    //case RULE_ASSIGN:tokens[nr_token].type=RULE_ASSIGN;strcpy(tokens[nr_token].str,"=");break;
+	     *                    
+	    } 
+	    ++nr_token; */
+	    break;
+	    }
 	}
-
-	return true; 
+	
+	if(i == NR_REGEX) {
+	  printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+	  return false;
+	}
+      }
+    }
+  }
+  int t2=tokens[nr_token-1].type;
+  if ((left!=right)||(t2!=RULE_DIGIT && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG)) {
+    fputs("Bad expression!\n", stderr);
+    return false;
+  }
+  return true; 
 }
 /*
 typedef struct split_expr {
@@ -258,6 +624,9 @@ int eva(int p, int q, int sum) {
 }*/
 
 uint32_t expr(char *e, bool *success) {
+	if (strcmp("clear",e)==0) {
+	  clear_var();
+	}
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
@@ -268,4 +637,3 @@ uint32_t expr(char *e, bool *success) {
 	//panic("please implement me");
 	return 0;
 }
-
