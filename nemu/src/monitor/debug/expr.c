@@ -182,8 +182,7 @@ static bool make_token(char *e) {
 	      tokens[nr_token].value=(long)swaddr_read((swaddr_t)tokens[nr_token].value,4);
 	    }
 	    break;
-	  case RULE_ALPHA:
-	    
+	  case RULE_ALPHA: 
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_NEG) {
@@ -202,6 +201,7 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_ALPHA;
 	    strncpy(tokens[nr_token].str,substr_start,substr_len);
 	    int tmp_var=find_var(tokens[nr_token].str);
+	    printf("var: %d\n",tmp_var);
 	    if (nr_token==0) {
 	      tmp_var=set_var(tokens[nr_token].str,0);
 	      if (tmp_var==-1) {
