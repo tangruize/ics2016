@@ -38,9 +38,9 @@ static struct rule {
 	 * Pay attention to the precedence level of different rules.
 	 */
 
+    {"[a-zA-Z0-9_]+", RULE_ALPHA},
     {"[0-9]+", RULE_DIGIT},
     {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi)", RULE_REG},
-    {"[a-zA-Z0-9_]+", RULE_ALPHA},
 	{" +",	RULE_NOTYPE},
 	{"\\+", RULE_ADD},
     {"-", RULE_SUB},
