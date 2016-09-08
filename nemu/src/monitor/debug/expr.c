@@ -39,8 +39,8 @@ static struct rule {
 	 */
 
     {"[0-9]+", RULE_DIGIT},
-    {"[a-zA-Z]+", RULE_ALPHA},
     {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi)", RULE_REG},
+    {"[a-zA-Z0-9_]+", RULE_ALPHA},
 	{" +",	RULE_NOTYPE},
 	{"\\+", RULE_ADD},
     {"-", RULE_SUB},
@@ -108,7 +108,7 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
-		    case RULE_NOTYPE:--nr_token;break;
+	/*	    case RULE_NOTYPE:--nr_token;break;
                     case RULE_ADD:tokens[nr_token].type=RULE_ADD;strcpy(tokens[nr_token].str, "+");break;
                     case RULE_SUB:tokens[nr_token].type=RULE_SUB;strcpy(tokens[nr_token].str, "-");break;
                     case RULE_MUL:tokens[nr_token].type=RULE_MUL;strcpy(tokens[nr_token].str, "*");break;
@@ -119,7 +119,8 @@ static bool make_token(char *e) {
                     case RULE_EQ:tokens[nr_token].type=RULE_EQ;strcpy(tokens[nr_token].str,"==");break;
                     case RULE_NE:tokens[nr_token].type=RULE_NE;strcpy(tokens[nr_token].str,"!=");break;
                     //case RULE_ASSIGN:tokens[nr_token].type=RULE_ASSIGN;strcpy(tokens[nr_token].str,"=");break;
-				}
+                    */
+				} 
                     ++nr_token;
 				break;
 			}
