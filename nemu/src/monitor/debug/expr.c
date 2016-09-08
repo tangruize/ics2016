@@ -412,6 +412,7 @@ static bool make_token(char *e) {
 	    break;
 	  case RULE_ASSIGN:
 	    if (nr_token!=1 || tokens[0].type!=RULE_ALPHA) {
+	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
 	      return false;
 	    }
 	    tokens[nr_token].type=RULE_ASSIGN;
