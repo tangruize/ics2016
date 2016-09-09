@@ -588,11 +588,16 @@ static int eval(int p, int q, bool *success) {
 	    tokens[max_pre_pos].value=(long)swaddr_read((swaddr_t)tokens[next].value,4);
 	    break;
 	}
+	tokens[max_pre_pos].type=RULE_DIGIT;
+	tokens[next].type=RULE_NOTYPE;
+	if (tokens[max_pre_pos].type<RULE_NOT) {
+	  tokens[pre].type=RULE_NOTYPE;
+	}
       }
-      tokens[max_pre_pos].type=RULE_DIGIT;
-      tokens[next].type=RULE_NOTYPE;
-      if (tokens[max_pre_pos].type<RULE_NOT) {
-	tokens[pre].type=RULE_NOTYPE;
+      else {
+	printf("error!\n");
+	*success=false;
+	return 0;
       }
     }
   }
