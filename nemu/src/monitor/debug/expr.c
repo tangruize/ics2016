@@ -602,7 +602,7 @@ static int eval(int p, int q, bool *success) {
     }
   }
   //debug
-      printf("0: %ld\n", tokens[0].value);
+      printf("0: %ld\t1: %ld\t2: %ld\n", tokens[0].value,tokens[1].value,tokens[2].value);
   for (i=p;i<=q;++i) {
     if (tokens[i].type>RULE_NOTYPE) {
       *success=true;
@@ -750,9 +750,9 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  int result=eval(0,nr_token-1,success);
+  long result=eval(0,nr_token-1,success);
   if (*success==true) {
-    printf("%d\n", result);
+    printf("%ld\n", result);
   }
   // printf("%d\n", eva(0,nr_token-1,0));
   
