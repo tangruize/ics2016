@@ -564,6 +564,8 @@ static int eval(int p, int q, bool *success) {
 	    }
 	    else {
 	      fputs("Divisor cannot be zero!\n", stderr);
+	      *success=false;
+	      return -1;
 	    }
 	    break;
 	  case RULE_NOT:
