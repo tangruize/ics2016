@@ -130,7 +130,7 @@ static int set_var(char *str, int value) {
   strcpy(var[var_cnt].str,str);
   var[var_cnt].key=value;
   ++var_cnt;
-  return var_cnt;
+  return var_cnt-1;
 }
 
 static int clear_var() {
