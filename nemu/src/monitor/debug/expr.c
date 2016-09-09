@@ -828,6 +828,7 @@ static int eval_start(bool *success) {
 uint32_t expr(char *e, bool *success) {
   if (strcmp("clear",e)==0) {
     clear_var();
+    *success=true;
     return 0;
   }
   if(!make_token(e)) {
