@@ -603,6 +603,9 @@ static int eval(int p, int q, bool *success) {
       return tokens[i].value;
     }
   }
+  
+  //debug
+  printf("false\n");
   *success=false;
   return -1;
 }
