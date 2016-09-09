@@ -172,7 +172,6 @@ static bool make_token(char *e) {
 	int is_neg_or_der=0;
 	int t;
 	if (start_alpha&&nr_token==1&&rules[i].token_type!=RULE_ASSIGN) {
-	  --var_cnt;
 	  return print_err(e, position);
 	}
 	switch(rules[i].token_type) {
@@ -222,14 +221,15 @@ static bool make_token(char *e) {
 	    tokens[nr_token].str[substr_len]='\0';
 	    int tmp_var=find_var(tokens[nr_token].str);
 	    //printf("var: %d\n",tmp_var);
-	    if (nr_token==0) {
-	      tmp_var=set_var(tokens[nr_token].str,0);
+	    int is_find=find_var(tokens[nr_token].str);
+	    if (nr_token==0 && is_find==-1) {
+	      //tmp_var=set_var(tokens[nr_token].str,0);
 	      start_alpha=1;
-	      if (tmp_var==-1) {
+	      /*if (tmp_var==-1) {
 		return false;
-	      }
+	      }*/
 	    }
-	    else if (tmp_var!=-1) {
+	    else if (is_find!=-1) {
 	      if (is_neg_or_der==1) {
 		tokens[nr_token].value=-var[tmp_var].key;
 	      }
@@ -238,7 +238,7 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    else {
-	      printf("cannot find the variable '%s'\n", tokens[nr_token].str);
+	      printf("Cannot find the variable '%s'\n", tokens[nr_token].str);
 	      return false;
 	    }
 	    break;
