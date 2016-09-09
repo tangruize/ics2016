@@ -125,7 +125,7 @@ static int clear_var() {
 static char *cpu_name_rule[]={"$eax", "$ecx", "$edx", "$ebx", "$esp", "$ebp", "$esi", "$edi", "$eip"};
 
 static bool print_err(char *str, int n) {
-  fprintf(stderr, "Bad expression!\n%s\n\033[32m%*c\033[0m\n", str, n+1, '^');
+  fprintf(stderr, "%s\n\033[32m%*c\033[0m\n", str, n+1, '^');
   return false;
 }
   
@@ -144,7 +144,7 @@ static bool make_token(char *e) {
 	char *substr_start = e + position;
 	int substr_len = pmatch.rm_eo;
 	
-	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+	//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 	
 	
 	/* done */
@@ -155,6 +155,7 @@ static bool make_token(char *e) {
 	int is_neg_or_der=0;
 	int t;
 	if (start_alpha&&nr_token==1&&rules[i].token_type!=RULE_ASSIGN) {
+	  --var_cnt;
 	  return print_err(e, position);
 	}
 	switch(rules[i].token_type) {
@@ -464,7 +465,7 @@ static bool make_token(char *e) {
     }
   }
   if (left!=right) {
-    fprintf(stderr, "Bad expression!\nBrackets do not match.\n");
+    fprintf(stderr, "Brackets do not match.\n");
     return false;
   }
   return true; 
