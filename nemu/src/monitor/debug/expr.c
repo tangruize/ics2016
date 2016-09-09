@@ -255,7 +255,7 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    else {
-	      fprintf(stderr, "Cannot find the variable %s\n", tokens[nr_token].str);
+	      fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
 	      return false;
 	    }
 	    break;
@@ -506,7 +506,7 @@ static bool make_token(char *e) {
     return false;
   }
   if (start_alpha==1 && nr_token==1) {
-    fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
+    fprintf(stderr, "Cannot find the variable '%s'\n", tokens[0].str);
     return false;
   }
   return true; 
