@@ -11,10 +11,11 @@
 enum {
   
   RULE_ASSIGN=0,
-  RULE_AND, RULE_OR,
-  RULE_EQ, RULE_NE,
+  RULE_AND, RULE_OR, 
+  RULE_EQ, RULE_NE, RULE_GT, RULE_LT, RULE_GE, RULE_LE,
+  RULE_SHIFT_L, RULE_SHIFT_R,
   RULE_ADD, RULE_SUB,
-  RULE_MUL, RULE_DIV,
+  RULE_MUL, RULE_DIV, RULE_REM,
   RULE_NOT, RULE_NEG, RULE_DER, 
   RULE_BRA_L, RULE_BRA_R,
   
@@ -31,11 +32,12 @@ static struct precedence {
 } rule_pre[] = {
   {RULE_ASSIGN,0},
   {RULE_AND,1}, {RULE_OR,1},
-  {RULE_EQ,2}, {RULE_NE,2},
-  {RULE_ADD,3}, {RULE_SUB,3},
-  {RULE_MUL,4}, {RULE_DIV,4},
-  {RULE_NOT,5}, {RULE_NEG, 5}, {RULE_DER, 5},
-  {RULE_BRA_L,6},{RULE_BRA_R,6}
+  {RULE_EQ,2}, {RULE_NE,2}, {RULE_GT,2}, {RULE_LT, 2}, {RULE_GE,2}, {RULE_LE, 2},
+  {RULE_SHIFT_L, 3}, {RULE_SHIFT_R,3},
+  {RULE_ADD,4}, {RULE_SUB,4},
+  {RULE_MUL,5}, {RULE_DIV,5}, {RULE_REM, 5},
+  {RULE_NOT,6}, {RULE_NEG, 6}, {RULE_DER, 6},
+  {RULE_BRA_L,7},{RULE_BRA_R,7}
 };
 
 static struct rule {
@@ -51,15 +53,22 @@ static struct rule {
   {"^[a-zA-Z_][a-zA-Z0-9_]*", RULE_ALPHA},
   {"[0-9]+", RULE_DIGIT},
   {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip)", RULE_REG},
-  {" +",	RULE_NOTYPE},
+  {" +", RULE_NOTYPE},
   {"\\+", RULE_ADD},
   {"-", RULE_SUB},
   {"\\*", RULE_MUL},
   {"/", RULE_DIV},
+  {"%",RULE_REM},
   {"\\(", RULE_BRA_L},
   {"\\)", RULE_BRA_R},
   {"!=", RULE_NE},
   {"==", RULE_EQ},
+  {">", RULE_GT},
+  {"<",RULE_LT},
+  {">=",RULE_GE},
+  {"<=",RULE_LE},
+  {"<<",RULE_SHIFT_L},
+  {">>",RULE_SHIFT_R},
   {"=", RULE_ASSIGN},
   {"\\|\\|", RULE_OR},
   {"&&", RULE_AND},
@@ -376,6 +385,48 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    break;
+	  case RULE_REM:
+	    tokens[nr_token].type=RULE_REM;
+	    strcpy(tokens[nr_token].str, "%");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_SHIFT_L:
+	    tokens[nr_token].type=RULE_SHIFT_L;
+	    strcpy(tokens[nr_token].str, "<<");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_SHIFT_R:
+	    tokens[nr_token].type=RULE_SHIFT_R;
+	    strcpy(tokens[nr_token].str, ">>");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
 	  case RULE_BRA_L:
 	    tokens[nr_token].type=RULE_BRA_L;
 	    strcpy(tokens[nr_token].str, "(");
@@ -422,6 +473,62 @@ static bool make_token(char *e) {
 	  case RULE_EQ:
 	    tokens[nr_token].type=RULE_EQ;
 	    strcpy(tokens[nr_token].str,"==");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_GT:
+	    tokens[nr_token].type=RULE_GT;
+	    strcpy(tokens[nr_token].str,">");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_LT:
+	    tokens[nr_token].type=RULE_LT;
+	    strcpy(tokens[nr_token].str,"<");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_GE:
+	    tokens[nr_token].type=RULE_GE;
+	    strcpy(tokens[nr_token].str,">=");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_LE:
+	    tokens[nr_token].type=RULE_LE;
+	    strcpy(tokens[nr_token].str,"<=");
 	    if (nr_token==0) {
 	      return print_err(e, position);
 	    }
@@ -574,6 +681,18 @@ static int eval(int p, int q, bool *success) {
 	  case RULE_NE:
 	    tokens[max_pre_pos].value=(tokens[pre].value!=tokens[next].value);
 	    break;
+	  case RULE_GT:
+	    tokens[max_pre_pos].value=(tokens[pre].value>tokens[next].value);
+	    break;
+	  case RULE_LT:
+	    tokens[max_pre_pos].value=(tokens[pre].value<tokens[next].value);
+	    break;
+	  case RULE_GE:
+	    tokens[max_pre_pos].value=(tokens[pre].value>=tokens[next].value);
+	    break;
+	  case RULE_LE:
+	    tokens[max_pre_pos].value=(tokens[pre].value<=tokens[next].value);
+	    break;
 	  case RULE_ADD:
 	    tokens[max_pre_pos].value=(tokens[pre].value+tokens[next].value);
 	    break;
@@ -592,6 +711,15 @@ static int eval(int p, int q, bool *success) {
 	      *success=false;
 	      return -1;
 	    }
+	    break;
+	  case RULE_REM:
+	    tokens[max_pre_pos].value=(tokens[pre].value%tokens[next].value);
+	    break;
+	  case RULE_SHIFT_L:
+	    tokens[max_pre_pos].value=(tokens[pre].value<<tokens[next].value);
+	    break;
+	  case RULE_SHIFT_R:
+	    tokens[max_pre_pos].value=(tokens[pre].value>>tokens[next].value);
 	    break;
 	  case RULE_NOT:
 	    tokens[max_pre_pos].value=(!tokens[next].value);
