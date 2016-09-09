@@ -598,7 +598,7 @@ static int eval(int p, int q, bool *success) {
       *success=true;
       
       //debug
-      printf("where: %d", i);
+      printf("where: %d\n value: %ld", i, tokens[i].value);
       
       return tokens[i].value;
     }
