@@ -539,6 +539,8 @@ static int eval(int p, int q, bool *success) {
     if (max_pre!=-1) {
       int pre,next;
       if (find_digit(p,q,max_pre_pos,&pre,&next)==0) {
+	//debug
+	printf("pre: %d\t next: %d\n", pre, next);
 	switch (tokens[max_pre_pos].type) {
 	  case RULE_AND:
 	    tokens[max_pre_pos].value=(tokens[pre].value&&tokens[next].value);
