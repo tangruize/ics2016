@@ -101,7 +101,7 @@ typedef struct variables {
   int key;
 } variables;
 
-#define VAR_MAX 2
+#define VAR_MAX 32
 static variables var[VAR_MAX];
 static int var_cnt=0;
 
@@ -227,7 +227,7 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_ALPHA;
 	    strncpy(tokens[nr_token].str,substr_start,substr_len);
 	    tokens[nr_token].str[substr_len]='\0';
-	    printf("%s\n", tokens[nr_token].str);
+	    //printf("%s\n", tokens[nr_token].str);
 	    int tmp_var=find_var(tokens[nr_token].str);
 	    //printf("var: %d\n",tmp_var);
 	    //int is_find=find_var(tokens[nr_token].str);
@@ -255,7 +255,7 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    else {
-	      fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
+	      fprintf(stderr, "Cannot find the variable \'%s\'\n", tokens[nr_token].str);
 	      return false;
 	    }
 	    break;
