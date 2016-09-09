@@ -599,36 +599,7 @@ static int eval(int p, int q, bool *success) {
   *success=false;
   return -1;
 }
-/*
- * typedef struct split_expr {
- *    int start,end;
- *    int sum, is_calc;
- *    split_expr *depend;
- *    split_expr *next;
- * } split_expr; 
- * 
- * split_expr *expr_start;
- * 
- * int analyse_expr() {
- *    while (expr_start!=NULL)
- *    {
- *        split_expr *p=expr->next;
- *        free(expr_start);
- *        expr_start=p;
- *    }
- *    int i=0;
- *    for (;i!=nr_token;++i)
- *    {
- *        split_expr *p=new split_expr;
- *        p->next=NULL;
- *        p->depend=NULL;
- *        if (expr_start==NULL) {
- *            expr_start=p;
- *        }
- * 
- *    }
- * }
- */
+
 /*
  * int check_brackets(int p, int q, int *r, int *s) {
  *    Assert(p<=q, "Bad expression.\n");
