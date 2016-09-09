@@ -713,7 +713,14 @@ static int eval(int p, int q, bool *success) {
 	    }
 	    break;
 	  case RULE_REM:
-	    tokens[max_pre_pos].value=(tokens[pre].value%tokens[next].value);
+	    if (tokens[next].value) {
+	      tokens[max_pre_pos].value=(tokens[pre].value%tokens[next].value);
+	    }
+	    else {
+	      fputs("Divisor cannot be zero!\n", stderr);
+	      *success=false;
+	      return -1;
+	    }
 	    break;
 	  case RULE_SHIFT_L:
 	    tokens[max_pre_pos].value=(tokens[pre].value<<tokens[next].value);
