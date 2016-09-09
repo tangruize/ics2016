@@ -9,52 +9,44 @@
 #include <regex.h>
 
 enum {
-    RULE_DIGIT=256, RULE_ALPHA, RULE_REG, RULE_NOTYPE,
-    RULE_ADD, RULE_SUB, RULE_MUL, RULE_DIV,
-    RULE_BRA_L, RULE_BRA_R, 
-    RULE_NE, RULE_EQ, RULE_ASSIGN,
-    RULE_OR, RULE_AND, RULE_NOT,
-    RULE_DER, RULE_NEG
-
-	/* TODO: Add more token types */
-
+  RULE_DIGIT=256, RULE_ALPHA, RULE_REG, RULE_NOTYPE,
+  RULE_ADD, RULE_SUB, RULE_MUL, RULE_DIV,
+  RULE_BRA_L, RULE_BRA_R, 
+  RULE_NE, RULE_EQ, RULE_ASSIGN,
+  RULE_OR, RULE_AND, RULE_NOT,
+  RULE_DER, RULE_NEG
+  
+  /* done */
+  /* TODO: Add more token types */
+  
 };
 
-/* 
 static struct rule {
-	char *regex;
-	int token_type;
+  char *regex;
+  int token_type;
 } rules[] = {
-	{" +",	NOTYPE},				// spaces
-	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
-};*/
-
-static struct rule {
-	char *regex;
-	int token_type;
-} rules[] = {
-
-	/* TODO: Add more rules.
-	 * Pay attention to the precedence level of different rules.
-	 */
-
-    {"^[a-zA-Z_][a-zA-Z0-9_]*", RULE_ALPHA},
-    {"[0-9]+", RULE_DIGIT},
-    {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi)", RULE_REG},
-	{" +",	RULE_NOTYPE},
-	{"\\+", RULE_ADD},
-    {"-", RULE_SUB},
-    {"\\*", RULE_MUL},
-    {"/", RULE_DIV},
-    {"\\(", RULE_BRA_L},
-    {"\\)", RULE_BRA_R},
-    {"!=", RULE_NE},
-	{"==", RULE_EQ},
-    {"=", RULE_ASSIGN},
-    {"\\|\\|", RULE_OR},
-    {"&&", RULE_AND},
-    {"\\!", RULE_NOT},
+  
+  /* done */
+  /* TODO: Add more rules.
+   * Pay attention to the precedence level of different rules.
+   */
+  
+  {"^[a-zA-Z_][a-zA-Z0-9_]*", RULE_ALPHA},
+  {"[0-9]+", RULE_DIGIT},
+  {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi)", RULE_REG},
+  {" +",	RULE_NOTYPE},
+  {"\\+", RULE_ADD},
+  {"-", RULE_SUB},
+  {"\\*", RULE_MUL},
+  {"/", RULE_DIV},
+  {"\\(", RULE_BRA_L},
+  {"\\)", RULE_BRA_R},
+  {"!=", RULE_NE},
+  {"==", RULE_EQ},
+  {"=", RULE_ASSIGN},
+  {"\\|\\|", RULE_OR},
+  {"&&", RULE_AND},
+  {"\\!", RULE_NOT},
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -65,23 +57,23 @@ static regex_t re[NR_REGEX];
  * Therefore we compile them only once before any usage.
  */
 void init_regex() {
-	int i;
-	char error_msg[128];
-	int ret;
-
-	for(i = 0; i < NR_REGEX; i ++) {
-		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
-		if(ret != 0) {
-			regerror(ret, &re[i], error_msg, 128);
-			Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
-		}
-	}
+  int i;
+  char error_msg[128];
+  int ret;
+  
+  for(i = 0; i < NR_REGEX; i ++) {
+    ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+    if(ret != 0) {
+      regerror(ret, &re[i], error_msg, 128);
+      Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+    }
+  }
 }
 
 typedef struct token {
-	int type;
-	char str[32];
-	long int value;
+  int type;
+  char str[32];
+  long int value;
 } Token;
 
 Token tokens[32];
@@ -124,14 +116,19 @@ static int set_var(char *str, long int value) {
   return var_cnt;
 }
 
-static int clear_var()
-{
+static int clear_var() {
   var_cnt=0;
   printf("Ok!\n");
   return 0;
 }
 
 static char *cpu_name_rule[]={"$eax", "$ecx", "$edx", "$ebx", "$esp", "$ebp", "$esi", "$edi", "$eip"};
+
+static bool print_err(char *str, int n) {
+  fprintf(stderr, "Bad expression!\n%s\n\033[32m%-*c\033[0m\n", str, n, '^');
+  return false;
+}
+  
 
 static bool make_token(char *e) {
   int position = 0;
@@ -150,6 +147,7 @@ static bool make_token(char *e) {
 	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 	position += substr_len;
 	
+	/* done */
 	/* TODO: Now a new token is recognized with rules[i]. Add codes
 	 * to record the token in the array `tokens'. For certain types
 	 * of tokens, some extra actions should be performed.
@@ -157,9 +155,8 @@ static bool make_token(char *e) {
 	int is_neg_or_der=0;
 	int t;
 	if (start_alpha&&nr_token==1&&rules[i].token_type!=RULE_ASSIGN) {
-	  printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	  return false;
-	 }
+	  return print_err(e, position);
+	}
 	switch(rules[i].token_type) {
 	  case RULE_DIGIT:
 	    if (nr_token!=0) {
@@ -173,8 +170,7 @@ static bool make_token(char *e) {
 		is_neg_or_der=2;
 	      }
 	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    tokens[nr_token].type=RULE_DIGIT;
@@ -199,8 +195,7 @@ static bool make_token(char *e) {
 		is_neg_or_der=2;
 	      }
 	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    tokens[nr_token].type=RULE_ALPHA;
@@ -223,8 +218,8 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    else {
-		printf("cannot find the variable '%s'\n", tokens[nr_token].str);
-		return false;
+	      printf("cannot find the variable '%s'\n", tokens[nr_token].str);
+	      return false;
 	    }
 	    break;
 	  case RULE_REG:
@@ -240,8 +235,7 @@ static bool make_token(char *e) {
 		is_neg_or_der=2;
 	      }
 	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    tokens[nr_token].type=RULE_REG;
@@ -268,15 +262,13 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_ADD;
 	    strcpy(tokens[nr_token].str, "+");
 	    if (nr_token==0) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    break;
@@ -295,15 +287,13 @@ static bool make_token(char *e) {
 	    }
 	    if (tokens[nr_token].type!=RULE_NEG) {
 	      if (nr_token==0) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	      else
 	      {
 		t=tokens[nr_token-1].type;
 		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		  printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		  return false;
+		  return print_err(e, position);
 		}
 	      }
 	    }
@@ -323,15 +313,13 @@ static bool make_token(char *e) {
 	    }
 	    if (tokens[nr_token].type!=RULE_DER) {
 	      if (nr_token==0) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	      else
 	      {
 		t=tokens[nr_token-1].type;
 		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		  printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		  return false;
+		  return print_err(e, position);
 		}
 	      }
 	    }
@@ -340,14 +328,13 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_DIV;
 	    strcpy(tokens[nr_token].str, "/");
 	    if (nr_token==0) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    break;
@@ -359,8 +346,7 @@ static bool make_token(char *e) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
 	      {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    ++left;
@@ -369,34 +355,29 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_BRA_R;
 	    strcpy(tokens[nr_token].str, ")");
 	    if (nr_token==0) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    t=tokens[nr_token-1].type;
 	    if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG)
 	    {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    ++right;
 	    if (right>left) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    break;
 	  case RULE_NE:
 	    tokens[nr_token].type=RULE_NE;
 	    strcpy(tokens[nr_token].str,"!=");
 	    if (nr_token==0) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    break;
@@ -404,43 +385,37 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_EQ;
 	    strcpy(tokens[nr_token].str,"==");
 	    if (nr_token==0) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    break;
 	  case RULE_ASSIGN:
 	    if (nr_token!=1 || tokens[0].type!=RULE_ALPHA) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    tokens[nr_token].type=RULE_ASSIGN;
 	    strcpy(tokens[nr_token].str,"=");	
 	    if (nr_token!=1||tokens[0].type!=RULE_ALPHA) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    break;
 	  case RULE_OR:
 	    tokens[nr_token].type=RULE_OR;
 	    strcpy(tokens[nr_token].str,"||");
 	    if (nr_token==0) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    break;
@@ -448,15 +423,13 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_AND;
 	    strcpy(tokens[nr_token].str,"&&");
 	    if (nr_token==0) {
-	      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-	      return false;
+	      return print_err(e, position);
 	    }
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
 	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    break;
@@ -467,8 +440,7 @@ static bool make_token(char *e) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
 	      {
-		printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-		return false;
+		return print_err(e, position);
 	      }
 	    }
 	    break;
@@ -487,150 +459,151 @@ static bool make_token(char *e) {
   {
     t2=tokens[nr_token-1].type;
     if (t2!=RULE_DIGIT && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG) {
-      printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
-      return false;
+      return print_err(e, position-1);
     }
   }
   if (left!=right) {
-    printf("LINE: %d\n",__LINE__); fputs("Bad expression!\n", stderr);
+    fprintf(stderr, "Bad expression!\nBrackets do not match.\n");
     return false;
   }
   return true; 
 }
+
+
 /*
-typedef struct split_expr {
-    int start,end;
-    int sum, is_calc;
-    split_expr *depend;
-    split_expr *next;
-} split_expr; 
-
-split_expr *expr_start;
-
-int analyse_expr() {
-    while (expr_start!=NULL)
-    {
-        split_expr *p=expr->next;
-        free(expr_start);
-        expr_start=p;
-    }
-    int i=0;
-    for (;i!=nr_token;++i)
-    {
-        split_expr *p=new split_expr;
-        p->next=NULL;
-        p->depend=NULL;
-        if (expr_start==NULL) {
-            expr_start=p;
-        }
-
-    }
-}
-*/
+ * typedef struct split_expr {
+ *    int start,end;
+ *    int sum, is_calc;
+ *    split_expr *depend;
+ *    split_expr *next;
+ * } split_expr; 
+ * 
+ * split_expr *expr_start;
+ * 
+ * int analyse_expr() {
+ *    while (expr_start!=NULL)
+ *    {
+ *        split_expr *p=expr->next;
+ *        free(expr_start);
+ *        expr_start=p;
+ *    }
+ *    int i=0;
+ *    for (;i!=nr_token;++i)
+ *    {
+ *        split_expr *p=new split_expr;
+ *        p->next=NULL;
+ *        p->depend=NULL;
+ *        if (expr_start==NULL) {
+ *            expr_start=p;
+ *        }
+ * 
+ *    }
+ * }
+ */
 /*
-int check_brackets(int p, int q, int *r, int *s) {
-    Assert(p<=q, "Bad expression.\n");
-    int i;
-    for (i=p; i<=q; ++i) {
-        if (tokens[i].type==RULE_BRA_L) {
-            int j=i+i;
-            int cnt=1, cnt2=1;
-            for (;j<=q;++j ) {
-                if (tokens[i].type==RULE_BRA_L) {
-                    ++cnt;
-                    ++cnt2;
-                }
-                else if (tokens[i].type==RULE_BRA_R) {
-                    --cnt;
-                    if (cnt==0) {
-                        *r=i+1;
-                        *s=j-1;
-                        return cnt2;
-                    }
-                }
-            }
-            return -1;
-        }
-    }
-    return 0;
-}
-
-int err_exp=0;
-int eva(int p, int q, int sum) {
-    int pp=0,qq=0;
-    //Assert(p<=q, "Bad expression.\n");
-    if (p>=q) {
-        return sum;//+strtol(tokens[p].str,NULL,0);;
-    }
-    int check=check_brackets(p,q,&pp,&qq);
-    //printf("check: %d\n",check);
-    if (check==-1)
-    {
-        fputs("The brackets do not match.\n", stderr);
-        err_exp=1;
-        return -1;
-    }
-    else if (check ==0)
-    {
-        if (p==0) {
-            int a=strtol(tokens[p].str,NULL,0);
-            int b=strtol(tokens[p+2].str,NULL,0);
-            p+=3;
-            //printf("%d\t%d\n", a,b);
-            switch (tokens[p-2].type)
-            {
-                case RULE_ADD:return eva(p,q,a+b);
-                case RULE_SUB:return eva(p,q,a-b);
-                case RULE_MUL:return eva(p,q,a*b);
-                case RULE_DIV:if (b==0){
-                    err_exp=1;
-                    fputs("Divisor cannot be zero!\n", stderr);
-                    return -1;
-                    }
-                    return eva(p,q,a/b);
-                case RULE_NE:return eva(p,q,a!=b);
-                case RULE_EQ:return eva(p,q,a==b);
-            }
-        }
-        else 
-        {
-            int b=strtol(tokens[p+1].str,NULL,0);
-            p+=2;
-            printf("b: %d\tsum: %d\tp: %d\tq: %d\n", b,sum,p,q);
-            switch (tokens[p-2].type)
-            {
-                case RULE_ADD:return eva(p,q,sum+b);
-                case RULE_SUB:return eva(p,q,sum-b);
-                case RULE_MUL:return eva(p,q,sum*b);
-                case RULE_DIV:if (b==0){
-                    err_exp=1;
-                    fputs("Divisor cannot be zero!\n", stderr);
-                    return -1;
-                    }
-                    return eva(p,q,sum/b);
-                case RULE_NE:return eva(p,q,sum!=b);
-                case RULE_EQ:return eva(p,q,sum==b);
-            }
-        }
-    }
-    else
-    {
-        return eva(pp,qq,sum);
-    }
-    return 0;
-}*/
+ * int check_brackets(int p, int q, int *r, int *s) {
+ *    Assert(p<=q, "Bad expression.\n");
+ *    int i;
+ *    for (i=p; i<=q; ++i) {
+ *        if (tokens[i].type==RULE_BRA_L) {
+ *            int j=i+i;
+ *            int cnt=1, cnt2=1;
+ *            for (;j<=q;++j ) {
+ *                if (tokens[i].type==RULE_BRA_L) {
+ *                    ++cnt;
+ *                    ++cnt2;
+ *                }
+ *                else if (tokens[i].type==RULE_BRA_R) {
+ *                    --cnt;
+ *                    if (cnt==0) {
+ *r=i+1;
+ *s=j-1;
+ *                        return cnt2;
+ *                    }
+ *                }
+ *            }
+ *            return -1;
+ *        }
+ *    }
+ *    return 0;
+ * }
+ * 
+ * int err_exp=0;
+ * int eva(int p, int q, int sum) {
+ *    int pp=0,qq=0;
+ *    //Assert(p<=q, "Bad expression.\n");
+ *    if (p>=q) {
+ *        return sum;//+strtol(tokens[p].str,NULL,0);;
+ *    }
+ *    int check=check_brackets(p,q,&pp,&qq);
+ *    //printf("check: %d\n",check);
+ *    if (check==-1)
+ *    {
+ *        fputs("The brackets do not match.\n", stderr);
+ *        err_exp=1;
+ *        return -1;
+ *    }
+ *    else if (check ==0)
+ *    {
+ *        if (p==0) {
+ *            int a=strtol(tokens[p].str,NULL,0);
+ *            int b=strtol(tokens[p+2].str,NULL,0);
+ *            p+=3;
+ *            //printf("%d\t%d\n", a,b);
+ *            switch (tokens[p-2].type)
+ *            {
+ *                case RULE_ADD:return eva(p,q,a+b);
+ *                case RULE_SUB:return eva(p,q,a-b);
+ *                case RULE_MUL:return eva(p,q,a*b);
+ *                case RULE_DIV:if (b==0){
+ *                    err_exp=1;
+ *                    fputs("Divisor cannot be zero!\n", stderr);
+ *                    return -1;
+ *                    }
+ *                    return eva(p,q,a/b);
+ *                case RULE_NE:return eva(p,q,a!=b);
+ *                case RULE_EQ:return eva(p,q,a==b);
+ *            }
+ *        }
+ *        else 
+ *        {
+ *            int b=strtol(tokens[p+1].str,NULL,0);
+ *            p+=2;
+ *            printf("b: %d\tsum: %d\tp: %d\tq: %d\n", b,sum,p,q);
+ *            switch (tokens[p-2].type)
+ *            {
+ *                case RULE_ADD:return eva(p,q,sum+b);
+ *                case RULE_SUB:return eva(p,q,sum-b);
+ *                case RULE_MUL:return eva(p,q,sum*b);
+ *                case RULE_DIV:if (b==0){
+ *                    err_exp=1;
+ *                    fputs("Divisor cannot be zero!\n", stderr);
+ *                    return -1;
+ *                    }
+ *                    return eva(p,q,sum/b);
+ *                case RULE_NE:return eva(p,q,sum!=b);
+ *                case RULE_EQ:return eva(p,q,sum==b);
+ *            }
+ *        }
+ *    }
+ *    else
+ *    {
+ *        return eva(pp,qq,sum);
+ *    }
+ *    return 0;
+ * }*/
 
 uint32_t expr(char *e, bool *success) {
-	if (strcmp("clear",e)==0) {
-	  clear_var();
-	}
-	if(!make_token(e)) {
-		*success = false;
-		return 0;
-	}
-   // printf("%d\n", eva(0,nr_token-1,0));
-    
-	/* TODO: Insert codes to evaluate the expression. */
-	//panic("please implement me");
-	return 0;
+  if (strcmp("clear",e)==0) {
+    clear_var();
+  }
+  if(!make_token(e)) {
+    *success = false;
+    return 0;
+  }
+  // printf("%d\n", eva(0,nr_token-1,0));
+  
+  /* TODO: Insert codes to evaluate the expression. */
+  //panic("please implement me");
+  return 0;
 }
