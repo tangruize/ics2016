@@ -239,7 +239,7 @@ void ui_mainloop() {
     
     if(i == NR_CMD) {
       bool success;
-      expr(args,&success);
+      expr(str,&success);
       if (success==false) {
 	printf("Unknown command '%s'\n", cmd); 
       }
