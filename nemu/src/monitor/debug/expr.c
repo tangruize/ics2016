@@ -533,14 +533,15 @@ static int eval(int p, int q, bool *success) {
     int max_pre=-1, max_pre_pos=-1;
     for (i=p;i<=q;++i) {
       if (tokens[i].type<RULE_NOTYPE&&rule_pre[tokens[i].type].pre>max_pre) {
+	max_pre=tokens[i].type;
 	max_pre_pos=i;
       }
     }
     //debug
-    printf("max_pre: %d", max_pre);
+    printf("max_pre: %d\n", max_pre);
     
     if (max_pre!=-1) {
-      int pre,next;
+      int pre=-1,next=-1;
       if (find_digit(p,q,max_pre_pos,&pre,&next)==0) {
 	//debug
 	printf("pre: %d\t next: %d\n", pre, next);
