@@ -664,8 +664,8 @@ static bool make_token(char *e, bool *is_match) {
       }
     }
     if(i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      is_match=false;
+      //printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      *is_match=false;
       return false;
     }
   }
@@ -682,7 +682,7 @@ static bool make_token(char *e, bool *is_match) {
     return false;
   }
   if (start_alpha==1 && nr_token==1) {
-    fprintf(stderr, "Cannot find the variable '%s'\n", tokens[0].str);
+    *is_match=false;
     return false;
   }
   return true; 
@@ -913,7 +913,6 @@ uint32_t expr(char *e, bool *success) {
   }
   bool is_match=true;
   if(!make_token(e, &is_match)) {
-    printf("%d", is_match);
     if (is_match==false) {
       *success = false;
     }
