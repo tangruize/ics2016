@@ -118,7 +118,7 @@ static int find_var(char *str) {
 static int set_var(char *str, int value) {
   int i=0;
   if (var_cnt==VAR_MAX) {
-    printf("variables reached limits (%d), please clear!\n", VAR_MAX);
+    printf("Variables reached limits (%d), please clear!\n", VAR_MAX);
     return -1;
   }
   for (;i < var_cnt; ++i) {
@@ -650,6 +650,25 @@ static int eval_bra(int p, int q, bool *success) {
   return eval(p,q,success);
 }
 
+static int eval_start(bool *success) {
+  if (nr_token>=2 && tokens[1].type==RULE_ASSIGN) {
+    int key=eval_bra(2, nr_token-1, success);
+    int i=set_var(tokens[0].str, key);
+    if (success==false) {
+      return -1;
+    }
+    if (i==-1) {
+      printf("The result is ");
+      return key;
+    }
+    printf("%s = ", var[i].str);
+    return key;
+  }
+  else {
+    return eval_bra(0, nr_token-1, success);
+  }
+}
+
 uint32_t expr(char *e, bool *success) {
   if (strcmp("clear",e)==0) {
     clear_var();
@@ -658,7 +677,7 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  int result=eval_bra(0,nr_token-1,success);
+  int result=eval_start(success);
   if (*success==true) {
     printf("%d\n", result);
   }
