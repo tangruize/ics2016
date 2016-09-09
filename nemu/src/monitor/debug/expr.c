@@ -221,15 +221,18 @@ static bool make_token(char *e) {
 	    tokens[nr_token].str[substr_len]='\0';
 	    int tmp_var=find_var(tokens[nr_token].str);
 	    //printf("var: %d\n",tmp_var);
-	    int is_find=find_var(tokens[nr_token].str);
-	    if (nr_token==0 && is_find==-1) {
+	    //int is_find=find_var(tokens[nr_token].str);
+	    if (nr_token==0 && tmp_var==-1) {
 	      //tmp_var=set_var(tokens[nr_token].str,0);
 	      start_alpha=1;
 	      /*if (tmp_var==-1) {
 		return false;
 	      }*/
 	    }
-	    else if (is_find!=-1) {
+	    else if (tmp_var!=-1) {
+	      if (is_neg_or_der==0) {
+		tokens[nr_token].value=var[tmp_var].key;
+	      }
 	      if (is_neg_or_der==1) {
 		tokens[nr_token].value=-var[tmp_var].key;
 	      }
