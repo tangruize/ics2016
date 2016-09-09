@@ -501,6 +501,7 @@ static bool make_token(char *e) {
   }
   if (start_alpha==1 && nr_token==1) {
     fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
+    return false;
   }
   return true; 
 }
