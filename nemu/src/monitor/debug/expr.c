@@ -227,6 +227,7 @@ static bool make_token(char *e) {
 	    tokens[nr_token].type=RULE_ALPHA;
 	    strncpy(tokens[nr_token].str,substr_start,substr_len);
 	    tokens[nr_token].str[substr_len]='\0';
+	    printf("%s\n", tokens[nr_token].str);
 	    int tmp_var=find_var(tokens[nr_token].str);
 	    //printf("var: %d\n",tmp_var);
 	    //int is_find=find_var(tokens[nr_token].str);
