@@ -50,7 +50,7 @@ static struct rule {
   
   {"^[a-zA-Z_][a-zA-Z0-9_]*", RULE_ALPHA},
   {"[0-9]+", RULE_DIGIT},
-  {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi)", RULE_REG},
+  {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip)", RULE_REG},
   {" +",	RULE_NOTYPE},
   {"\\+", RULE_ADD},
   {"-", RULE_SUB},
