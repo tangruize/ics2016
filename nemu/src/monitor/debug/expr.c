@@ -193,6 +193,7 @@ static bool make_token(char *e) {
 	    }
 	    tokens[nr_token].type=RULE_DIGIT;
 	    strncpy(tokens[nr_token].str,substr_start,substr_len);
+	    tokens[nr_token].str[substr_len]='\0';
 	    tokens[nr_token].value=strtol(tokens[nr_token].str,NULL,0);
 	    if (is_neg_or_der==1) {
 	      tokens[nr_token].value=-tokens[nr_token].value;
@@ -218,6 +219,7 @@ static bool make_token(char *e) {
 	    }
 	    tokens[nr_token].type=RULE_ALPHA;
 	    strncpy(tokens[nr_token].str,substr_start,substr_len);
+	    tokens[nr_token].str[substr_len]='\0';
 	    int tmp_var=find_var(tokens[nr_token].str);
 	    //printf("var: %d\n",tmp_var);
 	    if (nr_token==0) {
@@ -258,6 +260,7 @@ static bool make_token(char *e) {
 	    }
 	    tokens[nr_token].type=RULE_REG;
 	    strncpy(tokens[nr_token].str,substr_start,substr_len);
+	    tokens[nr_token].str[substr_len]='\0';
 	    int gpr_cnt=0;
 	    for (;gpr_cnt<8;++gpr_cnt) {
 	      if (strcmp(tokens[nr_token].str,cpu_name_rule[gpr_cnt])==0) {
