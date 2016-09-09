@@ -524,10 +524,6 @@ static int eval(int p, int q, bool *success) {
       ++op;
     }
   }
-  
-  /*debug*/
-  printf("op: %d\n", op);
-  
   int j=0;
   for (;j<op;++j) {
     int max_pre=-1, max_pre_pos=-1;
@@ -537,14 +533,9 @@ static int eval(int p, int q, bool *success) {
 	max_pre_pos=i;
       }
     }
-    //debug
-    printf("max_pre: %d\n", max_pre);
-    
     if (max_pre!=-1) {
       int pre=0,next=0;
       if (find_digit(p,q,max_pre_pos,&pre,&next)==0) {
-	//debug
-	printf("pre: %d\t next: %d\n", pre, next);
 	switch (tokens[max_pre_pos].type) {
 	  case RULE_AND:
 	    tokens[max_pre_pos].value=(tokens[pre].value&&tokens[next].value);
@@ -560,9 +551,6 @@ static int eval(int p, int q, bool *success) {
 	    break;
 	  case RULE_ADD:
 	    tokens[max_pre_pos].value=(tokens[pre].value+tokens[next].value);
-	    
-	    //debug 
-	    printf("add: %ld\n", tokens[max_pre_pos].value);
 	    break;
 	  case RULE_SUB:
 	    tokens[max_pre_pos].value=(tokens[pre].value-tokens[next].value);
@@ -590,9 +578,6 @@ static int eval(int p, int q, bool *success) {
 	}
 	
 	tokens[next].type=RULE_NOTYPE;
-	
-	//debug 
-	printf("rule_not: %d\trule_pos: %d\n", RULE_NOT,tokens[max_pre_pos].type);
 	if (tokens[max_pre_pos].type<RULE_NOT) {
 	  tokens[pre].type=RULE_NOTYPE;
 	}
@@ -605,21 +590,12 @@ static int eval(int p, int q, bool *success) {
       }
     }
   }
-  //debug
-      printf("0: %d\t1: %d\t2: %d\n", tokens[0].type,tokens[1].type,tokens[2].type);
   for (i=p;i<=q;++i) {
     if (tokens[i].type>RULE_NOTYPE) {
       *success=true;
-      
-      //debug
-      printf("where: %d\nvalue: %ld\n", i, tokens[i].value);
-      
       return tokens[i].value;
     }
   }
-  
-  //debug
-  printf("false\n");
   *success=false;
   return -1;
 }
