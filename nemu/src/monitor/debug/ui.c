@@ -55,7 +55,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Step one instruction exactly.", cmd_si },
   { "info", "Generic command for showing things about the program being debugged.", cmd_info },
-  { "x", "Examine memory: x/FMT ADDRESS.", cmd_x },
+  { "x", "Examine memory: x FMT ADDRESS.", cmd_x },
   
   /* TODO: Add more commands */
   
