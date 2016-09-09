@@ -237,7 +237,7 @@ static bool make_token(char *e) {
 		return false;
 	      }*/
 	    }
-	    else if (tmp_var!=-1) {
+	    if (tmp_var!=-1) {
 	      if (is_neg_or_der==0) {
 		tokens[nr_token].value=var[tmp_var].key;
 	      }
@@ -249,7 +249,7 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    else {
-	      printf("Cannot find the variable '%s'\n", tokens[nr_token].str);
+	      fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
 	      return false;
 	    }
 	    break;
@@ -498,6 +498,9 @@ static bool make_token(char *e) {
   if (left!=right) {
     fprintf(stderr, "Brackets do not match.\n");
     return false;
+  }
+  if (start_alpha==1 && nr_token==1) {
+    fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
   }
   return true; 
 }
