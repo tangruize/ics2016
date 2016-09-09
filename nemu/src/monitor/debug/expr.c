@@ -125,7 +125,7 @@ static int clear_var() {
 static char *cpu_name_rule[]={"$eax", "$ecx", "$edx", "$ebx", "$esp", "$ebp", "$esi", "$edi", "$eip"};
 
 static bool print_err(char *str, int n) {
-  fprintf(stderr, "Bad expression!\n%s\n\033[32m%*c\033[0m\n", str, n, '^');
+  fprintf(stderr, "Bad expression!\n%s\n\033[32m%*c\033[0m\n", str, n+1, '^');
   return false;
 }
   
