@@ -125,7 +125,7 @@ static int clear_var() {
 static char *cpu_name_rule[]={"$eax", "$ecx", "$edx", "$ebx", "$esp", "$ebp", "$esi", "$edi", "$eip"};
 
 static bool print_err(char *str, int n) {
-  fprintf(stderr, "Bad expression!\n%s\n\033[32m%*c\033[0m\n", str, n, '^');
+  fprintf(stderr, "Bad expression!\n%s\n\033[32m%*c\033[0m\n", str, n+1, '^');
   return false;
 }
   
@@ -277,7 +277,7 @@ static bool make_token(char *e) {
 	    strcpy(tokens[nr_token].str, "-");
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R && t!=RULE_ASSIGN)
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
 	      {
 		tokens[nr_token].type=RULE_NEG;
 	      }
@@ -303,7 +303,7 @@ static bool make_token(char *e) {
 	    strcpy(tokens[nr_token].str, "*");
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R && t!=RULE_ASSIGN)
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
 	      {
 		tokens[nr_token].type=RULE_DER;
 	      }
