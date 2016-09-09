@@ -607,7 +607,7 @@ static int check_brackets(int p, int q, int *r, int *s) {
   int i;
   for (i=p; i<=q; ++i) {
     if (tokens[i].type==RULE_BRA_L) {
-      int j=i+i;
+      int j=i+1;
       int cnt=1, cnt2=1;
       for (;j<=q;++j ) {
 	if (tokens[j].type==RULE_BRA_L) {
