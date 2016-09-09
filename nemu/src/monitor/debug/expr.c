@@ -358,7 +358,7 @@ static bool make_token(char *e) {
 	      return print_err(e, position);
 	    }
 	    t=tokens[nr_token-1].type;
-	    if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG)
+	    if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
 	    {
 	      return print_err(e, position);
 	    }
