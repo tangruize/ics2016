@@ -639,7 +639,6 @@ static long eval_bra(int p, int q, bool *success) {
     }
     tokens[pp].type=RULE_NOTYPE;
     tokens[qq].type=RULE_NOTYPE;
-    printf("subkey: %ld\n", eval_bra(pp+1,qq-1,success));
     if (*success!=true) {
       return -1;
     }
