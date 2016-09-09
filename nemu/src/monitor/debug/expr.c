@@ -524,6 +524,10 @@ static int eval(int p, int q, bool *success) {
       ++op;
     }
   }
+  
+  /*debug*/
+  printf("op: %d\n", op);
+  
   int j=0;
   for (;j<op;++j) {
     int max_pre=-1, max_pre_pos=-1;
