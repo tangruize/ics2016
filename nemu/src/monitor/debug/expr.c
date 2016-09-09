@@ -515,6 +515,7 @@ static int find_digit(int p, int q, int op, int *pre, int *next) {
 
 static int eval(int p, int q, bool *success) {
   if (p==q) {
+    *success=true;
     return tokens[p].value;
   }
   int i=p;
