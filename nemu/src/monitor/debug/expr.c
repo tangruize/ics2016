@@ -834,12 +834,10 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  int result=eval_start(success);
-  if (*success==true) {
+  bool s=true;
+  int result=eval_start(&s);
+  if (s==true) {
     printf("%d\n", result);
-  }
-  else {
-    printf("failed!\n");
   }
   
   /* done */
