@@ -560,6 +560,9 @@ static int eval(int p, int q, bool *success) {
 	    break;
 	  case RULE_ADD:
 	    tokens[max_pre_pos].value=(tokens[pre].value+tokens[next].value);
+	    
+	    //debug 
+	    printf("add: %ld\n", tokens[max_pre_pos].value);
 	    break;
 	  case RULE_SUB:
 	    tokens[max_pre_pos].value=(tokens[pre].value-tokens[next].value);
