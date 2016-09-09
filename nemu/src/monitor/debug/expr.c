@@ -911,7 +911,7 @@ uint32_t expr(char *e, bool *success) {
     *success=true;
     return 0;
   }
-  bool is_match;
+  bool is_match=true;
   if(!make_token(e, &is_match)) {
     if (is_match==false) {
       *success = false;
