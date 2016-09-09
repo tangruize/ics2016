@@ -125,7 +125,7 @@ static int clear_var() {
 static char *cpu_name_rule[]={"$eax", "$ecx", "$edx", "$ebx", "$esp", "$ebp", "$esi", "$edi", "$eip"};
 
 static bool print_err(char *str, int n) {
-  fprintf(stderr, "Bad expression!\n%s\n\033[32m%*c\033[0m\n", str, n+1, '^');
+  fprintf(stderr, "Bad expression!\n%s\n\033[32m%*c\033[0m\n", str, n, '^');
   return false;
 }
   
@@ -145,7 +145,7 @@ static bool make_token(char *e) {
 	int substr_len = pmatch.rm_eo;
 	
 	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
-	position += substr_len;
+	
 	
 	/* done */
 	/* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -445,6 +445,7 @@ static bool make_token(char *e) {
 	    }
 	    break;
 	}
+	position += substr_len;
 	++nr_token;
 	break;
       }
