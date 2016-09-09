@@ -588,14 +588,15 @@ static int eval(int p, int q, bool *success) {
 	    tokens[max_pre_pos].value=(long)swaddr_read((swaddr_t)tokens[next].value,4);
 	    break;
 	}
-	tokens[max_pre_pos].type=RULE_DIGIT;
+	
 	tokens[next].type=RULE_NOTYPE;
 	
 	//debug 
-	printf("rule_not: %d\trule_pos: %d\n", tokens[max_pre_pos].type,RULE_NOT);
+	printf("rule_not: %d\trule_pos: %d\n", RULE_NOT,tokens[max_pre_pos].type);
 	if (tokens[max_pre_pos].type<RULE_NOT) {
 	  tokens[pre].type=RULE_NOTYPE;
 	}
+	tokens[max_pre_pos].type=RULE_DIGIT;
       }
       else {
 	printf("error!\n");
