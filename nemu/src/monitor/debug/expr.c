@@ -623,7 +623,7 @@ static int check_brackets(int p, int q, int *r, int *s) {
 	  }
 	}
       }
-      printf("cnt1: %d\tcnt2: %d\ti: %d\tp: %d\tq: %d\n", cnt, cnt2, i ,p, q);
+      printf("cnt1: %d\tcnt2: %d\ti: %d\tj: %d\tp: %d\tq: %d\n", cnt, cnt2, i , j, p, q);
       return -1;
     }
   }
