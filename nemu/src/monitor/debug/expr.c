@@ -536,6 +536,9 @@ static int eval(int p, int q, bool *success) {
 	max_pre_pos=i;
       }
     }
+    //debug
+    printf("max_pre: %d", max_pre);
+    
     if (max_pre!=-1) {
       int pre,next;
       if (find_digit(p,q,max_pre_pos,&pre,&next)==0) {
