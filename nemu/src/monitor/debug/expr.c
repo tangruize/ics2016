@@ -913,6 +913,7 @@ uint32_t expr(char *e, bool *success) {
   }
   bool is_match=true;
   if(!make_token(e, &is_match)) {
+    printf("%d", is_match);
     if (is_match==false) {
       *success = false;
     }
