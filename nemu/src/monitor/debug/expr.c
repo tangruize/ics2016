@@ -11,12 +11,17 @@
 enum {
   
   RULE_ASSIGN=0,
-  RULE_AND, RULE_OR, 
-  RULE_EQ, RULE_NE, RULE_GT, RULE_LT, RULE_GE, RULE_LE,
+  RULE_OR,
+  RULE_AND,
+  RULE_BIT_OR,
+  RULE_BIT_XOR,
+  RULE_BIT_AND,
+  RULE_EQ, RULE_NE, 
+  RULE_GT, RULE_LT, RULE_GE, RULE_LE,
   RULE_SHIFT_L, RULE_SHIFT_R,
   RULE_ADD, RULE_SUB,
   RULE_MUL, RULE_DIV, RULE_REM,
-  RULE_NOT, RULE_NEG, RULE_DER, 
+  RULE_NOT, RULE_NEG, RULE_DER, RULE_BIT_NOT,
   RULE_BRA_L, RULE_BRA_R,
   
   RULE_NOTYPE=256, RULE_DIGIT, RULE_ALPHA, RULE_REG
@@ -30,14 +35,19 @@ static struct precedence {
   int rule;
   int pre;
 } rule_pre[] = {
-  {RULE_ASSIGN,0},
-  {RULE_AND,1}, {RULE_OR,1},
-  {RULE_EQ,2}, {RULE_NE,2}, {RULE_GT,2}, {RULE_LT, 2}, {RULE_GE,2}, {RULE_LE, 2},
-  {RULE_SHIFT_L, 3}, {RULE_SHIFT_R,3},
-  {RULE_ADD,4}, {RULE_SUB,4},
-  {RULE_MUL,5}, {RULE_DIV,5}, {RULE_REM, 5},
-  {RULE_NOT,6}, {RULE_NEG, 6}, {RULE_DER, 6},
-  {RULE_BRA_L,7},{RULE_BRA_R,7}
+  {RULE_ASSIGN,10},
+  {RULE_OR,20},
+  {RULE_AND,30},
+  {RULE_BIT_OR, 40},
+  {RULE_BIT_XOR, 50},
+  {RULE_BIT_AND, 60},
+  {RULE_EQ,70}, {RULE_NE,70},
+  {RULE_GT,80}, {RULE_LT, 80}, {RULE_GE,80}, {RULE_LE, 80},
+  {RULE_SHIFT_L, 90}, {RULE_SHIFT_R,90},
+  {RULE_ADD,100}, {RULE_SUB,100},
+  {RULE_MUL,110}, {RULE_DIV,110}, {RULE_REM, 110},
+  {RULE_NOT,120}, {RULE_NEG, 120}, {RULE_DER, 120}, {RULE_BIT_NOT, 120},
+  {RULE_BRA_L,130},{RULE_BRA_R,130}
 };
 
 static struct rule {
@@ -72,6 +82,10 @@ static struct rule {
   {"=", RULE_ASSIGN},
   {"\\|\\|", RULE_OR},
   {"&&", RULE_AND},
+  {"\\|", RULE_BIT_OR},
+  {"&",RULE_BIT_AND},
+  {"\\^",RULE_BIT_XOR},
+  {"~",RULE_BIT_NOT},
   {"\\!", RULE_NOT},
 };
 
@@ -564,6 +578,48 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    break;
+	  case RULE_BIT_OR:
+	    tokens[nr_token].type=RULE_BIT_OR;
+	    strcpy(tokens[nr_token].str,"|");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_BIT_AND:
+	    tokens[nr_token].type=RULE_BIT_AND;
+	    strcpy(tokens[nr_token].str,"&");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_BIT_XOR:
+	    tokens[nr_token].type=RULE_BIT_XOR;
+	    strcpy(tokens[nr_token].str,"^");
+	    if (nr_token==0) {
+	      return print_err(e, position);
+	    }
+	    else
+	    {
+	      t=tokens[nr_token-1].type;
+	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
 	  case RULE_AND:
 	    tokens[nr_token].type=RULE_AND;
 	    strcpy(tokens[nr_token].str,"&&");
@@ -581,6 +637,17 @@ static bool make_token(char *e) {
 	  case RULE_NOT:
 	    tokens[nr_token].type=RULE_NOT;
 	    strcpy(tokens[nr_token].str, "!");
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
+	      {
+		return print_err(e, position);
+	      }
+	    }
+	    break;
+	  case RULE_BIT_NOT:
+	    tokens[nr_token].type=RULE_BIT_NOT;
+	    strcpy(tokens[nr_token].str, "~");
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
@@ -672,8 +739,17 @@ static int eval(int p, int q, bool *success) {
 	  case RULE_AND:
 	    tokens[max_pre_pos].value=(tokens[pre].value&&tokens[next].value);
 	    break;
+	  case RULE_BIT_AND:
+	    tokens[max_pre_pos].value=(tokens[pre].value&tokens[next].value);
+	    break;
 	  case RULE_OR:
 	    tokens[max_pre_pos].value=(tokens[pre].value||tokens[next].value);
+	    break;
+	  case RULE_BIT_OR:
+	    tokens[max_pre_pos].value=(tokens[pre].value|tokens[next].value);
+	    break;
+	  case RULE_BIT_XOR:
+	    tokens[max_pre_pos].value=(tokens[pre].value^tokens[next].value);
 	    break;
 	  case RULE_EQ:
 	    tokens[max_pre_pos].value=(tokens[pre].value==tokens[next].value);
@@ -737,8 +813,10 @@ static int eval(int p, int q, bool *success) {
 	  case RULE_DER:
 	    tokens[max_pre_pos].value=(int)swaddr_read((swaddr_t)tokens[next].value,4);
 	    break;
+	  case RULE_BIT_NOT:
+	    tokens[max_pre_pos].value=(~tokens[next].value);
+	    break;
 	}
-	
 	tokens[next].type=RULE_NOTYPE;
 	if (tokens[max_pre_pos].type<RULE_NOT) {
 	  tokens[pre].type=RULE_NOTYPE;
