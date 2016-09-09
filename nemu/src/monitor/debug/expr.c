@@ -602,7 +602,7 @@ static int eval(int p, int q, bool *success) {
     }
   }
   //debug
-      printf("0: %ld\t1: %ld\t2: %ld\n", tokens[0].value,tokens[1].value,tokens[2].value);
+      printf("0: %d\t1: %d\t2: %d\n", tokens[0].type,tokens[1].type,tokens[2].type);
   for (i=p;i<=q;++i) {
     if (tokens[i].type>RULE_NOTYPE) {
       *success=true;
