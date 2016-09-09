@@ -741,7 +741,7 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }
   int result=eval(0,nr_token-1,success);
-  if (*success) {
+  if (*success==true) {
     printf("%d\n", result);
   }
   // printf("%d\n", eva(0,nr_token-1,0));
