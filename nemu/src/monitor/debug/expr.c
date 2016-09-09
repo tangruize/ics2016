@@ -275,7 +275,7 @@ static bool make_token(char *e) {
 	      tokens[nr_token].value=(long)swaddr_read((swaddr_t)tokens[nr_token].value,4);
 	    }
 	    break;
-	  case RULE_NOTYPE:break;
+	  case RULE_NOTYPE:--nr_token;break;
 	  case RULE_ADD:
 	    tokens[nr_token].type=RULE_ADD;
 	    strcpy(tokens[nr_token].str, "+");
