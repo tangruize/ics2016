@@ -230,7 +230,7 @@ static bool make_token(char *e) {
 	    int tmp_var=find_var(tokens[nr_token].str);
 	    //printf("var: %d\n",tmp_var);
 	    //int is_find=find_var(tokens[nr_token].str);
-	    if (nr_token==0 ) {
+	    if (nr_token==0) {
 	      //tmp_var=set_var(tokens[nr_token].str,0);
 	      if (tmp_var==-1) {
 		start_alpha=1;
@@ -242,7 +242,7 @@ static bool make_token(char *e) {
 		return false;
 	      }*/
 	    }
-	    if (nr_token!=0 && tmp_var!=-1) {
+	    else if (tmp_var!=-1) {
 	      if (is_neg_or_der==0) {
 		tokens[nr_token].value=var[tmp_var].key;
 	      }
@@ -254,7 +254,7 @@ static bool make_token(char *e) {
 	      }
 	    }
 	    else {
-	      fprintf(stderr, "1Cannot find the variable '%s'\n", tokens[nr_token].str);
+	      fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
 	      return false;
 	    }
 	    break;
