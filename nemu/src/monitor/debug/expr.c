@@ -631,10 +631,18 @@ static int check_brackets(int p, int q, int *r, int *s) {
 
 static long eval_bra(int p, int q, bool *success) {
   int pp=p,qq=q;
-  while (check_brackets(p,q,&pp,&qq)!=0) {
+  int check;
+  while ((check=check_brackets(p,q,&pp,&qq))!=0) {
+    if (check==-1) {
+      *success=false;
+      return -1;
+    }
     tokens[pp].type=RULE_NOTYPE;
     tokens[qq].type=RULE_NOTYPE;
-    eval_bra(pp+1,qq-1,success);
+    printf("subkey: %ld\n", eval_bra(pp+1,qq-1,success));
+    if (*success!=true) {
+      return -1;
+    }
   }
   return eval(p,q,success);
 }
