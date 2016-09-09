@@ -529,7 +529,7 @@ static int eval(int p, int q, bool *success) {
     int max_pre=-1, max_pre_pos=-1;
     for (i=p;i<=q;++i) {
       if (tokens[i].type<RULE_NOTYPE&&rule_pre[tokens[i].type].pre>max_pre) {
-	max_pre=tokens[i].type;
+	max_pre=rule_pre[tokens[i].type].pre;
 	max_pre_pos=i;
       }
     }
@@ -584,7 +584,7 @@ static int eval(int p, int q, bool *success) {
 	tokens[max_pre_pos].type=RULE_DIGIT;
       }
       else {
-	printf("error!\n");
+	printf("calculate error! please debug!\n");
 	*success=false;
 	return 0;
       }
