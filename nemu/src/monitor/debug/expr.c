@@ -590,6 +590,10 @@ static int eval(int p, int q, bool *success) {
   for (i=p;i<=q;++i) {
     if (tokens[i].type>RULE_NOTYPE) {
       *success=true;
+      
+      //debug
+      printf("where: %d", i);
+      
       return tokens[i].value;
     }
   }
