@@ -601,6 +601,8 @@ static int eval(int p, int q, bool *success) {
       }
     }
   }
+  //debug
+      printf("0: %ld\n", tokens[0].value);
   for (i=p;i<=q;++i) {
     if (tokens[i].type>RULE_NOTYPE) {
       *success=true;
