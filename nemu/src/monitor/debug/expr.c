@@ -161,7 +161,7 @@ static bool make_token(char *e) {
 	char *substr_start = e + position;
 	int substr_len = pmatch.rm_eo;
 	
-	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+	//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 	
 	
 	/* done */
@@ -513,7 +513,7 @@ static int find_digit(int p, int q, int op, int *pre, int *next) {
   return 0;
 }
 
-static int eval(int p, int q, bool *success) {
+static long eval(int p, int q, bool *success) {
   if (p==q) {
     *success=true;
     return tokens[p].value;
@@ -603,33 +603,44 @@ static int eval(int p, int q, bool *success) {
   return -1;
 }
 
+static int check_brackets(int p, int q, int *r, int *s) {
+  int i;
+  for (i=p; i<=q; ++i) {
+    if (tokens[i].type==RULE_BRA_L) {
+      int j=i+i;
+      int cnt=1, cnt2=1;
+      for (;j<=q;++j ) {
+	if (tokens[i].type==RULE_BRA_L) {
+	  ++cnt;
+	  ++cnt2;
+	}
+	else if (tokens[i].type==RULE_BRA_R) {
+	  --cnt;
+	  if (cnt==0) {
+	    *r=i;
+	    *s=j;
+	    return cnt2;
+	  }
+	}
+      }
+      return -1;
+    }
+  }
+  return 0;
+}
+
+static long eval_bra(int p, int q, bool *success) {
+  int pp=p,qq=q;
+  while (check_brackets(p,q,&pp,&qq)!=0) {
+    tokens[pp].type=RULE_NOTYPE;
+    tokens[qq].type=RULE_NOTYPE;
+    eval_bra(pp+1,qq-1,success);
+  }
+  return eval(p,q,success);
+}
+  
+
 /*
- * int check_brackets(int p, int q, int *r, int *s) {
- *    Assert(p<=q, "Bad expression.\n");
- *    int i;
- *    for (i=p; i<=q; ++i) {
- *        if (tokens[i].type==RULE_BRA_L) {
- *            int j=i+i;
- *            int cnt=1, cnt2=1;
- *            for (;j<=q;++j ) {
- *                if (tokens[i].type==RULE_BRA_L) {
- *                    ++cnt;
- *                    ++cnt2;
- *                }
- *                else if (tokens[i].type==RULE_BRA_R) {
- *                    --cnt;
- *                    if (cnt==0) {
- *r=i+1;
- *s=j-1;
- *                        return cnt2;
- *                    }
- *                }
- *            }
- *            return -1;
- *        }
- *    }
- *    return 0;
- * }
  * 
  * int err_exp=0;
  * int eva(int p, int q, int sum) {
@@ -704,7 +715,7 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  long result=eval(0,nr_token-1,success);
+  long result=eval_bra(0,nr_token-1,success);
   if (*success==true) {
     printf("%ld\n", result);
   }
