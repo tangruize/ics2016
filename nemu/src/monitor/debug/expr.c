@@ -727,6 +727,9 @@ uint32_t expr(char *e, bool *success) {
   if (*success==true) {
     printf("%ld\n", result);
   }
+  else {
+    printf("failed!\n");
+  }
   // printf("%d\n", eva(0,nr_token-1,0));
   
   /* TODO: Insert codes to evaluate the expression. */
