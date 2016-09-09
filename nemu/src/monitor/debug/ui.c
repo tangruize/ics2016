@@ -238,12 +238,11 @@ void ui_mainloop() {
     }
     
     if(i == NR_CMD) {
-      if (strcmp(cmd,"expr")==0) {
-	bool success;
-	expr(args,&success);
+      bool success;
+      expr(args,&success);
+      if (success==false) {
+	printf("Unknown command '%s'\n", cmd); 
       }
-      else {
-	printf("Unknown command '%s'\n", cmd); }
     }
   }
 }
