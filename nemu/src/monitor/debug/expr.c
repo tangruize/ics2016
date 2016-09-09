@@ -622,7 +622,9 @@ static int check_brackets(int p, int q, int *r, int *s) {
 	    return cnt2;
 	  }
 	}
+	printf("cnt1: %d\tcnt2: %d\ti: %d\tj: %d\tp: %d\tq: %d\n", cnt, cnt2, i, j, p, q);
       }
+      printf("cnt1: %d\tcnt2: %d\ti: %d\tj: %d\tp: %d\tq: %d\n", cnt, cnt2, i, j, p, q);
       return -1;
     }
   }
@@ -639,6 +641,7 @@ static long eval_bra(int p, int q, bool *success) {
     }
     tokens[pp].type=RULE_NOTYPE;
     tokens[qq].type=RULE_NOTYPE;
+    printf("subkey: %ld\n", eval_bra(pp+1,qq-1,success));
     if (*success!=true) {
       return -1;
     }
