@@ -590,6 +590,9 @@ static int eval(int p, int q, bool *success) {
 	}
 	tokens[max_pre_pos].type=RULE_DIGIT;
 	tokens[next].type=RULE_NOTYPE;
+	
+	//debug 
+	printf("rule_not: %d\trule_pos: %d\n", tokens[max_pre_pos].type,RULE_NOT);
 	if (tokens[max_pre_pos].type<RULE_NOT) {
 	  tokens[pre].type=RULE_NOTYPE;
 	}
