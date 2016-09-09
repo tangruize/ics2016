@@ -610,11 +610,11 @@ static int check_brackets(int p, int q, int *r, int *s) {
       int j=i+i;
       int cnt=1, cnt2=1;
       for (;j<=q;++j ) {
-	if (tokens[i].type==RULE_BRA_L) {
+	if (tokens[j].type==RULE_BRA_L) {
 	  ++cnt;
 	  ++cnt2;
 	}
-	else if (tokens[i].type==RULE_BRA_R) {
+	else if (tokens[j].type==RULE_BRA_R) {
 	  --cnt;
 	  if (cnt==0) {
 	    *r=i;
