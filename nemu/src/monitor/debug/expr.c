@@ -168,9 +168,10 @@ static bool print_err(char *str, int n) {
   fprintf(stderr, "%s\n\033[32m%*c\033[0m\n", str, n+1, '^');
   return false;
 }
-  
 
-static bool make_token(char *e) {
+
+static bool make_token(char *e, bool *is_match) {
+  *is_match=true;
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -263,8 +264,8 @@ static bool make_token(char *e) {
 		tokens[nr_token].value=var[tmp_var].key;
 	      }
 	      /*if (tmp_var==-1) {
-		return false;
-	      }*/
+	       *		return false;
+	    }*/
 	    }
 	    else if (tmp_var!=-1) {
 	      if (is_neg_or_der==0) {
@@ -663,7 +664,8 @@ static bool make_token(char *e) {
       }
     }
     if(i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      //printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      is_match=false;
       return false;
     }
   }
@@ -909,8 +911,14 @@ uint32_t expr(char *e, bool *success) {
     *success=true;
     return 0;
   }
-  if(!make_token(e)) {
-    *success = false;
+  bool is_match;
+  if(!make_token(e, &is_match)) {
+    if (is_match==false) {
+      *success = false;
+    }
+    else {
+      *success=true;
+    }
     return 0;
   }
   bool s=true;
