@@ -101,7 +101,7 @@ typedef struct variables {
   int key;
 } variables;
 
-#define VAR_MAX 32
+#define VAR_MAX 2
 static variables var[VAR_MAX];
 static int var_cnt=0;
 
@@ -173,6 +173,14 @@ static bool make_token(char *e) {
 	int t;
 	if (start_alpha&&nr_token==1&&rules[i].token_type!=RULE_ASSIGN) {
 	  return print_err(e, position);
+	}
+	if (substr_len>31) {
+	  fprintf(stderr, "The string is too long!\n");
+	  return print_err(e, position);
+	}
+	if (nr_token>31) {
+	  fprintf(stderr, "Too many terms!\n");
+	  return false;
 	}
 	switch(rules[i].token_type) {
 	  case RULE_DIGIT:
