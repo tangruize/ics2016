@@ -636,6 +636,7 @@ static long eval_bra(int p, int q, bool *success) {
   int check;
   while ((check=check_brackets(p,q,&pp,&qq))!=0) {
     if (check==-1) {
+      printf("f1\n");
       *success=false;
       return -1;
     }
@@ -643,6 +644,7 @@ static long eval_bra(int p, int q, bool *success) {
     tokens[qq].type=RULE_NOTYPE;
     //printf("subkey: %ld\n", eval_bra(pp+1,qq-1,success));
     if (*success!=true) {
+      printf("f2\n");
       return -1;
     }
   }
