@@ -677,10 +677,11 @@ bool make_token(char *e, bool *is_match, int prompt) {
     return false;
   }
   if (start_alpha==1 && nr_token==1) {
+    *is_match=false;
     if (prompt) {
       fprintf(stderr, "Cannot find the variable '%s'\n", tokens[0].str);
+      *is_match=true;
     }
-    *is_match=false;
     return false;
   }
   return true; 
