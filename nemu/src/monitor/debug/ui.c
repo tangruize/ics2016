@@ -48,7 +48,7 @@ static int cmd_w(char *args);
 
 static int cmd_delete(char *args);
 
-//static int cmd_p(char *args);
+static int cmd_p(char *args);
 
 static struct {
   char *name;
@@ -63,6 +63,7 @@ static struct {
   { "x", "Examine memory: x FMT ADDRESS.", cmd_x },
   { "w", "Set a watchpoint for an expression.", cmd_w },
   { "delete", "Delete some breakpoints or auto-display expressions", cmd_delete},
+  { "p", "Print value of expression EXP.", cmd_p},
 
   /* TODO: Add more commands */
   
@@ -108,7 +109,6 @@ static int cmd_help(char *args) {
 static int cmd_si(char *args) {
   uint32_t n = 1;
   char *arg = strtok(NULL, " ");
-  printf("%s\t%s\n", args, arg);
   if(arg != NULL) {
     uint32_t getNum = (uint32_t) strtol(arg, NULL, 0);
     if ((int)getNum <= 0) {
@@ -255,6 +255,17 @@ static int cmd_delete(char *args) {
       return 1;
   }
   return free_wp(getNum);
+}
+
+static int cmd_p(char *args) {
+  bool is_success=true;
+  expr(args, &is_success);
+  if (is_success==true) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
 }
 
 void ui_mainloop() {
