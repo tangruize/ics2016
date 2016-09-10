@@ -165,7 +165,7 @@ static bool print_err(char *str, int n) {
 }
 
 
-static bool make_token(char *e, bool *is_match) {
+bool make_token(char *e, bool *is_match) {
   *is_match=true;
   int position = 0;
   int i;
@@ -881,7 +881,7 @@ static int eval_bra(int p, int q, bool *success) {
   return eval(p,q,success);
 }
 
-static int eval_start(bool *success) {
+int eval_start(bool *success) {
   if (nr_token>=2 && tokens[1].type==RULE_ASSIGN) {
     int key=eval_bra(2, nr_token-1, success);
     int i=set_var(tokens[0].str, key);

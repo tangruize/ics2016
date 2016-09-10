@@ -12,5 +12,8 @@ typedef struct token {
 } Token;
 
 extern Token tokens[32];
+extern int nr_token;
+bool make_token(char *e, bool *is_match);
+int eval_start(bool *success);
 
 #endif

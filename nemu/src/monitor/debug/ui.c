@@ -44,6 +44,7 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_w(char *args);
 
 static struct {
   char *name;
@@ -56,7 +57,8 @@ static struct {
   { "si", "Step one instruction exactly.", cmd_si },
   { "info", "Generic command for showing things about the program being debugged.", cmd_info },
   { "x", "Examine memory: x FMT ADDRESS.", cmd_x },
-  
+  { "w", "Set a watchpoint for an expression.", cmd_w },
+
   /* TODO: Add more commands */
   
 };
@@ -174,7 +176,7 @@ static int print_addr(int n, swaddr_t addr) {
 }
 
 static int cmd_x(char *args) {
-  char *arg1 = strtok(NULL, " /");
+  char *arg1 = strtok(NULL, " ");
   char *arg2 = NULL;
   if (arg1 != NULL) {
     arg2 = strtok(args + strlen(arg1) + 1, " ");
@@ -204,6 +206,33 @@ static int cmd_x(char *args) {
     }
   }
   print_addr(n, getAddr);
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  char *arg = strtok(NULL, " ");
+  bool is_success=true;
+  if(!make_token(arg, &is_success)) {
+    if (is_success==false) {
+      fputs("Invalid expression!\n" ,stderr);
+    }
+    return 1;
+  }
+  int result=eval_start(&is_success);
+  if (is_success==false) {
+    return 1;
+  }
+  WP *p=new_wp();
+  if (p==NULL) {
+    return 2;
+  }
+  p->key=result;
+  int i;
+  for (i=0;i<nr_token;++i) {
+    p->resolved[i]=tokens[i];
+  }
+  strcpy(p->str, arg);
+  printf("watchpoint %d: %s\n", p->NO, p->str);
   return 0;
 }
 

@@ -60,7 +60,9 @@ void free_wp(WP *wp) {
         else {
             head=head->next;
         }
-        wp->next=free_;
-        free_=wp;
+        for (p=free_;p->next!=NULL;p=p->next) {}
+        p->next=wp;
+        wp->next=NULL;
+        wp->NO=p->NO+1;
     }
 }
