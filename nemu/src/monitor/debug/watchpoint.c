@@ -38,6 +38,10 @@ WP* new_wp() {
 }
 
 int free_wp(int NO) {
+  if (head==NULL) {
+    fputs("Empty watchpoint pool\n", stderr);
+    return 1;
+  }
   WP* p=head, *q=NULL;
   if (NO!=head->NO) {
     for (;p->next!=NULL;p=p->next) {
