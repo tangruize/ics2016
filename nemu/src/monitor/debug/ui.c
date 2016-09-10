@@ -245,6 +245,7 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_delete(char *args) {
+  printf("%s\n", args);
   char *arg = strtok(NULL, " ");
   int getNum = (int) strtol(arg, NULL, 0);
   if (getNum <= 0) {
