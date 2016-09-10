@@ -901,6 +901,9 @@ int eval_start(bool *success) {
 }
 
 uint32_t expr(char *e, bool *success) {
+  if (e==NULL) {
+    return 1;
+  }
   if (strcmp("clear",e)==0) {
     clear_var();
     *success=true;
