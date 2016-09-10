@@ -22,11 +22,17 @@ void init_wp_pool() {
 
 WP* new_wp() {
     if (free_==NULL) {
+        fputs("No more free watchpoint pool!\n", stderr);
         return NULL;
     }
     else {
         WP* p=free_;
         free_=free_->next;
+        p->next=NULL;
+        if (head!=NULL) {
+            p->next=head;
+        }
+        head=p;
         return p;
     }
 }
@@ -36,6 +42,24 @@ void free_wp(WP *wp) {
         return;
     }
     else {
+        WP* p=head;
+        if (wp!=head) {
+            for (;p!=NULL;p=p->next) {
+                if (p->next==wp) {
+                    break;
+                }
+            }
+            if (p==NULL) {
+                fputs("Cannot find the watchpoint!\n",stderr);
+                return;
+            }
+            else {
+                p->next=wp->next;
+            }
+        }
+        else {
+            head=head->next;
+        }
         wp->next=free_;
         free_=wp;
     }

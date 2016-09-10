@@ -1,5 +1,6 @@
 #include "nemu.h"
 #include "common.h"
+#include "monitor/expr.h"
 #include <stdlib.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -109,12 +110,6 @@ void init_regex() {
     }
   }
 }
-
-typedef struct token {
-  int type;
-  char str[32];
-  int value;
-} Token;
 
 Token tokens[32];
 int nr_token;

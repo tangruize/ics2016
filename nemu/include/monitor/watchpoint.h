@@ -2,14 +2,19 @@
 #define __WATCHPOINT_H__
 
 #include "common.h"
+#include "expr.h"
 
 typedef struct watchpoint {
 	int NO;
 	struct watchpoint *next;
-
+    Token resolved[32];
+    int key;
 	/* TODO: Add more members if necessary */
 
 
 } WP;
+
+WP* new_wp();
+void free_wp(WP *wp);
 
 #endif
