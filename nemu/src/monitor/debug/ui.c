@@ -275,7 +275,9 @@ static int cmd_b(char *args) {
   //char *arg = strtok(NULL, " ");
   char str[32];
   strcpy(str, "$eip==");
+  printf("%s\n", str);
   strcat(str, args);
+  printf("%s\n",str);
   return cmd_w(str);
 }
 
