@@ -145,7 +145,7 @@ static int cmd_info(char *args) {
     else if (strcmp("w", arg) == 0 || strcmp("watchpoints", arg) == 0) {
       WP *p=head;
       printf("Num     What\n");
-      for (;p!=NULL;++p) {
+      for (;p!=NULL;p=p->next) {
 	printf("%-8d%s\n",p->NO, p->str);
       }
     }
