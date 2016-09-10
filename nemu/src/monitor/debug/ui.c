@@ -222,7 +222,7 @@ static int cmd_x(char *args) {
 static int cmd_w(char *args) {
   char *arg = strtok(NULL, " ");
   bool is_success=true;
-  if(!make_token(arg, &is_success)) {
+  if(!make_token(arg, &is_success,1)) {
     if (is_success==false) {
       fputs("Invalid expression!\n" ,stderr);
     }
@@ -259,7 +259,7 @@ static int cmd_delete(char *args) {
 
 static int cmd_p(char *args) {
   bool is_success=true;
-  expr(args, &is_success);
+  expr(args, &is_success, 1);
   if (is_success==true) {
     return 0;
   }
@@ -300,7 +300,7 @@ void ui_mainloop() {
     
     if(i == NR_CMD) {
       bool success=true;
-      expr(str,&success);
+      expr(str,&success,0);
       if (success==false) {
 	printf("Unknown command '%s'\n", cmd); 
       }

@@ -165,7 +165,7 @@ static bool print_err(char *str, int n) {
 }
 
 
-bool make_token(char *e, bool *is_match) {
+bool make_token(char *e, bool *is_match, int prompt) {
   *is_match=true;
   int position = 0;
   int i;
@@ -677,6 +677,9 @@ bool make_token(char *e, bool *is_match) {
     return false;
   }
   if (start_alpha==1 && nr_token==1) {
+    if (prompt) {
+      fprintf(stderr, "Cannot find the variable '%s'\n", tokens[0].str);
+    }
     *is_match=false;
     return false;
   }
@@ -900,7 +903,7 @@ int eval_start(bool *success) {
   }
 }
 
-uint32_t expr(char *e, bool *success) {
+uint32_t expr(char *e, bool *success, int prompt) {
   if (e==NULL) {
     return 1;
   }
@@ -910,7 +913,7 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }
   bool is_match=true;
-  if(!make_token(e, &is_match)) {
+  if(!make_token(e, &is_match, prompt)) {
     //printf("is_match: %d\n",is_match);
     if (is_match==false) {
       *success = false;
