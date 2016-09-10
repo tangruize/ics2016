@@ -48,6 +48,8 @@ static int cmd_w(char *args);
 
 static int cmd_delete(char *args);
 
+//static int cmd_p(char *args);
+
 static struct {
   char *name;
   char *description;
@@ -106,6 +108,7 @@ static int cmd_help(char *args) {
 static int cmd_si(char *args) {
   uint32_t n = 1;
   char *arg = strtok(NULL, " ");
+  printf("%s\t%s\n", args, arg);
   if(arg != NULL) {
     uint32_t getNum = (uint32_t) strtol(arg, NULL, 0);
     if ((int)getNum <= 0) {
@@ -245,7 +248,6 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_delete(char *args) {
-  printf("%s\n", args);
   char *arg = strtok(NULL, " ");
   int getNum = (int) strtol(arg, NULL, 0);
   if (getNum <= 0) {
