@@ -247,6 +247,10 @@ static int cmd_w(char *args) {
 static int cmd_delete(char *args) {
   char *arg = strtok(NULL, " ");
   int getNum = (int) strtol(arg, NULL, 0);
+  if (getNum <= 0) {
+      fputs("expected numbers greater than 0.\n", stderr);
+      return 1;
+  }
   return free_wp(getNum);
 }
 
