@@ -223,9 +223,9 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
-  char *arg = strtok(NULL, " ");
+  //char *arg = strtok(NULL, " ");
   bool is_success=true;
-  if(!make_token(arg, &is_success,1)) {
+  if(!make_token(args, &is_success,1)) {
     if (is_success==false) {
       fputs("Invalid expression!\n" ,stderr);
     }
@@ -245,7 +245,7 @@ static int cmd_w(char *args) {
     p->resolved[i]=tokens[i];
   }
   p->nr_tk=nr_token;
-  strcpy(p->str, arg);
+  strcpy(p->str, args);
   printf("watchpoint %d: %s\n", p->NO, p->str);
   return 0;
 }
