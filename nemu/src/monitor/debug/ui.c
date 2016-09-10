@@ -46,6 +46,8 @@ static int cmd_x(char *args);
 
 static int cmd_w(char *args);
 
+static int cmd_delete(char *args);
+
 static struct {
   char *name;
   char *description;
@@ -58,6 +60,7 @@ static struct {
   { "info", "Generic command for showing things about the program being debugged.", cmd_info },
   { "x", "Examine memory: x FMT ADDRESS.", cmd_x },
   { "w", "Set a watchpoint for an expression.", cmd_w },
+  { "delete", "Delete some breakpoints or auto-display expressions", cmd_delete},
 
   /* TODO: Add more commands */
   
@@ -144,9 +147,9 @@ static int cmd_info(char *args) {
     }
     else if (strcmp("w", arg) == 0 || strcmp("watchpoints", arg) == 0) {
       WP *p=head;
-      printf("Num     What\n");
+      printf("Num     What\tValue\n");
       for (;p!=NULL;p=p->next) {
-	printf("%-8d%s\n",p->NO, p->str);
+	printf("%-8d%s\t%d\n",p->NO, p->str, p->key);
       }
     }
     else {
@@ -239,6 +242,12 @@ static int cmd_w(char *args) {
   strcpy(p->str, arg);
   printf("watchpoint %d: %s\n", p->NO, p->str);
   return 0;
+}
+
+static int cmd_delete(char *args) {
+  char *arg = strtok(NULL, " ");
+  int getNum = (int) strtol(arg, NULL, 0);
+  return free_wp(getNum);
 }
 
 void ui_mainloop() {

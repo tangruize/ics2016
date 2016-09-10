@@ -37,32 +37,29 @@ WP* new_wp() {
     }
 }
 
-void free_wp(WP *wp) {
-    if (wp==NULL) {
-        return;
-    }
-    else {
-        WP* p=head;
-        if (wp!=head) {
-            for (;p!=NULL;p=p->next) {
-                if (p->next==wp) {
+int free_wp(int NO) {
+        WP* p=head, *q=NULL;
+        if (NO!=head->NO) {
+            for (;p->next!=NULL;p=p->next) {
+                if (p->next->NO==NO) {
                     break;
                 }
             }
-            if (p==NULL) {
+            if (p->next==NULL) {
                 fputs("Cannot find the watchpoint!\n",stderr);
-                return;
+                return 1;
             }
             else {
-                p->next=wp->next;
+	      q=p->next;
+                p->next=p->next->next;
             }
         }
         else {
             head=head->next;
         }
         for (p=free_;p->next!=NULL;p=p->next) {}
-        p->next=wp;
-        wp->next=NULL;
-        wp->NO=p->NO+1;
-    }
+        p->next=q;
+        q->next=NULL;
+        q->NO=p->NO+1;
+	return 0;
 }
