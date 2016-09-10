@@ -231,6 +231,7 @@ static int cmd_w(char *args) {
   for (i=0;i<nr_token;++i) {
     p->resolved[i]=tokens[i];
   }
+  p->nr_tk=nr_token;
   strcpy(p->str, arg);
   printf("watchpoint %d: %s\n", p->NO, p->str);
   return 0;
