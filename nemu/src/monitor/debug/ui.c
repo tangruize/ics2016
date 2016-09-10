@@ -50,6 +50,8 @@ static int cmd_delete(char *args);
 
 static int cmd_p(char *args);
 
+static int cmd_b(char *args);
+
 static struct {
   char *name;
   char *description;
@@ -64,6 +66,7 @@ static struct {
   { "w", "Set a watchpoint for an expression.", cmd_w },
   { "delete", "Delete some breakpoints or auto-display expressions", cmd_delete},
   { "p", "Print value of expression EXP.", cmd_p},
+  { "b", "Set breakpoint at specified line", cmd_b},
 
   /* TODO: Add more commands */
   
@@ -268,6 +271,14 @@ static int cmd_p(char *args) {
   }
 }
 
+static int cmd_b(char *args) {
+  //char *arg = strtok(NULL, " ");
+  char str[32];
+  strcpy(str, "$eip==");
+  strcat(str, args);
+  return cmd_w(str);
+}
+
 void ui_mainloop() {
   while(1) {
     char *str = rl_gets();
@@ -297,7 +308,6 @@ void ui_mainloop() {
 	break;
       }
     }
-    
     if(i == NR_CMD) {
       bool success=true;
       expr(str,&success,0);
