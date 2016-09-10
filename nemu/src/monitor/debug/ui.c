@@ -153,9 +153,9 @@ static int cmd_info(char *args) {
     }
     else if (strcmp("w", arg) == 0 || strcmp("watchpoints", arg) == 0) {
       WP *p=head;
-      printf("Num     What\tValue\n");
+      printf("Num     Value   What\n");
       for (;p!=NULL;p=p->next) {
-	printf("%-8d%s\t%d\n",p->NO, p->str, p->key);
+	printf("%-8d%-8d%s\n",p->NO, p->key, p->str);
       }
     }
     else {
