@@ -25,7 +25,7 @@ enum {
   RULE_NOT, RULE_NEG, RULE_DER, RULE_BIT_NOT,
   RULE_BRA_L, RULE_BRA_R,
   
-  RULE_NOTYPE=256, RULE_DIGIT, RULE_ALPHA, RULE_REG
+  RULE_NOTYPE=256, RULE_DIGIT, RULE_HEX, RULE_ALPHA, RULE_REG
   
   /* done */
   /* TODO: Add more token types */
@@ -61,8 +61,9 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   
+  {"[0-9]+", RULE_DIGIT},
+  {"^((0x)|(0X))[0-9a-fA-F]+", RULE_HEX},
   {"^[a-zA-Z_][a-zA-Z0-9_]*", RULE_ALPHA},
-  {"^((0x)|(0X))?[0-9]+", RULE_DIGIT},
   {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip)", RULE_REG},
   {" +", RULE_NOTYPE},
   {"\\+", RULE_ADD},
@@ -213,11 +214,37 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		--nr_token;
 		is_neg_or_der=2;
 	      }
-	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
 	    tokens[nr_token].type=RULE_DIGIT;
+	    strncpy(tokens[nr_token].str,substr_start,substr_len);
+	    tokens[nr_token].str[substr_len]='\0';
+	    tokens[nr_token].value=strtol(tokens[nr_token].str,NULL,0);
+	    if (is_neg_or_der==1) {
+	      tokens[nr_token].value=-tokens[nr_token].value;
+	    }
+	    else if(is_neg_or_der==2){
+	      tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4);
+	    }
+	    break;
+	  case RULE_HEX:
+	    if (nr_token!=0) {
+	      t=tokens[nr_token-1].type;
+	      if (t==RULE_NEG) {
+		--nr_token;
+		is_neg_or_der=1;
+	      }
+	      else if (t==RULE_DER){
+		--nr_token;
+		is_neg_or_der=2;
+	      }
+	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+		return print_err(e, position);
+	      }
+	    }
+	    tokens[nr_token].type=RULE_HEX;
 	    strncpy(tokens[nr_token].str,substr_start,substr_len);
 	    tokens[nr_token].str[substr_len]='\0';
 	    tokens[nr_token].value=strtol(tokens[nr_token].str,NULL,0);
@@ -239,7 +266,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		--nr_token;
 		is_neg_or_der=2;
 	      }
-	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -290,7 +317,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		--nr_token;
 		is_neg_or_der=2;
 	      }
-	      else if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -324,7 +351,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -334,7 +361,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    strcpy(tokens[nr_token].str, "-");
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
 	      {
 		tokens[nr_token].type=RULE_NEG;
 	      }
@@ -349,7 +376,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	      else
 	      {
 		t=tokens[nr_token-1].type;
-		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		  return print_err(e, position);
 		}
 	      }
@@ -360,7 +387,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    strcpy(tokens[nr_token].str, "*");
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
 	      {
 		tokens[nr_token].type=RULE_DER;
 	      }
@@ -375,7 +402,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	      else
 	      {
 		t=tokens[nr_token-1].type;
-		if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+		if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		  return print_err(e, position);
 		}
 	      }
@@ -390,7 +417,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -404,7 +431,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -418,7 +445,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -432,7 +459,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -443,7 +470,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    if (nr_token!=0)
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
+	      if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
 	      {
 		return print_err(e, position);
 	      }
@@ -457,7 +484,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	      return print_err(e, position);
 	    }
 	    t=tokens[nr_token-1].type;
-	    if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
+	    if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_REG && t!=RULE_BRA_R)
 	    {
 	      return print_err(e, position);
 	    }
@@ -475,7 +502,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -489,7 +516,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -503,7 +530,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -517,7 +544,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -531,7 +558,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -545,7 +572,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -569,7 +596,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -583,7 +610,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -597,7 +624,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -611,7 +638,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -625,7 +652,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    else
 	    {
 	      t=tokens[nr_token-1].type;
-	      if (t!=RULE_DIGIT && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
+	      if (t!=RULE_DIGIT && t!=RULE_HEX && t!=RULE_ALPHA && t!=RULE_BRA_R && t!=RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -635,7 +662,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    strcpy(tokens[nr_token].str, "!");
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
-	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
+	      if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
 	      {
 		return print_err(e, position);
 	      }
@@ -646,7 +673,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    strcpy(tokens[nr_token].str, "~");
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
-	      if (t==RULE_DIGIT || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
+	      if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_REG || t==RULE_BRA_R)
 	      {
 		return print_err(e, position);
 	      }
@@ -668,7 +695,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
   if (nr_token>0)
   {
     t2=tokens[nr_token-1].type;
-    if (t2!=RULE_DIGIT && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG) {
+    if (t2!=RULE_DIGIT && t2!=RULE_HEX && t2!=RULE_ALPHA && t2!=RULE_BRA_R && t2!=RULE_REG) {
       return print_err(e, position-1);
     }
   }
