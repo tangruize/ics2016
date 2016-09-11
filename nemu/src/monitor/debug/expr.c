@@ -214,7 +214,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		--nr_token;
 		is_neg_or_der=2;
 	      }
-	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+	      else if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -240,7 +240,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		--nr_token;
 		is_neg_or_der=2;
 	      }
-	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+	      else if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -266,7 +266,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		--nr_token;
 		is_neg_or_der=2;
 	      }
-	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+	      else if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
@@ -317,7 +317,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		--nr_token;
 		is_neg_or_der=2;
 	      }
-	      else if (t==RULE_DIGIT || RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
+	      else if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 		return print_err(e, position);
 	      }
 	    }
