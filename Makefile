@@ -7,9 +7,9 @@ COUNT := \
 			if [ @? -eq 0 ]; then  \
 			    CUR_BRANCH=@(git branch | grep %*% | cut -d% % -f2); \
 			    CUR_LINE=@(find . -type f -name *.[ch] -print0 | xargs -0 cat | tr -s %\\n% | wc -l); \
-			    git checkout master > /dev/null; \
+			    git checkout master; \
 			    MASTER_LINE=@(find . -type f -name *.[ch] -print0 | xargs -0 cat | tr -s %\\n% | wc -l); \
-			    git checkout @{CUR_BRANCH} > /dev/null; \
+			    git checkout @{CUR_BRANCH}; \
 			    /bin/echo -e "Lines of @{CUR_BRANCH}:    \t@{CUR_LINE}"; \
 			    /bin/echo -e "Lines of master:    \\t@{MASTER_LINE}"; \
 			    /bin/echo -e "I have coded:    \\t@(expr @{CUR_LINE} - @{MASTER_LINE})"; \
