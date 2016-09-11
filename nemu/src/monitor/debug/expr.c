@@ -61,8 +61,8 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   
-  {"[0-9]+", RULE_DIGIT},
   {"^((0x)|(0X))[0-9a-fA-F]+", RULE_HEX},
+  {"[0-9]+", RULE_DIGIT},
   {"^[a-zA-Z_][a-zA-Z0-9_]*", RULE_ALPHA},
   {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip)", RULE_REG},
   {" +", RULE_NOTYPE},
