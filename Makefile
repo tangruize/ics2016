@@ -92,6 +92,7 @@ test: $(nemu_BIN) $(testcase_BIN) entry
 	bash test.sh $(testcase_BIN)
 count: 
 	$(call git_commit, "count lines")
-	@echo '${COUNT}' | tr '@%' '\044\047' | sh
+	bash count.sh
+#@echo '${COUNT}' | tr '@%' '\044\047' | sh
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
