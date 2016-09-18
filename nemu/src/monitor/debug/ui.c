@@ -225,6 +225,11 @@ static int cmd_x(char *args) {
 static int cmd_w(char *args) {
   //char *arg = strtok(NULL, " ");
   bool is_success=true;
+    if (args==NULL) {
+        char w[]="w";
+        cmd_info(w);
+        return 0;
+    }
   if(!make_token(args, &is_success,1)) {
     if (is_success==false) {
       fputs("Invalid expression!\n" ,stderr);
