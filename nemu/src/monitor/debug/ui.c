@@ -308,9 +308,7 @@ void ui_mainloop() {
           printf("exit\n");
           return;
       }
-      printf("set 1\n");
     char *str_end = str + strlen(str);
-    printf("set 2\n");
     /* extract the first token as the command */
     char *cmd = strtok(str, " ");
     if(cmd == NULL) { continue; }
