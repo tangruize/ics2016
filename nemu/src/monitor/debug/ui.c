@@ -304,6 +304,10 @@ static int cmd_b(char *args) {
 void ui_mainloop() {
   while(1) {
     char *str = rl_gets();
+      if (feof(stdin)) {
+          printf("exit\n");
+          return;
+      }
     char *str_end = str + strlen(str);
     
     /* extract the first token as the command */
