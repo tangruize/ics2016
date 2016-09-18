@@ -143,7 +143,7 @@ static int print_cpu(int reg) {
 }
 
 static int cmd_info(char *args) {
-  char *arg = strtok(NULL, " ");
+  char *arg = strtok(args, " ");
   if (arg != NULL) {
     if (strcmp("r", arg) == 0 || strcmp("registers", arg) == 0) {
       int i;
