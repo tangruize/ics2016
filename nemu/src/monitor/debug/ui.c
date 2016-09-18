@@ -271,6 +271,11 @@ static int cmd_d(char *args) {
 }
 
 static int cmd_p(char *args) {
+    if (args==NULL)
+    {
+        my_help("p");
+        return 0;
+    }
   bool is_success=true;
   expr(args, &is_success, 1);
   if (is_success==true) {
@@ -283,6 +288,11 @@ static int cmd_p(char *args) {
 
 static int cmd_b(char *args) {
   //char *arg = strtok(NULL, " ");
+    if (args==NULL)
+    {
+        my_help("b");
+        return 0;
+    }
   char str[32];
   strcpy(str, "$eip==");
   //printf("%s\n", str);
