@@ -1,23 +1,3 @@
-# count lines #
-
-COUNT := \
-	ICS="@{HOME}/ics2016"; \
-	CUR_CWD=@(pwd); \
-	cd @{ICS}/nemu; \
-	if [ @? -eq 0 ]; then  \
-	    CUR_BRANCH=@(git branch | grep %*% | cut -d% % -f2); \
-	    CUR_LINE=@(find . -type f -name *.[ch] -print0 | xargs -0 cat | tr -s %\\n% | wc -l); \
-	    git checkout master >/dev/null; \
-	    MASTER_LINE=@(find . -type f -name *.[ch] -print0 | xargs -0 cat | tr -s %\\n% | wc -l); \
-	    git checkout @{CUR_BRANCH} >/dev/null; \
-	    /bin/echo -e "Lines of master:    \\t@{MASTER_LINE}"; \
-	    /bin/echo -e "Lines of @{CUR_BRANCH}:    \\t@{CUR_LINE}"; \
-	    /bin/echo -e "I have coded:    \\t@(expr @{CUR_LINE} - @{MASTER_LINE})"; \
-	    cd @{CUR_CWD}; \
-	fi
-
-#####
-
 ##### global settings #####
 
 .PHONY: nemu entry testcase kernel run gdb test submit clean
@@ -92,6 +72,6 @@ test: $(nemu_BIN) $(testcase_BIN) entry
 	bash test.sh $(testcase_BIN)
 count: 
 	$(call git_commit, "count lines")
-	@echo '${COUNT}' | tr '@%' '\044\047' | sh
+	@bash count.sh
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
