@@ -191,7 +191,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	 */
 	int is_neg_or_der=0;
 	int t;
-	if (start_alpha&&nr_token==1&&rules[i].token_type!=RULE_ASSIGN) {
+	if (start_alpha&&nr_token==1&&rules[i].token_type!=RULE_ASSIGN&&rules[i].token_type!=RULE_NOTYPE) {
 	  return print_err(e, position);
 	}
 	if (substr_len>31) {
