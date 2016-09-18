@@ -312,8 +312,11 @@ void ui_mainloop() {
     }
     if(i == NR_CMD) {
       bool success=true;
+       int len=strlen(cmd);
+        strcat(str, cmd+len);
       expr(str,&success,0);
       if (success==false) {
+          //cmd[len]='\0';
 	printf("Unknown command '%s'\n", cmd); 
       }
     }
