@@ -338,9 +338,11 @@ void ui_mainloop() {
       bool success=true;
        int len=0;
         if (args!=NULL) {
-            //len=strlen(cmd);
+            len=strlen(cmd);
             //strcat(str, args);
+            printf("1: %s\t%s\n",str, cmd);
             cmd[len]=' ';
+            printf("2: %s\t%s\n",str, cmd);
         }
       expr(str,&success,0);
       if (success==false) {
