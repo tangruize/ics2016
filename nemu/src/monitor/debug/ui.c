@@ -313,13 +313,13 @@ void ui_mainloop() {
     if(i == NR_CMD) {
       bool success=true;
        int len=0;
-        if (cmd!=NULL) {
+        if (args!=NULL) {
             len=strlen(cmd);
             strcat(str, args);
         }
       expr(str,&success,0);
       if (success==false) {
-          if (cmd!=NULL) {
+          if (len!=0) {
             cmd[len]='\0';
           }
 	printf("Unknown command '%s'\n", cmd); 
