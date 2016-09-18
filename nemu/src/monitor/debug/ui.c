@@ -257,7 +257,9 @@ static int cmd_w(char *args) {
 
 static int cmd_d(char *args) {
   char *arg = strtok(NULL, " ");
+    printf("set 1\n");
   int getNum = (int) strtol(arg, NULL, 0);
+    printf("set 2\n");
   if (getNum <= 0) {
       fputs("expected numbers greater than 0.\n", stderr);
       return 1;
