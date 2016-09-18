@@ -46,7 +46,7 @@ static int cmd_x(char *args);
 
 static int cmd_w(char *args);
 
-static int cmd_delete(char *args);
+static int cmd_d(char *args);
 
 static int cmd_p(char *args);
 
@@ -64,7 +64,7 @@ static struct {
   { "info", "Generic command for showing things about the program being debugged.", cmd_info },
   { "x", "Examine memory: x FMT ADDRESS.", cmd_x },
   { "w", "Set a watchpoint for an expression.", cmd_w },
-  { "delete", "Delete some breakpoints or auto-display expressions", cmd_delete},
+  { "d", "Delete some breakpoints or auto-display expressions", cmd_d},
   { "p", "Print value of expression EXP.", cmd_p},
   { "b", "Set breakpoint at specified line", cmd_b},
 
@@ -250,7 +250,7 @@ static int cmd_w(char *args) {
   return 0;
 }
 
-static int cmd_delete(char *args) {
+static int cmd_d(char *args) {
   char *arg = strtok(NULL, " ");
   int getNum = (int) strtol(arg, NULL, 0);
   if (getNum <= 0) {
@@ -312,16 +312,16 @@ void ui_mainloop() {
     }
     if(i == NR_CMD) {
       bool success=true;
-        //printf("src:%s\n", str);
-       int len=strlen(cmd);
-        strcat(str, args);
-        //printf("dst:%s\n", str);
-
+       int len=0;
+        if (cmd!=NULL) {
+            len=strlen(cmd);
+            strcat(str, args);
+        }
       expr(str,&success,0);
       if (success==false) {
-        //printf("src:%s\n", str);
-        cmd[len]='\0';
-        //printf("dst:%s\n", str);
+          if (cmd!=NULL) {
+            cmd[len]='\0';
+          }
 	printf("Unknown command '%s'\n", cmd); 
       }
     }
