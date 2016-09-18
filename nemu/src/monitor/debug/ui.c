@@ -338,8 +338,9 @@ void ui_mainloop() {
       bool success=true;
        int len=0;
         if (args!=NULL) {
-            len=strlen(cmd);
-            strcat(str, args);
+            //len=strlen(cmd);
+            //strcat(str, args);
+            cmd[len]=' ';
         }
       expr(str,&success,0);
       if (success==false) {
