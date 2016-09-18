@@ -312,16 +312,16 @@ void ui_mainloop() {
     }
     if(i == NR_CMD) {
       bool success=true;
-        printf("src:%s\n", str);
+        //printf("src:%s\n", str);
        int len=strlen(cmd);
         strcat(str, args);
-        printf("dst:%s\n", str);
+        //printf("dst:%s\n", str);
 
       expr(str,&success,0);
       if (success==false) {
-        printf("src:%s\n", str);
+        //printf("src:%s\n", str);
         cmd[len]='\0';
-        printf("dst:%s\n", str);
+        //printf("dst:%s\n", str);
 	printf("Unknown command '%s'\n", cmd); 
       }
     }
