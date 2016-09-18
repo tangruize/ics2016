@@ -314,12 +314,14 @@ void ui_mainloop() {
       bool success=true;
         printf("src:%s\n", str);
        int len=strlen(cmd);
-        strcat(str, cmd+len);
+        strcat(str, args);
         printf("dst:%s\n", str);
 
       expr(str,&success,0);
       if (success==false) {
-          //cmd[len]='\0';
+        printf("src:%s\n", str);
+        cmd[len]='\0';
+        printf("dst:%s\n", str);
 	printf("Unknown command '%s'\n", cmd); 
       }
     }
