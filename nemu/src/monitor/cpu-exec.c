@@ -69,12 +69,19 @@ void cpu_exec(volatile uint32_t n) {
     WP *p=head;
     bool is_changed=false;
     for (;p!=NULL;p=p->next) {
-      nr_token=p->nr_tk;
-      int token_i=0;
-      for (;token_i<nr_token;++token_i) {
-	tokens[token_i]=p->resolved[token_i];
-      }
+        if (p->str==NULL) {
+            fprintf(stderr, "Bad watchpoint %d: %s\n", p->NO, p->str);
+            continue;
+        }
+        char str_tmp[32];
+        strcpy(str_tmp, p->str);
       bool is_success=true;
+        if (!make_token(str_tmp,&is_success,1 )) {
+            if (is_success==false) {
+            fprintf(stderr, "Bad watchpoint %d: %s\n", p->NO, p->str);
+                continue;
+            }
+        }
       int result=eval_start(&is_success);
       if (is_success==false) {
 	fprintf(stderr, "Bad watchpoint %d: %s\n", p->NO, p->str);

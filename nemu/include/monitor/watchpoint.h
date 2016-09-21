@@ -7,10 +7,8 @@
 typedef struct watchpoint {
   int NO;
   int key;
-  int nr_tk;
   struct watchpoint *next;
   char str[32];
-  Token resolved[32];
   /* TODO: Add more members if necessary */
   
   
