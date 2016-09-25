@@ -193,6 +193,7 @@ static int cmd_x(char *args) {
   char *arg2 = NULL;
   if (arg1 != NULL) {
     arg2 = strtok(args + strlen(arg1) + 1, " ");
+      printf("exp: %s\n", arg2);
   }
   int n = 1;
   uint32_t getAddr;
