@@ -191,10 +191,18 @@ static int print_addr(int n, swaddr_t addr) {
 static int cmd_x(char *args) {
   char *arg1 = strtok(NULL, " ");
   char *arg2 = NULL;
+      bool s=true;
   if (arg1 != NULL) {
     //arg2 = strtok(args + strlen(arg1) + 1, " ");
     arg2 = args + strlen(arg1) + 1;
-      printf("exp: %s\n", args + strlen(arg1) +1 );
+      if (!make_token(arg2, &s, 0))
+      {
+          if (s==false)
+          {
+              printf("Bad expression!\n");
+              return 0;
+          }
+      }
   }
   int n = 1;
   uint32_t getAddr;
@@ -205,8 +213,8 @@ static int cmd_x(char *args) {
   else if (arg2 != NULL)
   {
     int getNum = (int) strtol(arg1, NULL, 0);
-    getAddr = (uint32_t) strtol(arg2, NULL, 0);
-    if (getNum <= 0 || (int)getAddr < 0) {
+    getAddr = eval_start(&s);
+      if (getNum <= 0 || (int)getAddr < 0) {
       fputs("expected numbers greater than 0.\n", stderr);
       return 1;
     }
@@ -214,12 +222,17 @@ static int cmd_x(char *args) {
   }
   else
   {
-    getAddr  = (uint32_t) strtol(arg1, NULL, 0);
+    getAddr = eval_start(&s);
     if ((int)getAddr < 0) {
       fputs("expected a valid address.\n", stderr);
       return 1;
     }
   }
+    if (s==false)
+    {
+        printf("Bad expression!\n");
+        return 0;
+    }
   print_addr(n, getAddr);
   return 0;
 }
