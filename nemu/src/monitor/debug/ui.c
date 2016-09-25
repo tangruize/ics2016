@@ -197,11 +197,8 @@ static int cmd_x(char *args) {
     arg2 = args + strlen(arg1) + 1;
       if (!make_token(arg2, &s, 0))
       {
-          if (s==false)
-          {
               printf("Bad expression!\n");
               return 0;
-          }
       }
   }
   int n = 1;
