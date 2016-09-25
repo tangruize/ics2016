@@ -192,7 +192,8 @@ static int cmd_x(char *args) {
   char *arg1 = strtok(NULL, " ");
   char *arg2 = NULL;
   if (arg1 != NULL) {
-    arg2 = strtok(args + strlen(arg1) + 1, " ");
+    //arg2 = strtok(args + strlen(arg1) + 1, " ");
+    arg2 = args + strlen(arg1) + 1;
       printf("exp: %s\n", args + strlen(arg1) +1 );
   }
   int n = 1;
