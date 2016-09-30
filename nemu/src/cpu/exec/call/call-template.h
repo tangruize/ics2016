@@ -12,7 +12,7 @@ static void do_execute() {
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(call_rel_, SUFFIX)) {
-  concat(decode_i_, SUFFIX)(eip);
+  concat(decode_i_, SUFFIX)(eip + 1);
   op_dest->type = OP_TYPE_MEM;
   op_dest->addr = REG(R_ESP);
   op_dest->size = DATA_BYTE;
