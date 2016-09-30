@@ -27,6 +27,29 @@ typedef union {
     struct {
 	    uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
     	swaddr_t eip;
+			union {
+				struct {
+					unsigned :16;
+					unsigned VM :1;
+					unsigned RF :1;
+					unsigned :1;
+					unsigned NT :1;
+					unsigned IOPL :2;
+					unsigned OF :1;
+					unsigned DF :1;
+					unsigned IF :1;
+					unsigned TF :1;
+					unsigned SF :1;
+					unsigned ZF :1;
+					unsigned :1;
+					unsigned AF :1;
+					unsigned :1;
+					unsigned PF :1;
+					unsigned :1;
+					unsigned CF :1;
+				} eflags;
+				unsigned eflags_init;
+			};
     };
 
 } CPU_state;
