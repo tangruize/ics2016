@@ -40,7 +40,4 @@ void reg_test() {
 	assert(sample[R_EDI] == cpu.edi);
 
 	assert(eip_sample == cpu.eip);
-
-	cpu.eflags_init = 0x00000002;
-	assert(eflags(CF) == 0);
 }
