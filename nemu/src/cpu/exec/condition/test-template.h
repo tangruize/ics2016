@@ -10,7 +10,7 @@ static void do_execute() {
   eflags(ZF) = set_zf(result);
   eflags(SF) = set_sf(result, DATA_BYTE);
   eflags(PF) = set_pf(result);
-  print_asm(str(instr) " %%%s,%%%s", REG_NAME(op_src->reg), REG_NAME(op_dest->reg));
+  print_asm(str(instr) " %s,%s", op_src->str, op_dest->str);
 }
 
 make_instr_helper(r2rm)
