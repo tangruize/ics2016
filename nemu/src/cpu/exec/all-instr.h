@@ -28,3 +28,5 @@
 #include "special/special.h"
 
 #include "control-trans/call.h"
+
+#include "condition/test.h"
