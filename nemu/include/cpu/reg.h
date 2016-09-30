@@ -29,7 +29,7 @@ typedef union {
     	swaddr_t eip;
 			union {
 				struct {
-					unsigned :16;
+					unsigned :14;
 					unsigned VM :1;
 					unsigned RF :1;
 					unsigned :1;
