@@ -41,5 +41,6 @@ void reg_test() {
 
 	assert(eip_sample == cpu.eip);
 
+	cpu.eflags_init = 0x00000001;
 	assert(eflags(CF) == 0);
 }
