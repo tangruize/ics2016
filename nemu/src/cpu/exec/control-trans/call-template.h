@@ -3,7 +3,7 @@
 #define instr call
 
 static void do_execute() {
-  REG(R_ESP) -= DATA_BYTE;
+  REG(R_ESP) -= ((DATA_BYTE == 2) ? 2 : 4);
   OPERAND_W(op_dest, cpu.eip);
   cpu.eip = (cpu.eip + op_src->val) & ((DATA_BYTE==2) ? 0x0000FFFF : 0xFFFFFFFF);
   print_asm_template1();
