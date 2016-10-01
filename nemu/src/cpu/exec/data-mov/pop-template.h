@@ -13,7 +13,11 @@ static void do_execute() {
 }
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
-make_instr_helper(r)
+make_helper(concat(pop_r_, SUFFIX)) {
+  concat(decode_r_, SUFFIX)(eip);
+  do_execute();
+  return 1;
+}
 
 make_helper(concat(pop_m_, SUFFIX)) {
   op_src->type = OP_TYPE_MEM;
