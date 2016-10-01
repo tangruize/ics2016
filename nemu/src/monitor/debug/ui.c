@@ -206,18 +206,20 @@ static int cmd_x(char *args) {
   else if (arg2 != NULL)
   {
     int getNum = (int) strtol(arg1, NULL, 0);
-    getAddr = (uint32_t) strtol(arg2, NULL, 0);
-    if (getNum <= 0 || (int)getAddr < 0) {
-      fputs("expected numbers greater than 0.\n", stderr);
+     bool is_success=true;
+    getAddr = (uint32_t) express(arg2, &is_success);
+    if (getNum <= 0 || is_success==false) {
+      fputs("Bad expression\n", stderr);
       return 1;
     }
     n = getNum;
   }
   else
   {
-    getAddr  = (uint32_t) strtol(arg1, NULL, 0);
-    if ((int)getAddr < 0) {
-      fputs("expected a valid address.\n", stderr);
+    bool is_success=true;
+   getAddr = (uint32_t) express(arg1, &is_success);
+    if (is_success==false) {
+      fputs("Bad expression\n", stderr);
       return 1;
     }
   }
