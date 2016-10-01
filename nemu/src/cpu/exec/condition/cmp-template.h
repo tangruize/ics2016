@@ -22,8 +22,8 @@ make_instr_helper(rm2r)
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(cmp_i2rm_sx_, SUFFIX)) {
   op_dest->size = DATA_BYTE;
-  int len = read_ModR_M(eip, op_dest, op_src);
-  printf("len: %d\n",len );
+  int len = read_ModR_M(cpu.eip, op_dest, op_src);
+  //printf("len: %d\n",len );
   int8_t tmp = (int8_t)swaddr_read(cpu.eip + len + 1, 1);
   int tmp2=(int)tmp;
   op_src->val=(uint32_t)tmp2;
