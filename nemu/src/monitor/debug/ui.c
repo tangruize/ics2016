@@ -196,7 +196,7 @@ static int cmd_x(char *args) {
   printf("%s\n", arg1);
   char *arg2 = NULL;
   if (arg1 != NULL) {
-    arg2 = strtok(args + strlen(arg1) + 1, " ");
+    arg2 = args + strlen(arg1) + 1;
   }
   int n = 1;
   uint32_t getAddr;
@@ -209,7 +209,7 @@ static int cmd_x(char *args) {
     int getNum = (int) strtol(arg1, NULL, 0);
      bool is_success=true;
     getAddr = (uint32_t) express(arg2, &is_success);
-    printf("%s\n", arg2);
+    //printf("%s\n", arg2);
     if (getNum <= 0 || is_success==false) {
         if (getNum <= 0) {
           fputs("Bad expression\n", stderr);
