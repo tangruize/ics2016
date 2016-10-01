@@ -209,8 +209,11 @@ static int cmd_x(char *args) {
     int getNum = (int) strtol(arg1, NULL, 0);
      bool is_success=true;
     getAddr = (uint32_t) express(arg2, &is_success);
+    printf("%s\n", arg2);
     if (getNum <= 0 || is_success==false) {
-      fputs("Bad expression\n", stderr);
+        if (getNum <= 0) {
+          fputs("Bad expression\n", stderr);
+        }
       return 1;
     }
     n = getNum;
@@ -218,9 +221,9 @@ static int cmd_x(char *args) {
   else
   {
     bool is_success=true;
-   getAddr = (uint32_t) express(arg1, &is_success);
+    getAddr = (uint32_t) express(arg1, &is_success);
     if (is_success==false) {
-      fputs("Bad expression\n", stderr);
+      //fputs("Bad expression\n", stderr);
       return 1;
     }
   }
