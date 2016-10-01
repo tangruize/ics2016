@@ -193,6 +193,7 @@ static int print_addr(int n, swaddr_t addr) {
 
 static int cmd_x(char *args) {
   char *arg1 = strtok(NULL, " ");
+  printf("%s\n", arg1);
   char *arg2 = NULL;
   if (arg1 != NULL) {
     arg2 = strtok(args + strlen(arg1) + 1, " ");
