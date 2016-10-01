@@ -29,18 +29,18 @@ typedef union {
     	swaddr_t eip;
 			union {
 				struct {
-					unsigned CF :1;
+					unsigned CF :1; //use
 					unsigned :1;
-					unsigned PF :1;
+					unsigned PF :1; //use
 					unsigned :1;
 					unsigned AF :1;
 					unsigned :1;
-					unsigned ZF :1;
-					unsigned SF :1;
+					unsigned ZF :1; //use
+					unsigned SF :1; //use
 					unsigned TF :1;
-					unsigned IF :1;
-					unsigned DF :1;
-					unsigned OF :1;
+					unsigned IF :1; //use
+					unsigned DF :1; //use
+					unsigned OF :1; //use
 					unsigned IOPL :2;
 					unsigned NT :1;
 					unsigned :1;

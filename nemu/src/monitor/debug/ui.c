@@ -130,7 +130,7 @@ static int cmd_si(char *args) {
 static char *cpu_name[]={"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "eip"};
 
 static int print_cpu(int reg) {
-  if (reg < 0 || reg > 8) {
+  if (reg < 0 || reg > 9) {
     return 1;
   }
   else if (reg == 8) {
@@ -138,6 +138,17 @@ static int print_cpu(int reg) {
   }
   else if (reg == R_ESP || reg == R_EBP) {
     printf("%-12s0x%x\t0x%x\n", cpu_name[reg], cpu.gpr[reg]._32, cpu.gpr[reg]._32);
+  }
+  else if (reg==9) {
+    printf("%-12s0x%x\t[ ", "eflags", cpu.eflags_init);
+    if (eflags(CF)) puts("CF ");
+    if (eflags(PF)) puts("PF ");
+    if (eflags(ZF)) puts("ZF ");
+    if (eflags(SF)) puts("SF ");
+    if (eflags(IF)) puts("IF ");
+    if (eflags(DF)) puts("DF ");
+    if (eflags(OF)) puts("OF ");
+    puts("]\n");
   }
   else {
     printf("%-12s0x%x\t%d\n", cpu_name[reg], cpu.gpr[reg]._32, cpu.gpr[reg]._32);
@@ -150,7 +161,7 @@ static int cmd_info(char *args) {
   if (arg != NULL) {
     if (strcmp("r", arg) == 0 || strcmp("registers", arg) == 0) {
       int i;
-      for (i = 0; i < 9; ++i) {
+      for (i = 0; i <= 9; ++i) {
 	print_cpu(i);
       }
     }
