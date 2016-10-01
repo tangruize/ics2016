@@ -196,7 +196,7 @@ static int cmd_x(char *args) {
   printf("%s\n", arg1);
   char *arg2 = NULL;
   if (arg1 != NULL) {
-    arg2 = args + strlen(arg1) + 1;
+    arg2 = strtok(NULL, " ");
   }
   int n = 1;
   uint32_t getAddr;
