@@ -30,5 +30,6 @@
 #include "control-trans/call.h"
 
 #include "condition/test.h"
+#include "condition/cmp.h"
 
 #include "jump/je.h"

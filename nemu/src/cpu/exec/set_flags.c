@@ -47,3 +47,62 @@ int set_sf(unsigned to_check, int size) {
     return 0;
   }
 }
+
+int set_cf(uint32_t left, uint32_t right, int size) {
+  uint32_t tmp = left + right;
+  if (size == 1) {
+    tmp &= 0xff;
+  }
+  else if (size == 2) {
+    tmp &= 0xffff;
+  }
+  else if (size != 4) {
+    assert(0);
+  }
+  if (tmp < left) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+int set_of(uint32_t left, uint32_t right, int size) {
+  if (size == 1){
+    int8_t a=(int8_t)left;
+    int8_t b=(int8_t)right;
+    int8_t t=a+b;
+    if (((a < 0) == (b < 0)) && ((t < 0) != (a < 0))) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+  else if (size ==2) {
+    int16_t a=(int16_t)left;
+    int16_t b=(int16_t)right;
+    int16_t t=a+b;
+    if (((a < 0) == (b < 0)) && ((t < 0) != (a < 0))) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+  else if (size == 4) {
+    int32_t a=(int32_t)left;
+    int32_t b=(int32_t)right;
+    int32_t t=a+b;
+    if (((a < 0) == (b < 0)) && ((t < 0) != (a < 0))) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+  else {
+    assert(0);
+    return 0;
+  }
+}
