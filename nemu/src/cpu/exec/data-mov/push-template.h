@@ -5,7 +5,8 @@
 static void do_execute() {
   REG(R_ESP) -= DATA_BYTE;
   OPERAND_W(op_dest, op_src->val);
-  print_asm(str(instr) " %s", op_src->str);
+  print_asm_template1();
+  //print_asm(str(instr) " %s", op_src->str);
 }
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
