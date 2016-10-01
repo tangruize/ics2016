@@ -141,14 +141,14 @@ static int print_cpu(int reg) {
   }
   else if (reg==9) {
     printf("%-12s0x%x\t[ ", "eflags", cpu.eflags_init);
-    if (eflags(CF)) puts("CF ");
-    if (eflags(PF)) puts("PF ");
-    if (eflags(ZF)) puts("ZF ");
-    if (eflags(SF)) puts("SF ");
-    if (eflags(IF)) puts("IF ");
-    if (eflags(DF)) puts("DF ");
-    if (eflags(OF)) puts("OF ");
-    puts("]\n");
+    if (eflags(CF)) printf("CF ");
+    if (eflags(PF)) printf("PF ");
+    if (eflags(ZF)) printf("ZF ");
+    if (eflags(SF)) printf("SF ");
+    if (eflags(IF)) printf("IF ");
+    if (eflags(DF)) printf("DF ");
+    if (eflags(OF)) printf("OF ");
+    printf("]\n");
   }
   else {
     printf("%-12s0x%x\t%d\n", cpu_name[reg], cpu.gpr[reg]._32, cpu.gpr[reg]._32);
