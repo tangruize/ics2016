@@ -27,7 +27,7 @@ make_helper(concat(cmp_i2rm_sx_, SUFFIX)) {
   int8_t tmp = (int8_t)swaddr_read(cpu.eip + len + 1, 1);
   int tmp2=(int)tmp;
   op_src->val=(uint32_t)tmp2;
-  print_asm("mov" str(SUFFIX) " 0x%x,%%%s", op_src->val, op_dest->str);
+  print_asm("cmp" str(SUFFIX) " 0x%x,%s", op_src->val, op_dest->str);
   return len + 2;
 }
 #endif
