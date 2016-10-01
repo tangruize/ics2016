@@ -10,26 +10,26 @@
 #include <regex.h>
 
 enum {
-  
+
   RULE_ASSIGN=0,
   RULE_OR,
   RULE_AND,
   RULE_BIT_OR,
   RULE_BIT_XOR,
   RULE_BIT_AND,
-  RULE_EQ, RULE_NE, 
+  RULE_EQ, RULE_NE,
   RULE_GT, RULE_LT, RULE_GE, RULE_LE,
   RULE_SHIFT_L, RULE_SHIFT_R,
   RULE_ADD, RULE_SUB,
   RULE_MUL, RULE_DIV, RULE_REM,
   RULE_NOT, RULE_NEG, RULE_DER, RULE_BIT_NOT,
   RULE_BRA_L, RULE_BRA_R,
-  
+
   RULE_NOTYPE=256, RULE_DIGIT, RULE_HEX, RULE_ALPHA, RULE_REG
-  
+
   /* done */
   /* TODO: Add more token types */
-  
+
 };
 
 static struct precedence {
@@ -55,12 +55,12 @@ static struct rule {
   char *regex;
   int token_type;
 } rules[] = {
-  
+
   /* done */
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  
+
   {"^((0x)|(0X))[0-9a-fA-F]+", RULE_HEX},
   {"[0-9]+", RULE_DIGIT},
   {"^[a-zA-Z_][a-zA-Z0-9_]*", RULE_ALPHA},
@@ -102,7 +102,7 @@ void init_regex() {
   int i;
   char error_msg[128];
   int ret;
-  
+
   for(i = 0; i < NR_REGEX; i ++) {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if(ret != 0) {
@@ -180,10 +180,10 @@ bool make_token(char *e, bool *is_match, int prompt) {
       if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 	char *substr_start = e + position;
 	int substr_len = pmatch.rm_eo;
-	
+
 //	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
-	
-	
+
+
 	/* done */
 	/* TODO: Now a new token is recognized with rules[i]. Add codes
 	 * to record the token in the array `tokens'. For certain types
@@ -255,7 +255,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	      tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4);
 	    }
 	    break;
-	  case RULE_ALPHA: 
+	  case RULE_ALPHA:
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_NEG) {
@@ -306,7 +306,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	    }
 	    break;
 	  case RULE_REG:
-	    
+
 	    if (nr_token!=0) {
 	      t=tokens[nr_token-1].type;
 	      if (t==RULE_NEG) {
@@ -582,7 +582,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 	      return print_err(e, position);
 	    }
 	    tokens[nr_token].type=RULE_ASSIGN;
-	    strcpy(tokens[nr_token].str,"=");	
+	    strcpy(tokens[nr_token].str,"=");
 	    if (nr_token!=1||tokens[0].type!=RULE_ALPHA) {
 	      return print_err(e, position);
 	    }
@@ -714,7 +714,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
     }
     return false;
   }
-  return true; 
+  return true;
 }
 
 static int find_digit(int p, int q, int op, int *pre, int *next) {
@@ -934,6 +934,22 @@ int eval_start(bool *success) {
   }
 }
 
+int express(char *args, bool *is_success)
+{
+  *is_success=true;
+    if (args==NULL) {
+        *is_success=false;
+        return 0;
+    }
+  if(!make_token(args, is_success,1)) {
+    if (*is_success==false) {
+      fputs("Invalid expression!\n" ,stderr);
+    }
+    return 1;
+  }
+  return eval_start(is_success);
+}
+
 uint32_t expr(char *e, bool *success, int prompt) {
   if (e==NULL) {
     return 1;
@@ -959,7 +975,7 @@ uint32_t expr(char *e, bool *success, int prompt) {
   if (s==true) {
     printf("%d\n", result);
   }
-  
+
   /* done */
   /* TODO: Insert codes to evaluate the expression. */
   //panic("please implement me");
