@@ -22,7 +22,7 @@ static void do_execute() {
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(ret_, SUFFIX)) {
   do_execute();
-  return 1;
+  return 0;
 }
 
 make_helper(concat(ret_i_, SUFFIX)) {
@@ -32,7 +32,7 @@ make_helper(concat(ret_i_, SUFFIX)) {
   op_src->val = op_src->imm;
   snprintf(op_src->str, OP_STR_SIZE, "$0x%x", op_src->imm);
   do_execute();
-  return 3;
+  return 0;
 }
 #endif
 
