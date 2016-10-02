@@ -29,6 +29,7 @@
 #include "special/special.h"
 
 #include "control-trans/call.h"
+#include "control-trans/ret.h"
 
 #include "condition/test.h"
 #include "condition/cmp.h"
