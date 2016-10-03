@@ -1,4 +1,5 @@
 #include "cpu/exec/helper.h"
+#include "cpu/set_flags.h"
 
 #if DATA_BYTE == 1
 

@@ -18,4 +18,6 @@ make_helper_v(cmp_r2rm)
 make_helper_v(cmp_i2a)
 make_helper_v(cmp_i2rm)
 make_helper_v(cmp_rm2r)
-make_helper_v(cmp_i2rm_sx)
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+make_helper_v(cmp_si2rm)
+#endif

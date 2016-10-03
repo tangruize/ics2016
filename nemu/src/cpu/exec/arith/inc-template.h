@@ -1,4 +1,5 @@
 #include "cpu/exec/template-start.h"
+#include "cpu/set_flags.h"
 
 #define instr inc
 
@@ -7,7 +8,11 @@ static void do_execute () {
 	OPERAND_W(op_src, result);
 
 	/* TODO: Update EFLAGS. */
-	panic("please implement me");
+	//panic("please implement me");
+	eflags(OF) = set_of(op_src->val, 1, DATA_BYTE);
+	eflags(SF) = set_sf(result, DATA_BYTE);
+	eflags(ZF) = set_zf(result);
+	eflags(PF) = set_pf(result);
 
 	print_asm_template1();
 }
