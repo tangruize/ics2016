@@ -15,10 +15,17 @@ static void do_execute() {
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(push_r_, SUFFIX)) {
-  concat(decode_r_, SUFFIX)(eip);
+  concat(decode_r_, SUFFIX)(cpu.eip);
   do_execute();
   return 1;
 }
+
+make_helper(concat(push_m_, SUFFIX)) {
+  concat(decode_m_, SUFFIX)(cpu.eip+1);
+  print_asm("pop" str(SUFFIX) " 0x%x", (uint32_t)op_src->addr);
+  return DATA_BYTE + 1;
+}
+
 #endif
 
 #include "cpu/exec/template-end.h"

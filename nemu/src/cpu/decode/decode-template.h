@@ -187,4 +187,17 @@ void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	else { assert(0); }
 }
 
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+make_helper(concat(decode_m_, SUFFIX)) {
+	op_src->type = OP_TYPE_MEM;
+	op_src->addr = (uint32_t)swaddr_read(eip, DATA_BYTE);
+	op_src->size = DATA_BYTE;
+	op_src->val = swaddr_read(op_src->addr, op_src->size);
+	#ifdef DEBUG
+	snprintf(op_src->str, OP_STR_SIZE, "0x%x", op_src->val);
+	#endif
+	return DATA_BYTE;
+}
+#endif
+
 #include "cpu/exec/template-end.h"
