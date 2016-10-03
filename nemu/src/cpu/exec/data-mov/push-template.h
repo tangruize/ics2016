@@ -13,6 +13,8 @@ static void do_execute() {
   //print_asm(str(instr) " %s", op_src->str);
 }
 
+make_instr_helper(i)
+
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(push_r_, SUFFIX)) {
   concat(decode_r_, SUFFIX)(cpu.eip);
