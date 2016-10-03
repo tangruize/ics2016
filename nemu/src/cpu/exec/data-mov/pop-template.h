@@ -20,9 +20,7 @@ make_helper(concat(pop_r_, SUFFIX)) {
 }
 
 make_helper(concat(pop_m_, SUFFIX)) {
-  op_src->type = OP_TYPE_MEM;
-  op_src->addr = (uint32_t)swaddr_read(cpu.eip + 1, DATA_BYTE);
-  op_src->size = DATA_BYTE;
+  concat(decode_m_, SUFFIX)(cpu.eip+1);
   print_asm("pop" str(SUFFIX) " 0x%x", (uint32_t)op_src->addr);
   return DATA_BYTE + 1;
 }
