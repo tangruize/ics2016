@@ -19,11 +19,13 @@ make_helper(concat(pop_r_, SUFFIX)) {
   return 1;
 }
 
-make_helper(concat(pop_m_, SUFFIX)) {
+/*make_helper(concat(pop_m_, SUFFIX)) {
   concat(decode_m_, SUFFIX)(cpu.eip+1);
   print_asm("pop" str(SUFFIX) " 0x%x", (uint32_t)op_src->addr);
   return DATA_BYTE + 1;
-}
+}*/
+
+make_instr_helper(rm)
 #endif
 
 #include "cpu/exec/template-end.h"
