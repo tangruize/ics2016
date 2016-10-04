@@ -106,3 +106,147 @@ int set_of(uint32_t left, uint32_t right, int size) {
     return 0;
   }
 }
+
+uint8_t cc_nbe() {
+  if (eflags(CF) == 0 && eflags(ZF) == 0) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_nb() {
+  if (eflags(CF) == 0) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_b() {
+  if (eflags(CF) == 1) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_be() {
+  if (eflags(CF) == 1 || eflags(ZF) == 1) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_z() {
+  if (eflags(ZF) == 1) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_nle() {
+  if (eflags(ZF) == 0 && eflags(SF) == eflags(OF)) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_nl() {
+  if (eflags(SF) == eflags(OF)) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_l() {
+  if (eflags(SF) != eflags(OF)) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_le() {
+  if (eflags(ZF) == 1 || eflags(SF) != eflags(OF)) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_nz() {
+  if (eflags(ZF) == 0) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_no() {
+  if (eflags(OF) == 0) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_np() {
+  if (eflags(PF) == 0) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_ns() {
+  if (eflags(SF) == 0) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_o() {
+  if (eflags(OF) == 1) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_p() {
+  if (eflags(PF) == 1) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+uint8_t cc_s() {
+  if (eflags(SF) == 1) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
