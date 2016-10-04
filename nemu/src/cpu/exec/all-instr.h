@@ -17,7 +17,7 @@
 #include "arith/mul.h"
 #include "arith/idiv.h"
 #include "arith/div.h"
-#include "arith/add.h"
+#include "arith/addc.h"
 
 #include "logic/and.h"
 #include "logic/or.h"

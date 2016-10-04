@@ -1,10 +1,11 @@
 #include "cpu/exec/template-start.h"
 
-#define instr add
-
 static void do_execute() {
+  #ifdef __ADC__
+  op_src->val += eflags(CF);
+  #endif
   DATA_TYPE result = op_dest->val + op_src->val;
-  OPERAND_W(op_src, result);
+  OPERAND_W(op_dest, result);
 
   eflags(OF) = set_of(op_src->val, op_dest->val, DATA_BYTE);
   eflags(SF) = set_sf(result, DATA_BYTE);
