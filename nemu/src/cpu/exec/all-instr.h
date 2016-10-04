@@ -18,6 +18,7 @@
 #include "arith/idiv.h"
 #include "arith/div.h"
 #include "arith/addc.h"
+#include "arith/subb.h"
 
 #include "logic/and.h"
 #include "logic/or.h"
