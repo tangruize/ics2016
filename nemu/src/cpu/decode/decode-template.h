@@ -28,7 +28,8 @@ make_helper(concat(decode_i_, SUFFIX)) {
 /* sign immediate */
 make_helper(concat(decode_si_, SUFFIX)) {
 	op_src->type = OP_TYPE_IMM;
-	op_src->simm = instr_fetch(eip, 1);
+	int8_t tmp=(int8_t)instr_fetch(eip, 1);
+	op_src->simm = (DATA_TYPE_S)tmp;
 
 	/* TODO: Use instr_fetch() to read `DATA_BYTE' bytes of memory pointed
 	 * by `eip'. Interpret the result as an signed immediate, and assign
