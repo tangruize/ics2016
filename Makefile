@@ -53,7 +53,7 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := obj/testcase/mov-c
+USERPROG := obj/testcase/sum
 ENTRY := $(USERPROG)
 
 entry: $(ENTRY)
@@ -70,7 +70,7 @@ gdb: $(nemu_BIN) $(USERPROG) entry
 test: $(nemu_BIN) $(testcase_BIN) entry
 	$(call git_commit, "test")
 	bash test.sh $(testcase_BIN)
-count: 
+count:
 	$(call git_commit, "count lines")
 	@bash count.sh
 submit: clean
