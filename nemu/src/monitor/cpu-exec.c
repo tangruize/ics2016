@@ -9,7 +9,7 @@
  * This is useful when you use the `si' command.
  * You can modify this value as you want.
  */
-#define MAX_INSTR_TO_PRINT 10
+#define MAX_INSTR_TO_PRINT 100
 
 int nemu_state = STOP;
 
@@ -43,13 +43,13 @@ void cpu_exec(volatile uint32_t n) {
     return;
   }
   nemu_state = RUNNING;
-  
+
   #ifdef DEBUG
   volatile uint32_t n_temp = n;
   #endif
-  
+
   setjmp(jbuf);
-  
+
   for(; n > 0; n --) {
     #ifdef DEBUG
     swaddr_t eip_temp = cpu.eip;
@@ -58,13 +58,13 @@ void cpu_exec(volatile uint32_t n) {
       fputc('.', stderr);
     }
     #endif
-    
+
     /* Execute one instruction, including instruction fetch,
      * instruction decode, and the actual execution. */
     int instr_len = exec(cpu.eip);
-    
+
     cpu.eip += instr_len;
-    
+
     /* TODO: check watchpoints here. */
     WP *p=head;
     bool is_changed=false;
@@ -96,7 +96,7 @@ void cpu_exec(volatile uint32_t n) {
     if (is_changed==true) {
       nemu_state=STOP;
     }
-    
+
     #ifdef DEBUG
     print_bin_instr(eip_temp, instr_len);
     strcat(asm_buf, assembly);
@@ -105,21 +105,21 @@ void cpu_exec(volatile uint32_t n) {
       printf("%s\n", asm_buf);
     }
     #endif
-    
+
     #ifndef DEBUG
     print_bin_instr(eip_temp, instr_len);
     strcat(asm_buf, assembly);
     printf("%s\n", asm_buf);
     #endif
-    
-    
+
+
     #ifdef HAS_DEVICE
     extern void device_update();
     device_update();
     #endif
-    
+
     if(nemu_state != RUNNING) { return; }
   }
-  
+
   if(nemu_state == RUNNING) { nemu_state = STOP; }
 }
