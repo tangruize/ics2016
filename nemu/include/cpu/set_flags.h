@@ -24,4 +24,7 @@ uint8_t cc_nl();   //d
 uint8_t cc_le();   //e
 uint8_t cc_nle();  //f
 
+uint8_t cc_cxz();
+uint8_t cc_ecxz();
+
 #endif

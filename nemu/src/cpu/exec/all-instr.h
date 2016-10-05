@@ -38,8 +38,7 @@
 
 #include "control-trans/call.h"
 #include "control-trans/ret.h"
+#include "control-trans/jcc.h"
 
 #include "condition/test.h"
 #include "condition/cmp.h"
-
-#include "jump/je.h"

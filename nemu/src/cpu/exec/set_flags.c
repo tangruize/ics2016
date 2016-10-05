@@ -250,3 +250,21 @@ uint8_t cc_s() {
     return 0;
   }
 }
+
+uint8_t cc_cxz() {
+  if (cpu.gpr[R_CX]._16 == 0) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+uint8_t cc_ecxz() {
+  if (cpu.gpr[R_ECX]._32 == 0) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
