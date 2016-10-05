@@ -39,6 +39,7 @@
 #include "control-trans/call.h"
 #include "control-trans/ret.h"
 #include "control-trans/jcc.h"
+#include "control-trans/jmp.h"
 
 #include "condition/test.h"
 #include "condition/cmp.h"
