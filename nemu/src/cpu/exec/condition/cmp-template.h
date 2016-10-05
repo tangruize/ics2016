@@ -13,8 +13,8 @@ static void do_execute() {
   eflags(SF) = set_sf(tmp, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(tmp);
   eflags(PF) = set_pf(tmp);
-  eflags(CF) = !set_cf((int)op_dest->val, (int)op_src->val, (DATA_BYTE==2?2:4));
-  eflags(OF) = set_of((int)op_dest->val, (int)op_src->val, (DATA_BYTE==2?2:4));
+  eflags(CF) = !set_cf((int)op_dest->val, (int)-op_src->val, (DATA_BYTE==2?2:4));
+  eflags(OF) = set_of((int)op_dest->val, (int)-op_src->val, (DATA_BYTE==2?2:4));
   print_asm_template2();
 }
 
