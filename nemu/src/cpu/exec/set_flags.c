@@ -29,7 +29,7 @@ inline int set_zf(unsigned to_check) {
   return !to_check;
 }
 
-int set_sf(unsigned to_check, int size) {
+int set_sf(int to_check, int size) {
   if (size == 1) {
     uint8_t tmp = (uint8_t)to_check;
     return tmp >> ((size << 3) - 1);
@@ -48,8 +48,8 @@ int set_sf(unsigned to_check, int size) {
   }
 }
 
-int set_cf(uint32_t left, uint32_t right, int size) {
-  uint32_t tmp = left + right;
+int set_cf(int left, int right, int size) {
+  int tmp = left + right;
   if (size == 1) {
     tmp &= 0xff;
   }
@@ -59,7 +59,7 @@ int set_cf(uint32_t left, uint32_t right, int size) {
   else if (size != 4) {
     assert(0);
   }
-  if (tmp < left) {
+  if ((unsigned)tmp < (unsigned)left) {
     return 1;
   }
   else {
@@ -67,7 +67,7 @@ int set_cf(uint32_t left, uint32_t right, int size) {
   }
 }
 
-int set_of(uint32_t left, uint32_t right, int size) {
+int set_of(int left, int right, int size) {
   if (size == 1){
     int8_t a=(int8_t)left;
     int8_t b=(int8_t)right;

@@ -3,9 +3,9 @@
 
 int set_pf(unsigned to_check);
 inline int set_zf(unsigned to_check);
-inline int set_sf(unsigned to_check, int size);
-int set_of(uint32_t left, uint32_t right, int size);
-int set_cf(uint32_t left, uint32_t right, int size);
+inline int set_sf(int to_check, int size);
+int set_of(int left, int right, int size);
+int set_cf(int left, int right, int size);
 
 uint8_t cc_o();    //0
 uint8_t cc_no();   //1
