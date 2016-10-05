@@ -2,7 +2,7 @@
 
 static void do_execute() {
   #ifdef __SBB__
-  op_src->val += eflags(CF);
+  op_src->val = (int)op_src->val + (int)eflags(CF);
   #endif
   #if DATA_BYTE == 2
   uint16_t result = op_dest->val - op_src->val;
