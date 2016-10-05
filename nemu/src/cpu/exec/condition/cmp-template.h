@@ -5,12 +5,16 @@
 #define instr cmp
 
 static void do_execute() {
-  uint32_t tmp = (int32_t)op_dest->val - (int32_t) op_src->val;
-  eflags(SF) = set_sf(tmp, DATA_BYTE);
+  #if DATA_BYTE == 2
+  uint16_t tmp = op_dest->val - op_src->val;
+  #else
+  uint32_t tmp = (int)op_dest->val - (int)op_src->val;
+  #endif
+  eflags(SF) = set_sf(tmp, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(tmp);
   eflags(PF) = set_pf(tmp);
-  eflags(CF) = set_cf(op_dest->val, op_src->val, DATA_BYTE);
-  eflags(OF) = set_of(op_dest->val, op_src->val, DATA_BYTE);
+  eflags(CF) = !set_cf(op_dest->val, op_src->val, (DATA_BYTE==2?2:4));
+  eflags(OF) = set_of(op_dest->val, op_src->val, (DATA_BYTE==2?2:4));
   print_asm_template2();
 }
 
