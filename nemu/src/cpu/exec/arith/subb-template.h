@@ -10,7 +10,7 @@ static void do_execute() {
   uint32_t result = (int)op_dest->val - (int)op_src->val;
   #endif
   OPERAND_W(op_dest, result);
-  printf("%d\t%d\t%d\n",  op_src->val, op_dest->val, result);
+//  printf("%d\t%d\t%d\n",  op_src->val, op_dest->val, result);
 
   eflags(OF) = set_of(-op_src->val, op_dest->val, (DATA_BYTE==2?2:4));
   eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
