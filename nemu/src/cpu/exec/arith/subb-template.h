@@ -4,14 +4,18 @@ static void do_execute() {
   #ifdef __SBB__
   op_src->val += eflags(CF);
   #endif
-  DATA_TYPE result = op_dest->val - op_src->val;
+  #if DATA_BYTE == 2
+  uint16_t result = op_dest->val - op_src->val;
+  #else
+  uint32_t result = op_dest->val - op_src->val;
+  #endif
   OPERAND_W(op_dest, result);
 
-  eflags(OF) = set_of(-op_src->val, op_dest->val, DATA_BYTE);
+  eflags(OF) = set_of(-op_src->val, op_dest->val, (DATA_BYTE==2?2:4));
   eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(result);
   eflags(PF) = set_pf(result);
-  eflags(CF) = set_cf(-op_src->val, op_dest->val, DATA_BYTE);
+  eflags(CF) = set_cf(-op_src->val, op_dest->val, (DATA_BYTE==2?2:4));
 
   print_asm_template2();
 }
