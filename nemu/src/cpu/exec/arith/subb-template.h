@@ -8,7 +8,7 @@ static void do_execute() {
   OPERAND_W(op_dest, result);
 
   eflags(OF) = set_of(-op_src->val, op_dest->val, DATA_BYTE);
-  eflags(SF) = set_sf(result, DATA_BYTE);
+  eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(result);
   eflags(PF) = set_pf(result);
   eflags(CF) = set_cf(-op_src->val, op_dest->val, DATA_BYTE);
