@@ -4,7 +4,11 @@
 
 static void do_execute() {
   op_dest->type = OP_TYPE_MEM;
-  op_dest->addr = REG(R_ESP);
+  #if DATA_BYTE == 2
+  op_dest->addr = cpu.gpr[R_ESP]._16;
+  #else
+  op_dest->addr = cpu.gpr[R_ESP]._32;
+  #endif
   op_dest->size = DATA_BYTE;
   snprintf(op_dest->str, OP_STR_SIZE, "%s", REG_NAME(R_ESP));
   OPERAND_W(op_src, (uint32_t)swaddr_read(op_dest->addr, DATA_BYTE));
