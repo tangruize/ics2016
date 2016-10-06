@@ -48,22 +48,39 @@ int set_sf(int to_check, int size) {
   }
 }
 
-int set_cf(int left, int right, int size) {
-  int tmp = left + right;
+int set_cf(unsigned left, unsigned right, int size) {
   if (size == 1) {
-    tmp &= 0xff;
+    uint8_t x = left;
+    uint8_t y = right;
+    uint8_t tmp = x + y;
+    if (tmp < left) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
   }
   else if (size == 2) {
-    tmp &= 0xffff;
-  }
-  else if (size != 4) {
-    assert(0);
-  }
-  if ((unsigned)tmp < (unsigned)left) {
-    return 1;
+    uint16_t x = left;
+    uint16_t y = right;
+    uint16_t tmp = x + y;
+    if (tmp < left) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
   }
   else {
-    return 0;
+    uint32_t x = left;
+    uint32_t y = right;
+    uint32_t tmp = x + y;
+    if (tmp < left) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
   }
 }
 

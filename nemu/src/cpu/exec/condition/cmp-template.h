@@ -13,7 +13,7 @@ static void do_execute() {
   eflags(SF) = set_sf(tmp, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(tmp);
   eflags(PF) = set_pf(tmp);
-  eflags(CF) = !set_cf((int)op_dest->val, (int)-op_src->val, (DATA_BYTE==2?2:4));
+  eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, (DATA_BYTE==2?2:4));
   /*if (op_src->val == 0x80000000) {
       eflags(OF) = 1;
   }

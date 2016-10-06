@@ -15,7 +15,7 @@ static void do_execute() {
   eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(result);
   eflags(PF) = set_pf(result);
-  eflags(CF) = set_cf((int)op_src->val, (int)op_dest->val, (DATA_BYTE==2?2:4));
+  eflags(CF) = set_cf((unsigned)op_src->val, (unsigned)op_dest->val, (DATA_BYTE==2?2:4));
 
   print_asm_template2();
 }
