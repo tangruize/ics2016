@@ -18,6 +18,13 @@ make_helper(concat(lods_, SUFFIX)) {
   op_dest->reg=R_EAX; // the number is 0, exactly.
 
 	OPERAND_W(op_dest, op_src->val);
+
+  #if DATA_BYTE == 2
+  cpu.gpr[R_ESI]._16 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
+  #else
+  cpu.gpr[R_ESI]._16 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
+  #endif
+
 	print_asm_template2();
   return 1;
 }

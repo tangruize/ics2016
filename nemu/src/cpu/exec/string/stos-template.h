@@ -19,6 +19,13 @@ make_helper(concat(stos_, SUFFIX)) {
   op_src->val=REG(R_EAX);
 
 	OPERAND_W(op_dest, op_src->val);
+
+  #if DATA_BYTE == 2
+  cpu.gpr[R_EDI]._16 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
+  #else
+  cpu.gpr[R_EDI]._16 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
+  #endif
+
 	print_asm_template2();
   return 1;
 }
