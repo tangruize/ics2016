@@ -23,16 +23,16 @@ make_helper(concat(scas_, SUFFIX))  {
   uint32_t tmp = (int)op_dest->val - (int)op_src->val;
   //printf("%d = %d - %d\n", tmp, op_dest->val, op_src->val);
   #endif
-  eflags(SF) = set_sf(tmp, (DATA_BYTE==2?2:4));
+  eflags(SF) = set_sf(tmp, DATA_BYTE);
   eflags(ZF) = set_zf(tmp);
   eflags(PF) = set_pf(tmp);
   if (op_src->val) {
-    eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, (DATA_BYTE==2?2:4));
+    eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, DATA_BYTE);
   }
   else {
     eflags(CF) = 0;
   }
-  eflags(OF) = set_sub_of((int)op_dest->val, (int)op_src->val, (DATA_BYTE==2?2:4));
+  eflags(OF) = set_sub_of((int)op_dest->val, (int)op_src->val, DATA_BYTE);
 
   #if DATA_BYTE == 2
   cpu.gpr[R_EDI]._16 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
