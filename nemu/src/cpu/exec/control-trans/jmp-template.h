@@ -5,7 +5,7 @@
 static void do_execute() {
   //printf("%s\n", op_src->type == OP_TYPE_REG ? "reg" : "mem" );
   cpu.eip = ((int32_t)cpu.eip + (int32_t)op_src->val) & ((DATA_BYTE==2) ? 0x0000FFFF : 0xFFFFFFFF);
-  print_asm_template1();
+  //print_asm_template1();
 }
 
 #if DATA_BYTE == 1
