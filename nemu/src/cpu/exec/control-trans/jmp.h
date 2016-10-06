@@ -4,6 +4,6 @@
 make_helper(jmp_si_b);
 
 make_helper(jmp_i_v);
-make_helper(jmp_i_v);
+make_helper(jmp_rm_v);
 
 #endif
