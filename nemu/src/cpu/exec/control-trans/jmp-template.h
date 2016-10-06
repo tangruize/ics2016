@@ -12,6 +12,7 @@ make_instr_helper(si)
 #endif
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_instr_helper(i)
+make_instr_helper(rm)
 #endif
 
 #include "cpu/exec/template-end.h"
