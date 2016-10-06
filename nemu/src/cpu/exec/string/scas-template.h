@@ -34,9 +34,9 @@ make_helper(concat(scas_, SUFFIX))  {
   eflags(OF) = set_sub_of((int)op_dest->val, (int)op_src->val, (DATA_BYTE==2?2:4));
 
   #if DATA_BYTE == 2
-  cpu.gpr[R_EDI]._16 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
+  cpu.gpr[R_EDI]._16 = (int)cpu.gpr[R_EDI]._16 + (int)(eflags(DF) == 1 ? -DATA_BYTE : DATA_BYTE);
   #else
-  cpu.gpr[R_EDI]._32 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
+  cpu.gpr[R_EDI]._32 = (int)cpu.gpr[R_EDI]._32 + (int)(eflags(DF) == 1 ? -DATA_BYTE : DATA_BYTE);
   #endif
 
 
