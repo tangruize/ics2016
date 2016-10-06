@@ -68,11 +68,71 @@ int set_cf(int left, int right, int size) {
 }
 
 int set_of(int left, int right, int size) {
+  if (size == 1) {
+    int8_t x = left;
+    int8_t y = right;
+    int8_t sum = x+y;
+    int8_t neg_over = x < 0 && y < 0 && sum >= 0;
+    int8_t pos_over = x >= 0 && y >= 0 && sum < 0;
+    return neg_over || pos_over;
+  }
+  else if (size == 2) {
+    int16_t x = left;
+    int16_t y = right;
+    int16_t sum = x+y;
+    int16_t neg_over = x < 0 && y < 0 && sum >= 0;
+    int16_t pos_over = x >= 0 && y >= 0 && sum < 0;
+    return neg_over || pos_over;
+  }
+  else {
+    int32_t x = left;
+    int32_t y = right;
+    int32_t sum = x+y;
+    int32_t neg_over = x < 0 && y < 0 && sum >= 0;
+    int32_t pos_over = x >= 0 && y >= 0 && sum < 0;
+    return neg_over || pos_over;
+  }
+}
+
+int set_sub_of(int left, int right, int size) {
+  if (right == (0x1 << (size * 8 - 1))) {
+    if (size == 1) {
+      int8_t x = left;
+      if (x < 0) {
+        return 0;
+      }
+      else {
+        return 1;
+      }
+    }
+    else if (size == 2) {
+      int16_t x = left;
+      if (x < 0) {
+        return 0;
+      }
+      else {
+        return 1;
+      }
+    }
+    else {
+      int32_t x = left;
+      if (x < 0) {
+        return 0;
+      }
+      else {
+        return 1;
+      }
+    }
+  }
+  return set_of(left, -right, size);
+}
+
+/*int set_of(int left, int right, int size) {
   if (size == 1){
     int8_t a=(int8_t)left;
     int8_t b=(int8_t)right;
-    int8_t t=a+b;
-    if (((a < 0) == (b < 0)) && ((t < 0) != (a < 0))) {
+    long long t=a+b;
+    if (((a < 0) == (b < 0)) && (((int8_t)t < 0) != (a < 0))) {
       return 1;
     }
     else {
@@ -82,8 +142,8 @@ int set_of(int left, int right, int size) {
   else if (size ==2) {
     int16_t a=(int16_t)left;
     int16_t b=(int16_t)right;
-    int16_t t=a+b;
-    if (((a < 0) == (b < 0)) && ((t < 0) != (a < 0))) {
+    long long t=a+b;
+    if (((a < 0) == (b < 0)) && (((int16_t)t < 0) != (a < 0))) {
       return 1;
     }
     else {
@@ -93,8 +153,8 @@ int set_of(int left, int right, int size) {
   else if (size == 4) {
     int32_t a=(int32_t)left;
     int32_t b=(int32_t)right;
-    int32_t t=a+b;
-    if (((a < 0) == (b < 0)) && ((t < 0) != (a < 0))) {
+    long long t=a+b;
+    if (((a < 0) == (b < 0)) && (((int32_t)t < 0) != (a < 0))) {
       return 1;
     }
     else {
@@ -106,6 +166,7 @@ int set_of(int left, int right, int size) {
     return 0;
   }
 }
+*/
 
 uint8_t cc_nbe() {
   if (eflags(CF) == 0 && eflags(ZF) == 0) {

@@ -12,12 +12,12 @@ static void do_execute() {
   OPERAND_W(op_dest, result);
 //  printf("%d\t%d\t%d\n",  op_src->val, op_dest->val, result);
 
-  if (op_src->val == 0x80000000) {
+  /*if (op_src->val == 0x80000000) {
       eflags(OF) = 1;
   }
-  else {
-    eflags(OF) = set_of((int)op_dest->val, (int)-op_src->val, (DATA_BYTE==2?2:4));
-  }
+  else {*/
+  eflags(OF) = set_sub_of((int)op_dest->val, (int)op_src->val, (DATA_BYTE==2?2:4));
+  /*}*/
   eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(result);
   eflags(PF) = set_pf(result);

@@ -8,7 +8,7 @@ static void do_execute () {
 
 	/* TODO: Update EFLAGS. */
 	//panic("please implement me");
-	eflags(OF) = set_of(op_src->val, -1, DATA_BYTE);
+	eflags(OF) = set_sub_of(op_src->val, 1, DATA_BYTE);
 	eflags(SF) = set_sf(result, DATA_BYTE);
 	eflags(ZF) = set_zf(result);
 	eflags(PF) = set_pf(result);
