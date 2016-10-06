@@ -21,7 +21,12 @@ static void do_execute() {
   eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(result);
   eflags(PF) = set_pf(result);
-  eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, (DATA_BYTE==2?2:4));
+  if (op_src->val) {
+    eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, (DATA_BYTE==2?2:4));
+  }
+  else {
+    eflags(CF) = 0;
+  }
 
   print_asm_template2();
 }
