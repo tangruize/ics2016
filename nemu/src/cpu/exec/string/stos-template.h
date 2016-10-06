@@ -26,6 +26,8 @@ make_helper(concat(stos_, SUFFIX)) {
   cpu.gpr[R_EDI]._32 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
   #endif
 
+  sprintf(op_src->str, "%%eax");
+
   sprintf(op_dest->str, "%%es:(%%edi)");
 
 
