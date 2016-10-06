@@ -26,7 +26,7 @@ make_helper(rep) {
 				);
 
 			/* TODO: Jump out of the while loop if necessary. */
-			if (eflags(ZF)==1) {
+			if (eflags(ZF)==0) {
 				break;
 			}
 
@@ -56,7 +56,7 @@ make_helper(repnz) {
 			  );
 
 		/* TODO: Jump out of the while loop if necessary. */
-		if (eflags(ZF)==0) {
+		if (eflags(ZF)==1) {
 			break;
 		}
 
