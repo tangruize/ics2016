@@ -5,9 +5,9 @@ static void do_execute() {
   op_src->val = (int)op_src->val + (int)eflags(CF);
   #endif
   #if DATA_BYTE == 2
-  uint16_t result = op_dest->val - op_src->val;
+  uint16_t result = (uint16_t)((int)op_dest->val - (int)op_src->val);
   #else
-  uint32_t result = (int)op_dest->val - (int)op_src->val;
+  uint32_t result = (uint32_t)((long long)op_dest->val - (long long)op_src->val);
   #endif
   OPERAND_W(op_dest, result);
 //  printf("%d\t%d\t%d\n",  op_src->val, op_dest->val, result);
