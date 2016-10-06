@@ -8,7 +8,6 @@
 #include "data-mov/movsx.h"
 #include "data-mov/movzx.h"
 #include "data-mov/cwdq.h"
-#include "data-mov/movs.h"
 
 
 
@@ -33,6 +32,8 @@
 #include "logic/setcc.h"
 
 #include "string/rep.h"
+#include "string/movs.h"
+
 
 #include "misc/misc.h"
 
