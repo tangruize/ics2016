@@ -3,7 +3,7 @@
 #define instr jmp
 
 static void do_execute() {
-  cpu.eip = ((int32_t)cpu.eip + (int32_t)op_src->simm) & ((DATA_BYTE==2) ? 0x0000FFFF : 0xFFFFFFFF);
+  cpu.eip = ((int32_t)cpu.eip + (int32_t)op_src->val) & ((DATA_BYTE==2) ? 0x0000FFFF : 0xFFFFFFFF);
   print_asm_template1();
 }
 
