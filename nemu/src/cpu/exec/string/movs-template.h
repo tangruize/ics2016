@@ -31,6 +31,10 @@ make_helper(concat(movs_, SUFFIX)) {
   cpu.gpr[R_EDI]._32 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
   #endif
 
+  sprintf(op_src->str, "%s%#x", ((int)op_src->val < 0 ? "-" : ""), ((int)op_src->val < 0 ? (int)-op_src->val : (int)op_src->val));
+  sprintf(op_dest->str, "%s%#x", ((int)op_dest->val < 0 ? "-" : ""), ((int)op_dest->val < 0 ? (int)-op_dest->val : (int)op_dest->val));
+
+
 	print_asm_template2();
   return 1;
 }
