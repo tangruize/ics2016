@@ -21,6 +21,7 @@ make_helper(concat(scas_, SUFFIX))  {
   uint16_t tmp = op_dest->val - op_src->val;
   #else
   uint32_t tmp = (int)op_dest->val - (int)op_src->val;
+  printf("%d = %d - %d\n", tmp, op_dest->val, op_src->val);
   #endif
   eflags(SF) = set_sf(tmp, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(tmp);
