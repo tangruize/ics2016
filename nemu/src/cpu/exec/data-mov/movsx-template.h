@@ -4,7 +4,8 @@
 
 #if DATA_BYTE == 2 || DATA_BYTE ==4
 static void do_execute() {
-  OPERAND_W(op_dest, op_src->val);
+  int8_t tmp=op_src->val;
+  OPERAND_W(op_dest, (DATA_TYPE_S)tmp);
   print_asm_template2();
 }
 
