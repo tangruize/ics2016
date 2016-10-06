@@ -26,6 +26,9 @@ make_helper(rep) {
 				);
 
 			/* TODO: Jump out of the while loop if necessary. */
+			if (eflags(ZF)==1) {
+				break;
+			}
 
 		}
 		len = 1;
@@ -36,7 +39,7 @@ make_helper(rep) {
 	sprintf(temp, "rep %s", assembly);
 	sprintf(assembly, "%s[cnt = %d]", temp, count);
 #endif
-	
+
 	return len + 1;
 }
 
@@ -53,6 +56,9 @@ make_helper(repnz) {
 			  );
 
 		/* TODO: Jump out of the while loop if necessary. */
+		if (eflags(ZF)==0) {
+			break;
+		}
 
 	}
 
