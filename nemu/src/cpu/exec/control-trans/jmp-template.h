@@ -30,8 +30,8 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
     snprintf(op_src->str, OP_STR_SIZE, "*%%%s", REG_NAME(op_src->reg));
   }
   cpu.eip = 0;
-  do_execute();
   jmp_indirect_len = len + 1;
+  do_execute();
   return len + 1;
 }
 #endif
