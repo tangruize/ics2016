@@ -23,6 +23,7 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
   if (op_src->type==OP_TYPE_REG) {
     snprintf(op_src->str, OP_STR_SIZE, "%%%s", REG_NAME(op_src->reg));
   }
+  do_execute();
   return len + 1;
 }
 #endif
