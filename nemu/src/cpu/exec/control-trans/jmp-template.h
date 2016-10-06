@@ -2,9 +2,15 @@
 
 #define instr jmp
 
+#ifndef __JMP_INDIRECT__
+#define __JMP_INDIRECT__
+static int jmp_indirect_len = 0;
+#endif
+
 static void do_execute() {
   //printf("%s\n", op_src->type == OP_TYPE_REG ? "reg" : "mem" );
-  cpu.eip = ((int32_t)cpu.eip + (int32_t)op_src->val) & ((DATA_BYTE==2) ? 0x0000FFFF : 0xFFFFFFFF);
+  cpu.eip = ((int32_t)cpu.eip + (int32_t)op_src->val - jmp_indirect_len) & ((DATA_BYTE==2) ? 0x0000FFFF : 0xFFFFFFFF);
+  jmp_indirect_len = 0;
   print_asm_template1();
 }
 
@@ -25,6 +31,7 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
   }
   cpu.eip = 0;
   do_execute();
+  jmp_indirect_len = len + 1;
   return len + 1;
 }
 #endif
