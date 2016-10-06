@@ -9,7 +9,11 @@ static int after_len = 0;
 #endif
 
 static void do_execute() {
-  REG(R_ESP) -= ((DATA_BYTE == 2) ? 2 : 4);
+  #if DATA_BYTE == 2
+  cpu.gpr[R_ESP]._16 -= 2;
+  #else
+  cpu.gpr[R_ESP]._32 -= 4;
+  #endif
   op_dest->type = OP_TYPE_MEM;
   op_dest->addr = REG(R_ESP);
   op_dest->size = DATA_BYTE;

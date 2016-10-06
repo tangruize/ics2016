@@ -10,7 +10,11 @@ static void do_execute() {
   op_src->reg = R_EBP;
   op_src->size = DATA_BYTE;
   OPERAND_W(op_src, (uint32_t)swaddr_read((swaddr_t)REG(R_ESP), DATA_BYTE));
-  REG(R_ESP) += (DATA_BYTE == 2 ? 2 : 4);
+  #if DATA_BYTE == 2
+  cpu.gpr[R_ESP]._16 += 2;
+  #else
+  cpu.gpr[R_ESP]._32 += 4;
+  #endif
   print_asm(str(instr));
 }
 

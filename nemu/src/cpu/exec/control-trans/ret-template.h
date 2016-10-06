@@ -15,7 +15,11 @@ static int after_len = 0;
 static void do_execute() {
   uint32_t tmp = (uint32_t)swaddr_read(REG(R_ESP) + (has_i ? op_src->val : 0), DATA_BYTE);
   cpu.eip = (tmp - after_len) & ((DATA_BYTE==2) ? 0x0000FFFF : 0xFFFFFFFF);
-  REG(R_ESP) += ((DATA_BYTE == 2) ? 2 : 4);
+  #if DATA_BYTE == 2
+  cpu.gpr[R_ESP]._16 += 2;
+  #else
+  cpu.gpr[R_ESP]._32 += 4;
+  #endif
   if (has_i) {
     print_asm_template1();
   }

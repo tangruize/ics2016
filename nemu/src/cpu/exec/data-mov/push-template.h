@@ -3,7 +3,11 @@
 #define instr push
 
 static void do_execute() {
-  REG(R_ESP) -= ((DATA_BYTE == 2) ? 2 : 4);
+  #if DATA_BYTE == 2
+  cpu.gpr[R_ESP]._16 -= 2;
+  #else
+  cpu.gpr[R_ESP]._32 -= 4;
+  #endif
   op_dest->type = OP_TYPE_MEM;
   op_dest->addr = REG(R_ESP);
   op_dest->size = DATA_BYTE;
@@ -13,9 +17,13 @@ static void do_execute() {
   //print_asm(str(instr) " %s", op_src->str);
 }
 
-make_instr_helper(i)
+#if DATA_BYTE == 1
+make_instr_helper(si)
+#endif
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
+make_instr_helper(i)
+
 make_helper(concat(push_r_, SUFFIX)) {
   concat(decode_r_, SUFFIX)(cpu.eip);
   do_execute();

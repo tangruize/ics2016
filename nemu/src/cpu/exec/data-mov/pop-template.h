@@ -8,7 +8,11 @@ static void do_execute() {
   op_dest->size = DATA_BYTE;
   snprintf(op_dest->str, OP_STR_SIZE, "%s", REG_NAME(R_ESP));
   OPERAND_W(op_src, (uint32_t)swaddr_read(op_dest->addr, DATA_BYTE));
-  REG(R_ESP) += ((DATA_BYTE == 2) ? 2 : 4);
+  #if DATA_BYTE == 2
+  cpu.gpr[R_ESP]._16 += 2;
+  #else
+  cpu.gpr[R_ESP]._32 += 4;
+  #endif
   print_asm_template1();
 }
 
