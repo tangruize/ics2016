@@ -7,7 +7,8 @@ static void do_execute() {
   #if DATA_BYTE == 2
   uint16_t result = (uint16_t)((int)op_dest->val - (int)op_src->val);
   #else
-  uint32_t result = (uint32_t)((long long)op_dest->val - (long long)op_src->val);
+  long long tmp = (long long)op_dest->val - (long long)op_src->val;
+  uint32_t result = (uint32_t)tmp;
   #endif
   OPERAND_W(op_dest, result);
 //  printf("%d\t%d\t%d\n",  op_src->val, op_dest->val, result);
