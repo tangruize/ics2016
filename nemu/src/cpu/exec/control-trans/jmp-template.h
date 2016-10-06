@@ -13,7 +13,15 @@ make_instr_helper(si)
 #endif
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_instr_helper(i)
-make_instr_helper(rm)
+make_helper(concat(jmp_rm_, SUFFIX)) {
+  int len = concat(decode_rm_, SUFFIX)(cpu.eip+1);
+  #if DATA_BYTE == 2
+  op_src->val=(uint16_t)instr_fetch((swaddr_t)op_src->val, DATA_BYTE);
+  #else
+  op_src->val=(uint32_t)instr_fetch((swaddr_t)op_src->val, DATA_BYTE);
+  #endif
+  return len + 1;
+}
 #endif
 
 #include "cpu/exec/template-end.h"
