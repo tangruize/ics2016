@@ -20,6 +20,9 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
   #else
   op_src->val=(uint32_t)instr_fetch((swaddr_t)op_src->val, DATA_BYTE);
   #endif
+  if (op_src->type==OP_TYPE_REG) {
+    snprintf(op_src->str, OP_STR_SIZE, "%%%s", REG_NAME(op_src->reg));
+  }
   return len + 1;
 }
 #endif
