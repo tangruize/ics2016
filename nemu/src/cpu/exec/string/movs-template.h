@@ -32,7 +32,7 @@ make_helper(concat(movs_, SUFFIX)) {
   #endif
 
   sprintf(op_src->str, "%s%#x", ((int)op_src->val < 0 ? "-" : ""), ((int)op_src->val < 0 ? (int)-op_src->val : (int)op_src->val));
-  sprintf(op_dest->str, "%s%#x", ((int)op_dest->val < 0 ? "-" : ""), ((int)op_dest->val < 0 ? (int)-op_dest->val : (int)op_dest->val));
+  sprintf(op_dest->str, "%%es:(%%edi)");
 
 
 	print_asm_template2();

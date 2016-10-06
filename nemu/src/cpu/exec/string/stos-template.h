@@ -26,7 +26,7 @@ make_helper(concat(stos_, SUFFIX)) {
   cpu.gpr[R_EDI]._32 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
   #endif
 
-  sprintf(op_dest->str, "%s%#x", ((int)op_dest->val < 0 ? "-" : ""), ((int)op_dest->val < 0 ? (int)-op_dest->val : (int)op_dest->val));
+  sprintf(op_dest->str, "%%es:(%%edi)");
 
 
 	print_asm_template2();
