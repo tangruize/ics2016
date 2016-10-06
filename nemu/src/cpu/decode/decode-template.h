@@ -87,6 +87,9 @@ static int concat3(decode_rm_, SUFFIX, _internal) (swaddr_t eip, Operand *rm, Op
 static int concat3(decode_rmb_, SUFFIX, _internal) (swaddr_t eip, Operand *rm, Operand *reg) {
 	rm->size = 1;
 	int len = read_ModR_M(eip, rm, reg);
+	rm->size = DATA_BYTE;
+	DATA_TYPE_S tmp = (DATA_TYPE_S)rm->val;
+	rm->val=tmp;
 	reg->val = REG(reg->reg);
 #ifdef DEBUG
 	snprintf(reg->str, OP_STR_SIZE, "%%%s", REG_NAME(reg->reg));
