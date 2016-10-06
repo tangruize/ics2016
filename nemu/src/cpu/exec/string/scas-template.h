@@ -21,7 +21,7 @@ make_helper(concat(scas_, SUFFIX))  {
   uint16_t tmp = op_dest->val - op_src->val;
   #else
   uint32_t tmp = (int)op_dest->val - (int)op_src->val;
-  printf("%d = %d - %d\n", tmp, op_dest->val, op_src->val);
+  //printf("%d = %d - %d\n", tmp, op_dest->val, op_src->val);
   #endif
   eflags(SF) = set_sf(tmp, (DATA_BYTE==2?2:4));
   eflags(ZF) = set_zf(tmp);
@@ -35,9 +35,9 @@ make_helper(concat(scas_, SUFFIX))  {
   eflags(OF) = set_sub_of((int)op_dest->val, (int)op_src->val, (DATA_BYTE==2?2:4));
 
   #if DATA_BYTE == 2
-  cpu.gpr[R_EDI]._16 = (int)cpu.gpr[R_EDI]._16 + (int)(eflags(DF) == 1 ? -DATA_BYTE : DATA_BYTE);
+  cpu.gpr[R_EDI]._16 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
   #else
-  cpu.gpr[R_EDI]._32 = (int)cpu.gpr[R_EDI]._32 + (int)(eflags(DF) == 1 ? -DATA_BYTE : DATA_BYTE);
+  cpu.gpr[R_EDI]._32 += (eflags(DF) ? -DATA_BYTE : DATA_BYTE);
   #endif
 
 
