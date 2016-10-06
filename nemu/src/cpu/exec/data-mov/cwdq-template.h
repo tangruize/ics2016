@@ -10,7 +10,7 @@
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(instr) {
-  if (REG(R_EAX) < 0) {
+  if ((int)REG(R_EAX) < 0) {
     REG(R_EDX) = ext;
   }
   else {
