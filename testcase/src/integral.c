@@ -3,11 +3,21 @@
 
 FLOAT f(FLOAT x) {
 	/* f(x) = 1/(1+25x^2) */
-	FLOAT a = F_div_F(int2F(1), int2F(1) + F_mul_int(F_mul_F(x, x), 25));
+	FLOAT a;
 	set_bp();
-	if (x==0xffff0000 || x == 65536) {
+	a=F_mul_F(x, x);
+	if (x==65536)
+		nemu_assert(a == 65536);
+	a=F_mul_int(a, 25);
+	if (x==65536)
+		nemu_assert(a == 1638400);
+	a=int2F(1)+a;
+	if (x==65536)
+		nemu_assert(a == 1703936);
+	a=F_div_F(int2F(1), a);
+	if (x==65536)
 		nemu_assert(a == 2520);
-	}
+	//F_div_F(int2F(1), int2F(1) + F_mul_int(F_mul_F(x, x), 25));
 	return a;
 }
 
