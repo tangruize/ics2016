@@ -42,8 +42,8 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 
 	 union {
 		 struct {
-			 unsigned d;
 			 unsigned a;
+			 unsigned d;
 		 };
 		 long long c;
 	 } tmp;
