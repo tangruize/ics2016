@@ -15,10 +15,7 @@ FLOAT_CFLAGS_EXTRA := -m32 -fno-builtin -I$(LIB_COMMON_DIR) -O2
 $(FLOAT_O): lib-common/FLOAT/FLOAT.c
 	@mkdir -p $(dir $(FLOAT))
 	$(call make_command, $(CC), $(FLOAT_CFLAGS_EXTRA), cc $@, -c $<)
-#gcc $(FLOAT_CFLAGS_EXTRA) -o $@ -c $<
 
 $(FLOAT_VFPRINTF_O): lib-common/FLOAT/FLOAT_vfprintf.c
 	@mkdir -p $(dir $(FLOAT))
 	$(call make_command, $(CC), $(FLOAT_CFLAGS_EXTRA), cc $@, -c $<)
-
-#gcc $(FLOAT_CFLAGS_EXTRA) -o $@ -c $<
