@@ -11,11 +11,11 @@ static void do_execute() {
   #endif
   OPERAND_W(op_dest, result);
 
-  eflags(OF) = set_of((int)op_src->val, (int)op_dest->val, (DATA_BYTE==2?2:4));
-  eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
+  eflags(OF) = set_of((int)op_src->val, (int)op_dest->val, DATA_BYTE);
+  eflags(SF) = set_sf(result, DATA_BYTE);
   eflags(ZF) = set_zf(result);
   eflags(PF) = set_pf(result);
-  eflags(CF) = set_cf((unsigned)op_src->val, (unsigned)op_dest->val, (DATA_BYTE==2?2:4));
+  eflags(CF) = set_cf((unsigned)op_src->val, (unsigned)op_dest->val, DATA_BYTE);
 
   print_asm_template2();
 }

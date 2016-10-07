@@ -16,13 +16,13 @@ static void do_execute() {
       eflags(OF) = 1;
   }
   else {*/
-  eflags(OF) = set_sub_of((int)op_dest->val, (int)op_src->val, (DATA_BYTE==2?2:4));
+  eflags(OF) = set_sub_of((int)op_dest->val, (int)op_src->val, DATA_BYTE);
   /*}*/
-  eflags(SF) = set_sf(result, (DATA_BYTE==2?2:4));
+  eflags(SF) = set_sf(result, DATA_BYTE);
   eflags(ZF) = set_zf(result);
   eflags(PF) = set_pf(result);
   if (op_src->val) {
-    eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, (DATA_BYTE==2?2:4));
+    eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, DATA_BYTE);
   }
   else {
     eflags(CF) = 0;
