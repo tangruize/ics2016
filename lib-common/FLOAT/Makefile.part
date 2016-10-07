@@ -15,7 +15,7 @@ FLOAT_CFLAGS_EXTRA := -m32 -fno-builtin -I$(LIB_COMMON_DIR)
 # It is so strange that if I use -O2, float instructions will appear...
 $(FLOAT_O): lib-common/FLOAT/FLOAT.c
 	mkdir -p $(dir $(FLOAT))
-	gcc $(FLOAT_CFLAGS_EXTRA) -o $@ -c $<
+	gcc $(FLOAT_CFLAGS_EXTRA) -O2 -o $@ -c $<
 
 $(FLOAT_VFPRINTF_O): lib-common/FLOAT/FLOAT_vfprintf.c
 	mkdir -p $(dir $(FLOAT))
