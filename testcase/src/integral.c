@@ -14,8 +14,9 @@ FLOAT computeT(int n, FLOAT a, FLOAT b, FLOAT (*fun)(FLOAT)) {
 	for(k = 1; k < n; k ++) {
 		s += fun(a + F_mul_int(h, k));
 	}
-	set_bp();
+	nemu_assert(s == 180634);
 	s = F_mul_F(s, h);
+	nemu_assert(s == 36126);
 	return s;
 }
 
