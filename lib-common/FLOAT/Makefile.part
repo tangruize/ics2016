@@ -10,7 +10,7 @@ $(FLOAT): $(FLOAT_A_OBJ)
 
 # TODO: complete the following rules
 
-FLOAT_CFLAGS_EXTRA := -m32 -O2 -fno-builtin -I$(LIB_COMMON_DIR)
+FLOAT_CFLAGS_EXTRA := -m32 -fno-builtin -I$(LIB_COMMON_DIR)
 
 $(FLOAT_O): lib-common/FLOAT/FLOAT.c
 	mkdir -p $(dir $(FLOAT))
@@ -18,4 +18,4 @@ $(FLOAT_O): lib-common/FLOAT/FLOAT.c
 
 $(FLOAT_VFPRINTF_O): lib-common/FLOAT/FLOAT_vfprintf.c
 	mkdir -p $(dir $(FLOAT))
-	gcc $(FLOAT_CFLAGS_EXTRA) -c $< -o $@
+	gcc $(FLOAT_CFLAGS_EXTRA) -O2 -c $< -o $@
