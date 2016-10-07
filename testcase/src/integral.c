@@ -30,7 +30,7 @@ FLOAT computeT(int n, FLOAT a, FLOAT b, FLOAT (*fun)(FLOAT)) {
 	h = F_div_int((b - a), n);
 	nemu_assert(h == 13107);
 	s = F_div_int(fun(a) + fun(b), 2 );
-	//nemu_assert(s == 2520);
+	nemu_assert(s == 2520);
 	for(k = 1; k < n; k ++) {
 		s += fun(a + F_mul_int(h, k));
 	}
