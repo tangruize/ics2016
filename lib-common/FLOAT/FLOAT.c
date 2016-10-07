@@ -1,8 +1,24 @@
 #include "FLOAT.h"
 
+static union {
+	 struct {
+		 unsigned m : 23;
+		 unsigned e : 8;
+		 unsigned s : 1;
+	 } split;
+	 struct {
+		 unsigned f : 16;
+		 unsigned i : 15;
+		 unsigned s : 1;
+	 } split_u;
+	 float a;
+	 unsigned u;
+ } tmp_float;
+
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	nemu_assert(0);
-	return 0;
+	return (a*b)>>16;
+	//nemu_assert(0);
+	//return 0;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
@@ -24,8 +40,20 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * out another way to perform the division.
 	 */
 
-	nemu_assert(0);
-	return 0;
+	 union {
+		 struct {
+			 unsigned d;
+			 unsigned a;
+		 }
+		 long long c;
+	 } tmp;
+	 tmp.c = (((long long)a) << 16);
+	 FLOAT result;
+	 int q;
+	 asm volatile ("idiv %2" : "=a"(result), "=d"(q) : "r"(b), "a"(tmp.a), "d"(tmp.d));
+	 return result;
+	//nemu_assert(0);
+	//return 0;
 }
 
 FLOAT f2F(float a) {
@@ -39,13 +67,29 @@ FLOAT f2F(float a) {
 	 * performing arithmetic operations on it directly?
 	 */
 
-	nemu_assert(0);
-	return 0;
+	 tmp_float.a=a;
+	 if (tmp_float.split.e==0){
+		 return 0;
+	 }
+	 else if(tmp_float.split.e==0xff){
+		 return tmp_float.split.s ? -0x7fffffff : 0x7fffffff;
+	 }
+	 else {
+		 int e = (int)tmp_float.split.e - 134;
+		 unsigned m = (tmp_float.split.m | 0x800000);
+		 int sum = (e >= 0) ? (m << e) : (m >> -e);
+		 return  (tmp_float.split.s ? -sum : sum );
+	 }
+
+	//nemu_assert(0);
+	//return 0;
 }
 
 FLOAT Fabs(FLOAT a) {
-	nemu_assert(0);
-	return 0;
+	tmp_float.u = (unsigned)a;
+	return (tmp_float.split_u.s) ? -a : a;
+	//nemu_assert(0);
+	//return 0;
 }
 
 /* Functions below are already implemented */
@@ -73,4 +117,3 @@ FLOAT pow(FLOAT x, FLOAT y) {
 
 	return t;
 }
-
