@@ -44,7 +44,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 		 struct {
 			 unsigned d;
 			 unsigned a;
-		 }
+		 };
 		 long long c;
 	 } tmp;
 	 tmp.c = (((long long)a) << 16);
