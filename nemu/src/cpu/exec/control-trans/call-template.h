@@ -33,11 +33,11 @@ make_helper(concat(call_i_, SUFFIX)) {
 
 make_helper(concat(call_rm_, SUFFIX)) {
   after_len = concat(decode_rm_, SUFFIX)(cpu.eip+1);
-  printf("after: %d\n",after_len );
+  //printf("after: %d\n",after_len );
   if (op_src->type==OP_TYPE_REG) {
     snprintf(op_src->str, OP_STR_SIZE, "*%%%s", REG_NAME(op_src->reg));
   }
-  cpu.eip = 0;
+  cpu.eip = -(after_len + 1);
   do_execute();
   return after_len + 1;
 }
