@@ -31,7 +31,7 @@ make_helper(concat(call_i_, SUFFIX)) {
   return 1 + DATA_BYTE;
 }
 
-make_helper(concat(cal_rm_, SUFFIX)) {
+make_helper(concat(call_rm_, SUFFIX)) {
   after_len = concat(decode_rm_, SUFFIX)(cpu.eip+1);
   if (op_src->type==OP_TYPE_REG) {
     snprintf(op_src->str, OP_STR_SIZE, "*%%%s", REG_NAME(op_src->reg));
@@ -40,7 +40,6 @@ make_helper(concat(cal_rm_, SUFFIX)) {
   do_execute();
   return after_len + 1;
 }
-
 
 #endif
 
