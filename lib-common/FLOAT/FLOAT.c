@@ -11,7 +11,6 @@ static union {
 		 unsigned i : 15;
 		 unsigned s : 1;
 	 } split_u;
-	 float a;
 	 unsigned u;
  } tmp_float;
 
@@ -66,8 +65,8 @@ FLOAT f2F(float a) {
 	 * stack. How do you retrieve it to another variable without
 	 * performing arithmetic operations on it directly?
 	 */
-
-	 tmp_float.a=a;
+	 unsigned *p_a=(unsigned*)&a;
+	 tmp_float.u=*p_a;
 	 if (tmp_float.split.e==0){
 		 return 0;
 	 }
