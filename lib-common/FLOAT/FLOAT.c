@@ -15,7 +15,8 @@ static union {
  } tmp_float;
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	return (a*b)>>16;
+	long long c = (long long)a * b;
+	return (int)(c >> 16);
 	//nemu_assert(0);
 	//return 0;
 }
