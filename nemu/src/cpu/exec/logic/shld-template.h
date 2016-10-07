@@ -11,7 +11,7 @@ static void do_execute () {
 	count &= 0x1f;
 	while(count != 0) {
 		out <<= 1;
-		out |= ((unsigned)in & (DATA_BYTE == 16) ? 0x8000 : 0x80000000) >> ((DATA_BYTE << 3) - 1);
+		out |= ((unsigned)(in & ((DATA_BYTE == 16) ? 0x8000 : 0x80000000))) >> ((DATA_BYTE << 3) - 1);
 		printf("%d\n", out);
 		in <<= 1;
 		count --;
