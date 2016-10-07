@@ -30,6 +30,7 @@
 #include "logic/shr.h"
 #include "logic/shrd.h"
 #include "logic/setcc.h"
+#include "logic/shld.h"
 
 #include "string/rep.h"
 #include "string/movs.h"
