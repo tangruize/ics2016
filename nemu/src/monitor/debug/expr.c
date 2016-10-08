@@ -731,7 +731,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 		*is_match=false;
 		if (prompt) {
 			fprintf(stderr, "Cannot find the variable '%s'\n", tokens[0].str);
-			*is_match=true;
+			//*is_match=true;
 		}
 		return false;
 	}
