@@ -176,10 +176,9 @@ extern struct in_func {
 static int cmd_fin(char *args) {
   set_finish=true;
   cpu_exec(-1);
-  cpu_exec(1);
   printf("Run still %s(0x%x, 0x%x, 0x%x, 0x%x) return, with return value 0x%x\n",
   all_elf_funcs[in_func.index].str, bt_first->args[0], bt_first->args[1], bt_first->args[2], bt_first->args[3], cpu.gpr[R_EAX]._32 );
-  cpu_exec(1);
+  //cpu_exec(1);
   return 0;
 }
 
