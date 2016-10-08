@@ -168,9 +168,15 @@ static int cmd_bt(char *args) {
 }
 
 extern bool set_finish;
+extern struct in_func {
+	bool is_in;
+	int index;
+	unsigned off;
+} in_func;
 static int cmd_fin(char *args) {
   set_finish=true;
   cpu_exec(-1);
+  printf("Run still %s return, with return value 0x%x\n", all_elf_funcs[in_func.index].str, cpu.gpr[R_EAX]._32 );
 	return 0;
 }
 

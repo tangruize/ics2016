@@ -24,7 +24,7 @@ char asm_buf[128];
 /* Used with exception handling. */
 jmp_buf jbuf;
 
-struct {
+struct in_func {
 	bool is_in;
 	int index;
 	unsigned off;
