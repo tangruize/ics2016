@@ -395,7 +395,9 @@ static int cmd_p(char *args) {
 		return 0;
 	}
 	bool is_success=true;
-	expr(args, &is_success, 1);
+	printf("%s\n", args);
+	if (args[0]=='-' && args[1]=='x'){}
+	express(args, &is_success);
 	if (is_success==true) {
 		return 0;
 	}
