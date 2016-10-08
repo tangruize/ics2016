@@ -54,8 +54,8 @@ int set_in_func(swaddr_t eip){
     //printf("addr: %x\t%x\n", (unsigned)eip, all_elf_funcs[in_func.index].end);
 		is_return = true;
     if (set_finish) {
-      printf("ret: %d\n", call_cnt);
-      if (call_cnt>0) {
+      //printf("ret: %d\n", call_cnt);
+      if (call_cnt==0) {
         nemu_state = STOP;
         set_finish=false;
         call_cnt=1;
@@ -92,7 +92,7 @@ int set_in_func(swaddr_t eip){
 				p->caller_addr=eip;
 				p->is_return=is_return;
         if (set_finish && !is_return) {
-          printf("call: %d\n", call_cnt);
+          //printf("call: %d\n", call_cnt);
           ++call_cnt;
         }
 				if (bt_first!=NULL) {
