@@ -1,6 +1,7 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
+#include "monitor/set-elf-var.h"
 #include "cpu/helper.h"
 #include <setjmp.h>
 
@@ -21,9 +22,48 @@ char asm_buf[128];
 /* Used with exception handling. */
 jmp_buf jbuf;
 
+struct {
+  bool is_in;
+  int index;
+  unsigned off;
+} in_func={false,0,0};
+
+int set_in_func(){
+  if (in_func.is_in) {
+    if (cpu.eip >= all_elf_funcs[in_func.index].end) {
+      in_func.is_in=false;
+    }
+    else {
+      in_func.off=(unsigned)cpu.eip-all_elf_funcs[in_func.index].start;
+    }
+  }
+  if (!in_func.is_in) {
+    int i;
+    for (i=0;i<func_cnt;++i) {
+      if (cpu.eip >= all_elf_funcs[i].start && cpu.eip < all_elf_funcs[i].end) {
+        in_func.is_in=true;
+        in_func.index=i;
+        in_func.off=(unsigned)cpu.eip-all_elf_funcs[in_func.index].start;
+      }
+    }
+    if (i==func_cnt) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 void print_bin_instr(swaddr_t eip, int len) {
-  int i;
-  int l = sprintf(asm_buf, "%8x:   ", eip);
+  int i, l=0;
+  l = sprintf(asm_buf, "%8x", eip);
+  set_in_func();
+  if (in_func.is_in) {
+    l += snprintf(asm_buf + l, 12, "<%s", all_elf_funcs[in_func.index].str);
+    l += snprintf(asm_buf + l, 12, "+0x%x>:   ", in_func.off);
+  }
+  else {
+    l += sprintf(asm_buf + l, "<UNKNOWN>:   ");
+  }
   for(i = 0; i < len; i ++) {
     l += sprintf(asm_buf + l, "%02x ", instr_fetch(eip + i, 1));
   }
