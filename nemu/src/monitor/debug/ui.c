@@ -194,7 +194,7 @@ static int cmd_info(char *args) {
       else {
         PartOfStackFrame *p=bt_first;
         int counter=0;
-        for (;p!=NULL;p=p->next) {
+        for (;p!=NULL;p=p->next, ++counter) {
           printf("#%d 0x%x in %s, call %s(0x%x, 0x%x, 0x%x, 0x%x)\n", counter, p->caller_addr, p->caller_name,
            p->name, p->args[0], p->args[1], p->args[2], p->args[3]);
         }
