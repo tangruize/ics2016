@@ -3,6 +3,7 @@
 #include "monitor/watchpoint.h"
 #include "monitor/set-elf-var.h"
 #include "cpu/helper.h"
+#include <malloc.h>
 #include <setjmp.h>
 
 /* The assembly code of instructions executed is only output to the screen
@@ -28,6 +29,8 @@ struct {
   unsigned off;
 } in_func={false,0,0};
 
+PartOfStackFrame *bt_first=NULL;
+
 int set_in_func(swaddr_t eip){
   if (func_cnt==0) {
     in_func.is_in=false;
@@ -35,6 +38,7 @@ int set_in_func(swaddr_t eip){
   }
   if (in_func.is_in) {
     if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
+      // return
       in_func.is_in=false;
     }
     else {
@@ -45,9 +49,29 @@ int set_in_func(swaddr_t eip){
     int i;
     for (i=0;i<func_cnt;++i) {
       if (eip >= all_elf_funcs[i].start && eip < all_elf_funcs[i].end) {
+
+        // bt
+        PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
+        assert(p!=NULL);
+        p->caller_addr=eip;
+        strcpy(p->caller_name, all_elf_funcs[i].str);
+
+        // call
         in_func.is_in=true;
         in_func.index=i;
         in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
+
+        //bt
+        strcpy(p->name, all_elf_funcs[i].str);
+        p->args[0] = instr_fetch(cpu.gpr[R_ESP]._32+4, 4);
+        p->args[1] = instr_fetch(cpu.gpr[R_ESP]._32+8, 4);
+        p->args[2] = instr_fetch(cpu.gpr[R_ESP]._32+12, 4);
+        p->args[3] = instr_fetch(cpu.gpr[R_ESP]._32+16, 4);
+
+        p->next=bt_first;
+        bt_first=p;
+
+        break;
       }
     }
     if (i==func_cnt) {

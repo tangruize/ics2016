@@ -187,6 +187,19 @@ static int cmd_info(char *args) {
     		printf("%-12s\t0x%x\n",var[i].str, (unsigned)var[i].key);
     	}
     }
+    else if (strcmp("bt", arg) == 0) {
+      if (bt_first==NULL) {
+        printf("(NULL)\n");
+      }
+      else {
+        PartOfStackFrame *p=bt_first;
+        int counter=0;
+        for (;p!=NULL;p=p->next) {
+          printf("#%d 0x%x in %s, call %s(0x%x, 0x%x, 0x%x, 0x%x)\n", counter, p->caller_addr, p->caller_name,
+           p->name, p->args[0], p->args[1], p->args[2], p->args[3]);
+        }
+      }
+    }
 		else {
 			my_help("info");
 			return 1;
