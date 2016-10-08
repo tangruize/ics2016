@@ -126,6 +126,11 @@ static int find_var(char *str) {
 			return i;
 		}
 	}
+	for (i=0;i < func_cnt; ++i) {
+		if (strcmp(all_elf_funcs[i].str, str)==0) {
+			return i+VAR_MAX;
+		}
+	}
 	return -1;
 }
 
@@ -279,7 +284,12 @@ bool make_token(char *e, bool *is_match, int prompt) {
 							start_alpha=1;
 						}
 						else {
-							tokens[nr_token].value=var[tmp_var].key;
+							if (tmp_var<VAR_MAX) {
+								tokens[nr_token].value=var[tmp_var].key;
+							}
+							else {
+								tokens[nr_token].value=all_elf_funcs[tmp_var%VAR_MAX].start;
+							}
 						}
 						/*if (tmp_var==-1) {
 		   *		return false;
@@ -287,13 +297,28 @@ bool make_token(char *e, bool *is_match, int prompt) {
 					}
 					else if (tmp_var!=-1) {
 						if (is_neg_or_der==0) {
-							tokens[nr_token].value=var[tmp_var].key;
+							if (tmp_var<VAR_MAX) {
+								tokens[nr_token].value=var[tmp_var].key;
+							}
+							else {
+								tokens[nr_token].value=all_elf_funcs[tmp_var%VAR_MAX].start;
+							}
 						}
 						if (is_neg_or_der==1) {
-							tokens[nr_token].value=-var[tmp_var].key;
+							if (tmp_var<VAR_MAX) {
+								tokens[nr_token].value=var[tmp_var].key;
+							}
+							else {
+								tokens[nr_token].value=all_elf_funcs[tmp_var%VAR_MAX].start;
+							}
 						}
 						else if(is_neg_or_der==2) {
-							tokens[nr_token].value=(int)swaddr_read((swaddr_t)var[tmp_var].key,4);
+							if (tmp_var<VAR_MAX) {
+								tokens[nr_token].value=(int)swaddr_read((swaddr_t)var[tmp_var].key,4);
+							}
+							else {
+								tokens[nr_token].value=(int)swaddr_read((swaddr_t)all_elf_funcs[tmp_var%VAR_MAX].start,4);
+							}
 						}
 					}
 					else {
