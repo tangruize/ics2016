@@ -60,6 +60,8 @@ static int cmd_bt(char *args);
 
 static int cmd_fin(char *args);
 
+static int cmd_r(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -78,6 +80,8 @@ static struct {
 { "set", "Evaluate expression EXP and assign result to variable VAR", cmd_set},
 { "bt", "Print backtrace of all stack frames", cmd_bt},
 { "fin", "Execute until selected stack frame returns.", cmd_fin},
+{ "r", "Start debugged program.", cmd_r},
+
 
 
 
@@ -118,6 +122,25 @@ static int cmd_help(char *args) {
 			}
 		}
 		printf("Unknown command '%s'\n", arg);
+	}
+	return 0;
+}
+
+static int cmd_r(char *args) {
+	void restart();
+	extern int nemu_state;
+	char *arg = strtok(NULL, " ");
+	if (arg==NULL) {
+		if (nemu_state!=END) {
+			printf("The program is still running, specify -r to restart.\n");
+		}
+		else {
+			restart();
+		}
+	}
+	else if(strcmp(arg, "-r")) {
+		restart();
+		nemu_state=STOP;
 	}
 	return 0;
 }
