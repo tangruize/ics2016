@@ -396,7 +396,7 @@ static int cmd_w(char *args) {
 	p->is_break=is_break;
 	is_break=0;
 	strcpy(p->str, args);
-	if (is_break) {
+	if (p->is_break) {
 		printf("breakpoint %d: %s\n", p->NO, p->str+6);
 	}
 	else
