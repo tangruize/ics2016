@@ -51,12 +51,12 @@ int set_in_func(swaddr_t eip){
 		is_return = true;
     if (set_finish) {
       printf("ret: %d\n", call_cnt);
-      --call_cnt;
       if (call_cnt>0) {
         nemu_state = STOP;
         set_finish=false;
         call_cnt=1;
       }
+      --call_cnt;
     }
 	}
 
