@@ -225,7 +225,7 @@ void cpu_exec(volatile uint32_t n) {
 					p->key=result;
 				}
 				else {
-					
+					printf("Hit breakpoint at eip = 0x%x\n", (unsigned)cpu.eip);
 					p->key=0;
 				}
 			}
