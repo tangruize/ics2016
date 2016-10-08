@@ -135,11 +135,11 @@ static int print_cpu(int reg) {
 		return 1;
 	}
 	else if (reg == 8) {
-		printf("%-12s0x%x\t0x%x\n", cpu_name[reg], cpu.eip, cpu.eip);
+		printf("%-12s0x%x\t%d\n", cpu_name[reg], cpu.eip, cpu.eip);
 	}
-	else if (reg == R_ESP || reg == R_EBP) {
+	/*else if (reg == R_ESP || reg == R_EBP) {
 		printf("%-12s0x%x\t0x%x\n", cpu_name[reg], cpu.gpr[reg]._32, cpu.gpr[reg]._32);
-	}
+	}*/
 	else if (reg==9) {
 		printf("%-12s0x%x\t[ ", "eflags", cpu.eflags_init);
 		if (eflags(CF)) printf("CF ");
