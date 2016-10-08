@@ -40,6 +40,7 @@ int set_in_func(swaddr_t eip){
     in_func.is_in=false;
     return 1;
   }
+  printf("eip: %x\n", (unsigned)eip);
 
   if (in_func.is_in) {
     if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
