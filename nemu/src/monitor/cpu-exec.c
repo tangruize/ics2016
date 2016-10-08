@@ -221,7 +221,12 @@ void cpu_exec(volatile uint32_t n) {
 				printf("watchpoint %d: %s\n", p->NO, p->str);
 				printf("Old value: %d\nNew value: %d\n", p->key, result);
 				is_changed=true;
-				p->key=result;
+				if (!p->is_break) {
+					p->key=result;
+				}
+				else {
+					p->key=0;
+				}
 			}
 		}
 		if (is_changed==true) {

@@ -9,6 +9,7 @@
 #include <readline/history.h>
 
 void cpu_exec(uint32_t);
+static int is_break=0;
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -368,6 +369,8 @@ static int cmd_w(char *args) {
 		return 2;
 	}
 	p->key=result;
+	p->is_break=is_break;
+	is_break=0;
 	strcpy(p->str, args);
 	printf("watchpoint %d: %s\n", p->NO, p->str);
 	return 0;
@@ -428,6 +431,7 @@ static int cmd_b(char *args) {
 	//printf("%s\n", str);
 	strcat(str, args);
 	//printf("%s\n",str);
+	is_break=1;
 	return cmd_w(str);
 }
 

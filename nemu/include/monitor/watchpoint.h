@@ -7,11 +7,12 @@
 typedef struct watchpoint {
   int NO;
   int key;
+  int is_break;
   struct watchpoint *next;
   char str[32];
   /* TODO: Add more members if necessary */
-  
-  
+
+
 } WP;
 
 extern WP *head;
