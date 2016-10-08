@@ -41,6 +41,10 @@ int set_in_func(swaddr_t eip){
     if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
       // return
       in_func.is_in=false;
+      printf("end: %x\n", (unsigned)all_elf_funcs[in_func.index].end);
+      printf("eip: %x\n", (unsigned)eip);
+      printf("cpu: %x\n", (unsigned)cpu.eip);
+
       if (cpu.eip == all_elf_funcs[in_func.index].end) {
         is_return=true;
       }
