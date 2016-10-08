@@ -127,7 +127,6 @@ static int cmd_help(char *args) {
 }
 
 void restart();
-extern int nemu_state;
 
 static int cmd_r(char *args) {
 	char *arg = strtok(NULL, " ");
