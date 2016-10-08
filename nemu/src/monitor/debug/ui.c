@@ -184,7 +184,7 @@ static int cmd_info(char *args) {
       printf("Name        \tAddress\n");
       int i;
       for (i=0;i<var_cnt;++i) {
-    		printf("%-12s\t0x%x\n",var[var_cnt].str, (unsigned)var[var_cnt].key);
+    		printf("%-12s\t0x%x\n",var[i].str, (unsigned)var[i].key);
     	}
     }
 		else {
