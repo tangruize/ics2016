@@ -119,8 +119,8 @@ void print_bin_instr(swaddr_t eip, int len) {
   if (in_func.is_in) {
     l += snprintf(asm_buf + l, 8, "<%s", all_elf_funcs[in_func.index].str);
     //printf("%s\n", asm_buf);
-    printf("%d\n",l );
-    if (l==16){
+    //printf("%d\n",l );
+    if (l==18){
       --l;
     }
     l += snprintf(asm_buf + l, 12, "+0x%x>    ", in_func.off);
