@@ -33,7 +33,7 @@ static  bool is_return=false;
 
 PartOfStackFrame *bt_first=NULL;
 
-static int pre_index=0;
+//static int pre_index=0;
 
 int set_in_func(swaddr_t eip){
   if (func_cnt==0) {
@@ -45,13 +45,13 @@ int set_in_func(swaddr_t eip){
     if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
       // return
       in_func.is_in=false;
-      //printf("end: %x\n", (unsigned)all_elf_funcs[in_func.index].end);
-      //printf("eip: %x\n", (unsigned)eip);
+      printf("end: %x\n", (unsigned)all_elf_funcs[in_func.index].end);
+      printf("eip: %x\n", (unsigned)eip);
       //printf("cpu: %x\n", (unsigned)cpu.eip);
 
-      if (eip == all_elf_funcs[pre_index].end) {
+      /*if (eip == all_elf_funcs[pre_index].end) {
         is_return=true;
-      }
+      }*/
 
     }
     else {
@@ -77,7 +77,7 @@ int set_in_func(swaddr_t eip){
 
         // call
         in_func.is_in=true;
-        pre_index=in_func.index;
+        //pre_index=in_func.index;
         in_func.index=i;
         in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
 
