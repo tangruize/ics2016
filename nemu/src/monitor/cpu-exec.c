@@ -34,7 +34,7 @@ int set_in_func(){
       in_func.is_in=false;
     }
     else {
-      in_func.off=(unsigned)cpu.eip-all_elf_funcs[in_func.index].start;
+      in_func.off=(unsigned)cpu.eip-(unsigned)all_elf_funcs[in_func.index].start;
     }
   }
   if (!in_func.is_in) {
@@ -43,7 +43,7 @@ int set_in_func(){
       if (cpu.eip >= all_elf_funcs[i].start && cpu.eip < all_elf_funcs[i].end) {
         in_func.is_in=true;
         in_func.index=i;
-        in_func.off=(unsigned)cpu.eip-all_elf_funcs[in_func.index].start;
+        in_func.off=(unsigned)cpu.eip-(unsigned)all_elf_funcs[in_func.index].start;
       }
     }
     if (i==func_cnt) {
