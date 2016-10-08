@@ -258,10 +258,10 @@ bool make_token(char *e, bool *is_match, int prompt) {
 							--nr_token;
 							is_neg_or_der=1;
 						}
-						else if (t==RULE_DER) {
+						/*else if (t==RULE_DER) {
 							--nr_token;
 							is_neg_or_der=2;
-						}
+						}*/
 						else if (t==RULE_DIGIT || t==RULE_HEX || t==RULE_ALPHA || t==RULE_BRA_R || t==RULE_REG) {
 							return print_err(e, position);
 						}
@@ -292,9 +292,9 @@ bool make_token(char *e, bool *is_match, int prompt) {
 						if (is_neg_or_der==1) {
 							tokens[nr_token].value=-var[tmp_var].key;
 						}
-						else if(is_neg_or_der==2) {
+						/*else if(is_neg_or_der==2) {
 							tokens[nr_token].value=(int)swaddr_read((swaddr_t)var[tmp_var].key,4);
-						}
+						}*/
 					}
 					else {
 						fprintf(stderr, "Cannot find the variable '%s'\n", tokens[nr_token].str);
