@@ -225,7 +225,7 @@ void cpu_exec(volatile uint32_t n) {
 					p->key=result;
 				}
 				else {
-					printf("Hit breakpoint at eip = 0x%x\n", (unsigned)cpu.eip);
+					do_int3();
 					p->key=0;
 				}
 			}
@@ -249,11 +249,11 @@ void cpu_exec(volatile uint32_t n) {
 		}
 #endif
 
-#ifndef DEBUG
+/*#ifndef DEBUG
 		print_bin_instr(eip_temp, instr_len);
 		strcat(asm_buf, assembly);
 		printf("%s\n", asm_buf);
-#endif
+#endif*/
 
 
 #ifdef HAS_DEVICE
