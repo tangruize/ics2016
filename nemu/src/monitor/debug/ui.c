@@ -53,7 +53,7 @@ static int cmd_p(char *args);
 
 static int cmd_b(char *args);
 
-static int cmd_assign(char *args);
+static int cmd_set(char *args);
 
 static int cmd_bt(char *args);
 
@@ -65,14 +65,14 @@ static struct {
 { "help", "Display informations about all supported commands", cmd_help },
 { "c", "Continue the execution of the program", cmd_c },
 { "q", "Exit NEMU", cmd_q },
-{ "si", "Step one instruction exactly.", cmd_si },
-{ "info", "Generic command for showing things about the program being debugged.", cmd_info },
-{ "x", "Examine memory: x FMT ADDRESS.", cmd_x },
+{ "si", "Step one instruction exactly", cmd_si },
+{ "info", "Generic command for showing things about the program being debugged", cmd_info },
+{ "x", "Examine memory: x FMT ADDRESS", cmd_x },
 { "w", "Set a watchpoint for an expression.", cmd_w },
 { "d", "Delete some breakpoints or auto-display expressions", cmd_d},
-{ "p", "Print value of expression EXP.", cmd_p},
+{ "p", "Print value of expression EXP", cmd_p},
 { "b", "Set breakpoint at specified line", cmd_b},
-{ "assign", "Assign a specific register or memory address", cmd_assign},
+{ "set", "Evaluate expression EXP and assign result to variable VAR", cmd_set},
 { "bt", "Print backtrace of all stack frames", cmd_bt},
 
 /* TODO: Add more commands */
@@ -389,7 +389,7 @@ static int cmd_b(char *args) {
 	return cmd_w(str);
 }
 
-static int cmd_assign(char *args) {
+static int cmd_set(char *args) {
 	char *arg1 = strtok(NULL, "=");
 	char *arg2 = NULL;
 	if (arg1!=NULL) {
