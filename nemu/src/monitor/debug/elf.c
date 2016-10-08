@@ -1,6 +1,7 @@
 #include "common.h"
 #include <stdlib.h>
 #include <elf.h>
+#include "monitor/set-elf-var.h"
 
 char *exec_file = NULL;
 
@@ -96,6 +97,24 @@ void load_elf_tables(int argc, char *argv[]) {
 
 	}*/
 
-
 	fclose(fp);
+}
+
+int init_var() {
+	int i=0;
+	var_cnt=0;
+	for (i=0;i!=nr_symtab_entry;++i) {
+		if (symtab[i].st_info==1) {
+			Assert(var_cnt<VAR_MAX,"Resize VAR_MAX!\n");
+			if (symtab[i].st_name!=0){
+				strcpy(var[var_cnt].str, symtab[i].st_name + strtab);
+			}
+			else {
+				strcpy(var[var_cnt].str, NO_NAME);
+			}
+			var[var_cnt].key=(int)symtab[i].st_value;
+			++var_cnt;
+		}
+	}
+	return 0;
 }

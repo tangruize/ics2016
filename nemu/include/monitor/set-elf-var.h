@@ -2,6 +2,7 @@
 #define __SET_ELF_VAR_H__
 
 #define VAR_MAX 256
+#define NO_NAME "NO_NAME"
 
 typedef struct variables {
 	char str[128];
