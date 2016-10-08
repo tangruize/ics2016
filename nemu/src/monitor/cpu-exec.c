@@ -35,6 +35,7 @@ static bool is_return=false;
 PartOfStackFrame *bt_first=NULL;
 
 bool set_finish = false;
+static int call_cnt = 0;
 
 //static int pre_index=0;
 
@@ -47,8 +48,12 @@ int set_in_func(swaddr_t eip){
 	if ((all_elf_funcs[in_func.index].end - eip) <= 3) {
 		is_return = true;
     if (set_finish) {
-      nemu_state = STOP;
-      set_finish=false;
+      if (!call_cnt) {
+        nemu_state = STOP;
+        set_finish=false;
+        call_cnt=1;
+      }
+      --call_cnt;
     }
 	}
 
@@ -79,6 +84,9 @@ int set_in_func(swaddr_t eip){
 				assert(p!=NULL);
 				p->caller_addr=eip;
 				p->is_return=is_return;
+        if (set_finish && !is_return) {
+          ++call_cnt;
+        }
 				if (bt_first!=NULL) {
 					strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
 				}
