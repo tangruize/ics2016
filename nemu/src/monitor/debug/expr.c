@@ -707,10 +707,10 @@ bool make_token(char *e, bool *is_match, int prompt) {
 			}
 		}
 		if(i == NR_REGEX) {
-			if (prompt)
+			/*if (prompt)
 			{
 				printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-			}
+			}*/
 			*is_match=false;
 			return false;
 		}
