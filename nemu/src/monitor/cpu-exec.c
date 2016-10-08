@@ -34,7 +34,7 @@ int set_in_func(){
     return 1;
   }
   if (in_func.is_in) {
-    if (cpu.eip >= all_elf_funcs[in_func.index].end || cpu.eip < all_elf_funcs[in_func.index].start) {
+    if (cpu.eip > all_elf_funcs[in_func.index].end || cpu.eip < all_elf_funcs[in_func.index].start) {
       in_func.is_in=false;
     }
     else {
