@@ -180,6 +180,13 @@ static int cmd_info(char *args) {
     		printf("%-12s\t0x%x\t0x%x\n",all_elf_funcs[i].str, all_elf_funcs[i].start, all_elf_funcs[i].end);
     	}
     }
+    else if (strcmp("v", arg) == 0 || strcmp("variables", arg) == 0) {
+      printf("Name        \tAddress\n");
+      int i;
+      for (i=0;i<var_cnt;++i) {
+    		printf("%-12s\t0x%x\n",var[var_cnt].str, (unsigned)var[var_cnt].key);
+    	}
+    }
 		else {
 			my_help("info");
 			return 1;
