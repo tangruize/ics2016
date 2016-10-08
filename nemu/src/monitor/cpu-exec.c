@@ -45,8 +45,9 @@ int set_in_func(swaddr_t eip){
 		return 1;
 	}
 	//printf("eip: %x\n", (unsigned)eip);
-	if ((all_elf_funcs[in_func.index].end - eip) <= 3) {
-    printf("addr: %x\t%x\n", (unsigned)eip, all_elf_funcs[in_func.index].end);
+  uint8_t is_ret_instr=(uint8_t)instr_fetch(eip, 1);
+	if (is_ret_instr==0xc2 || is_ret_instr==0xc3) {
+    //printf("addr: %x\t%x\n", (unsigned)eip, all_elf_funcs[in_func.index].end);
 		is_return = true;
     if (set_finish) {
       //printf("%d\n", call_cnt);
