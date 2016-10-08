@@ -47,7 +47,7 @@ int set_in_func(swaddr_t eip){
 	//printf("eip: %x\n", (unsigned)eip);
   uint8_t is_ret_instr=(uint8_t)instr_fetch(eip, 1);
 	if (is_ret_instr==0xc2 || is_ret_instr==0xc3) {
-    printf("addr: %x\t%x\n", (unsigned)eip, all_elf_funcs[in_func.index].end);
+    //printf("addr: %x\t%x\n", (unsigned)eip, all_elf_funcs[in_func.index].end);
 		is_return = true;
     if (set_finish) {
       //printf("%d\n", call_cnt);
@@ -147,8 +147,8 @@ void print_bin_instr(swaddr_t eip, int len) {
 	else {
 		l += sprintf(asm_buf + l, "<UNKNOWN>:   ");
 	}
-	if (l!=31) {
-		l += sprintf(asm_buf + l, "%*s", 31-l, " ");
+	if (l!=33) {
+		l += sprintf(asm_buf + l, "%*s", 33-l, " ");
 	}
 	for(i = 0; i < len; i ++) {
 		l += sprintf(asm_buf + l, "%02x ", instr_fetch(eip + i, 1));
