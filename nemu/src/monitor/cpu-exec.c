@@ -44,7 +44,7 @@ int set_in_func(swaddr_t eip){
 		return 1;
 	}
 	//printf("eip: %x\n", (unsigned)eip);
-	if (abs(eip - all_elf_funcs[in_func.index].end) <= 3) {
+	if ((all_elf_funcs[in_func.index].end - eip) <= 3) {
 		is_return = true;
     if (set_finish) {
       nemu_state = STOP;
