@@ -226,8 +226,8 @@ void cpu_exec(volatile uint32_t n) {
 					p->key=result;
 				}
 				else {
-					do_int3();
-					printf("breakpoint %d: %s\n", p->NO, p->str+6);
+					printf("Hit breakpoint %d: %s\n", p->NO, p->str+6);
+					nemu_state = STOP;
 					p->key=0;
 				}
 			}
