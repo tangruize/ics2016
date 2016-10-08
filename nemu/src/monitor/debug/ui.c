@@ -57,6 +57,8 @@ static int cmd_set(char *args);
 
 static int cmd_bt(char *args);
 
+static int cmd_fin(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -74,6 +76,8 @@ static struct {
 { "b", "Set breakpoint at specified line", cmd_b},
 { "set", "Evaluate expression EXP and assign result to variable VAR", cmd_set},
 { "bt", "Print backtrace of all stack frames", cmd_bt},
+{ "fin", "Execute until selected stack frame returns.", cmd_fin},
+
 
 /* TODO: Add more commands */
 
@@ -160,6 +164,13 @@ static int cmd_bt(char *args) {
         p->name, p->args[0], p->args[1], p->args[2], p->args[3]);
     }
   }
+	return 0;
+}
+
+extern bool set_finish;
+static int cmd_fin(char *args) {
+  set_finish=true;
+  cpu_exec(-1);
 	return 0;
 }
 
