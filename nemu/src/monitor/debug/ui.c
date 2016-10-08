@@ -196,8 +196,8 @@ static int cmd_info(char *args) {
         int counter=0;
         for (;p!=NULL;p=p->next, ++counter) {
           if (p->caller_name[0]=='\0') {
-            printf("#%d 0x%x start %s(0x%x, 0x%x, 0x%x, 0x%x)\n", counter, p->caller_addr,
-              p->name, p->args[0], p->args[1], p->args[2], p->args[3]);
+            printf("#%d 0x%x start %s\n", counter, p->caller_addr,
+              p->name);
           }
           else if (p->is_return) {
             printf("#%d 0x%x in %s, return to %s, return val 0x%x\n", counter, p->caller_addr, p->caller_name,
