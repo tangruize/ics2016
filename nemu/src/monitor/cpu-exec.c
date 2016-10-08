@@ -48,7 +48,8 @@ int set_in_func(swaddr_t eip){
 	if ((all_elf_funcs[in_func.index].end - eip) <= 3) {
 		is_return = true;
     if (set_finish) {
-      if (!call_cnt) {
+      printf("%d\n", call_cnt);
+      if (call_cnt>0) {
         nemu_state = STOP;
         set_finish=false;
         call_cnt=1;
@@ -85,6 +86,7 @@ int set_in_func(swaddr_t eip){
 				p->caller_addr=eip;
 				p->is_return=is_return;
         if (set_finish && !is_return) {
+          printf("%d\n", call_cnt);
           ++call_cnt;
         }
 				if (bt_first!=NULL) {
