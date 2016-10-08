@@ -59,7 +59,7 @@ int set_in_func(swaddr_t eip){
 
 void print_bin_instr(swaddr_t eip, int len) {
   int i, l=0;
-  l = sprintf(asm_buf, "%8x", eip);
+  l = sprintf(asm_buf, "%8x ", eip);
   set_in_func(eip);
   if (in_func.is_in) {
     l += snprintf(asm_buf + l, 12, "<%s", all_elf_funcs[in_func.index].str);
@@ -67,6 +67,9 @@ void print_bin_instr(swaddr_t eip, int len) {
   }
   else {
     l += sprintf(asm_buf + l, "<UNKNOWN>:   ");
+  }
+  if (l!=31) {
+    l += sprintf(asm_buf + l, "%*s", 31-l, " ");
   }
   for(i = 0; i < len; i ++) {
     l += sprintf(asm_buf + l, "%02x ", instr_fetch(eip + i, 1));
