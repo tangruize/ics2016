@@ -140,7 +140,7 @@ static int cmd_r(char *args) {
 	}
 	else if(strcmp(arg, "-r")) {
 		restart();
-		nemu_state=STOP;
+		nemu_state=RUNNING;
 	}
 	return 0;
 }
