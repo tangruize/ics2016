@@ -395,7 +395,7 @@ static int cmd_p(char *args) {
 		return 0;
 	}
 	bool is_success=true;
-	printf("%s\n", args);
+	//printf("%s\n", args);
 	bool p_hex=false;
 	if (args[0]=='\\' && args[1]=='x'){
 		args+=2;
