@@ -117,20 +117,17 @@ void print_bin_instr(swaddr_t eip, int len) {
   int i, l=0;
   l = sprintf(asm_buf, "%8x ", eip);
   if (in_func.is_in) {
-    l += snprintf(asm_buf + l, 8, "<%s", all_elf_funcs[in_func.index].str);
+    l += snprintf(asm_buf + l, 12, "<%s", all_elf_funcs[in_func.index].str);
     //printf("%s\n", asm_buf);
     //printf("%d\n",l );
-    if (l==18){
-      --l;
-    }
     l += snprintf(asm_buf + l, 12, "+0x%x>    ", in_func.off);
     //printf("%s\n", asm_buf);
   }
   else {
     l += sprintf(asm_buf + l, "<UNKNOWN>:   ");
   }
-  if (l!=27) {
-    l += sprintf(asm_buf + l, "%*s", 27-l, " ");
+  if (l!=31) {
+    l += sprintf(asm_buf + l, "%*s", 31-l, " ");
   }
   for(i = 0; i < len; i ++) {
     l += sprintf(asm_buf + l, "%02x ", instr_fetch(eip + i, 1));
