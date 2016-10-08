@@ -130,8 +130,6 @@ void restart();
 
 static int cmd_r(char *args) {
 	char *arg = strtok(NULL, " ");
-	printf("%d\n", nemu_state);
-
 	if (arg==NULL) {
 		if (nemu_state!=END) {
 			printf("The program is still running, specify -r to restart.\n");
@@ -143,6 +141,7 @@ static int cmd_r(char *args) {
 	else if(strcmp(arg, "-r")) {
 		restart();
 		nemu_state=RUNNING;
+		printf("%d\n", nemu_state);
 	}
 	return 0;
 }
