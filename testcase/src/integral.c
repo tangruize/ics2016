@@ -4,7 +4,7 @@
 FLOAT f(FLOAT x) {
 	/* f(x) = 1/(1+25x^2) */
 	FLOAT a;
-	//set_bp();
+	set_bp();
 	a=F_mul_F(x, x);
 	if (x==65536)
 		nemu_assert(a == 65536);

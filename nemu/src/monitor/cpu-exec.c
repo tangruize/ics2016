@@ -218,13 +218,14 @@ void cpu_exec(volatile uint32_t n) {
 				fprintf(stderr, "Bad watchpoint %d: %s\n", p->NO, p->str);
 			}
 			else if (result!=p->key) {
-				printf("watchpoint %d: %s\n", p->NO, p->str);
-				printf("Old value: %d\nNew value: %d\n", p->key, result);
 				is_changed=true;
 				if (!p->is_break) {
+					printf("watchpoint %d: %s\n", p->NO, p->str);
+					printf("Old value: %d\nNew value: %d\n", p->key, result);
 					p->key=result;
 				}
 				else {
+					
 					p->key=0;
 				}
 			}
