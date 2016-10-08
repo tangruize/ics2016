@@ -20,6 +20,7 @@ typedef struct Funcs {
 }Funcs;
 
 struct PartOfStackFrame {
+	bool is_return;
   swaddr_t caller_addr;
   uint32_t args[4];
   char caller_name[32];

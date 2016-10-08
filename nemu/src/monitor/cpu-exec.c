@@ -36,10 +36,12 @@ int set_in_func(swaddr_t eip){
     in_func.is_in=false;
     return 1;
   }
+  bool is_return=false;
   if (in_func.is_in) {
     if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
       // return
       in_func.is_in=false;
+      is_return=true;
     }
     else {
       in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
@@ -54,7 +56,13 @@ int set_in_func(swaddr_t eip){
         PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
         assert(p!=NULL);
         p->caller_addr=eip;
-        strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
+        p->is_return=is_return;
+        if (bt_first!=NULL) {
+          strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
+        }
+        else {
+          p->caller_name[0]='\0';
+        }
 
         // call
         in_func.is_in=true;
@@ -63,13 +71,20 @@ int set_in_func(swaddr_t eip){
 
         //bt
         strcpy(p->name, all_elf_funcs[in_func.index].str);
-        p->args[0] = instr_fetch(cpu.gpr[R_ESP]._32+4, 4);
-        p->args[1] = instr_fetch(cpu.gpr[R_ESP]._32+8, 4);
-        p->args[2] = instr_fetch(cpu.gpr[R_ESP]._32+12, 4);
-        p->args[3] = instr_fetch(cpu.gpr[R_ESP]._32+16, 4);
+        if (is_return) {
+          p->args[0] = cpu.gpr[R_EAX]._32;
+        }
+        else {
+          p->args[0] = instr_fetch(cpu.gpr[R_ESP]._32+4, 4);
+          p->args[1] = instr_fetch(cpu.gpr[R_ESP]._32+8, 4);
+          p->args[2] = instr_fetch(cpu.gpr[R_ESP]._32+12, 4);
+          p->args[3] = instr_fetch(cpu.gpr[R_ESP]._32+16, 4);
+        }
 
         p->next=bt_first;
         bt_first=p;
+        
+        is_return=false;
 
         break;
       }
