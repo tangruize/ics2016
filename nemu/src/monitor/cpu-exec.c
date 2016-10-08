@@ -5,6 +5,7 @@
 #include "cpu/helper.h"
 #include <malloc.h>
 #include <setjmp.h>
+#include <stdlib.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -41,7 +42,7 @@ int set_in_func(swaddr_t eip){
     return 1;
   }
   //printf("eip: %x\n", (unsigned)eip);
-  if (eip - all_elf_funcs[in_func.index].end <= 3) {
+  if (abs(eip - all_elf_funcs[in_func.index].end) <= 3) {
     is_return = true;
   }
 
