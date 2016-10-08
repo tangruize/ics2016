@@ -54,7 +54,7 @@ int set_in_func(swaddr_t eip){
         PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
         assert(p!=NULL);
         p->caller_addr=eip;
-        strcpy(p->caller_name, all_elf_funcs[i].str);
+        strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
 
         // call
         in_func.is_in=true;
@@ -62,7 +62,7 @@ int set_in_func(swaddr_t eip){
         in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
 
         //bt
-        strcpy(p->name, all_elf_funcs[i].str);
+        strcpy(p->name, all_elf_funcs[in_func.index].str);
         p->args[0] = instr_fetch(cpu.gpr[R_ESP]._32+4, 4);
         p->args[1] = instr_fetch(cpu.gpr[R_ESP]._32+8, 4);
         p->args[2] = instr_fetch(cpu.gpr[R_ESP]._32+12, 4);
