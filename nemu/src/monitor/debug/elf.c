@@ -151,7 +151,7 @@ int sort_funcs() {
 		}
 	}
 	for (i=0;i<func_cnt;++i) {
-		printf("%-12s0x%10x0x%10x\n",all_elf_funcs[i].str, all_elf_funcs[i].start, all_elf_funcs[i].end);
+		printf("%-12s\t0x%x\t0x%x\n",all_elf_funcs[i].str, all_elf_funcs[i].start, all_elf_funcs[i].end);
 	}
 	return 0;
 }
