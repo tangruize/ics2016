@@ -36,7 +36,7 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Load the string table into expr */
 	init_var();
-	int sort_funcs();
+	sort_funcs();
 
 	/* Compile the regular expressions. */
 	init_regex();
