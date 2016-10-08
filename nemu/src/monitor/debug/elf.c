@@ -89,7 +89,7 @@ void load_elf_tables(int argc, char *argv[]) {
 		printf("st_size: %x\n", symtab[i].st_size);
 		printf("st_info: %hhx\n", symtab[i].st_info);
 		printf("st_other: %hhx\n", symtab[i].st_other);
-		printf("st_shndx: %hx\n", symtab[i].st_shndx);
+		printf("st_shndx: %hx\n\n", symtab[i].st_shndx);
 
 	}
 
