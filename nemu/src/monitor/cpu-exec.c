@@ -227,7 +227,7 @@ void cpu_exec(volatile uint32_t n) {
 				}
 				else {
 					do_int3();
-					printf("breakpoint %d: %s\n", p->NO, p->str);
+					printf("breakpoint %d: %s\n", p->NO, p->str+6);
 					p->key=0;
 				}
 			}
