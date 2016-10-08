@@ -41,7 +41,9 @@ int set_in_func(swaddr_t eip){
     if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
       // return
       in_func.is_in=false;
-      is_return=true;
+      if (eip == all_elf_funcs[in_func.index].end) {
+        is_return=true;
+      }
     }
     else {
       in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
@@ -83,7 +85,7 @@ int set_in_func(swaddr_t eip){
 
         p->next=bt_first;
         bt_first=p;
-        
+
         is_return=false;
 
         break;
