@@ -63,7 +63,7 @@ void print_bin_instr(swaddr_t eip, int len) {
   set_in_func(eip);
   if (in_func.is_in) {
     l += snprintf(asm_buf + l, 8, "<%s", all_elf_funcs[in_func.index].str);
-    l += snprintf(asm_buf + l, 12, "+0x%x>:   ", in_func.off);
+    l += snprintf(asm_buf + l, 12, "+0x%x>    ", in_func.off);
   }
   else {
     l += sprintf(asm_buf + l, "<UNKNOWN>:   ");
