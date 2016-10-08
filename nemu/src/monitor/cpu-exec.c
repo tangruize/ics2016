@@ -41,7 +41,7 @@ int set_in_func(swaddr_t eip){
     if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
       // return
       in_func.is_in=false;
-      if (eip == all_elf_funcs[in_func.index].end) {
+      if (cpu.eip == all_elf_funcs[in_func.index].end) {
         is_return=true;
       }
     }
