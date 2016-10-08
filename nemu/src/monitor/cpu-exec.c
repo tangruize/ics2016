@@ -147,9 +147,9 @@ void print_bin_instr(swaddr_t eip, int len) {
 	else {
 		l += sprintf(asm_buf + l, "<UNKNOWN>:   ");
 	}
-  printf("%d\n", l);
+  //printf("%d\n", l);
 	if (l!=33) {
-		l += sprintf(asm_buf + l, "%*s", 33-l, " ");
+		l += sprintf(asm_buf + l, "%*s", 33-l, "");
 	}
 	for(i = 0; i < len; i ++) {
 		l += sprintf(asm_buf + l, "%02x ", instr_fetch(eip + i, 1));
