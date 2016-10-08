@@ -170,7 +170,7 @@ static int cmd_bt(char *args) {
 extern bool set_finish;
 static int cmd_fin(char *args) {
   set_finish=true;
-  cpu_exec(-1);
+  cpu_exec(999);
 	return 0;
 }
 
