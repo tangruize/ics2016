@@ -397,14 +397,14 @@ static int cmd_p(char *args) {
 	bool is_success=true;
 	//printf("%s\n", args);
 	bool p_hex=false;
-	if (args[0]=='\\' && args[1]=='x'){
+	if (args[0]=='%' && args[1]=='x'){
 		args+=2;
 		p_hex=true;
 	}
 	int result = express(args, &is_success);
 	if (is_success==true) {
 		if (p_hex) {
-			printf("%x\n", (unsigned)result);
+			printf("0x%x\n", (unsigned)result);
 		}
 		else {
 			printf("%d\n", result);
