@@ -106,7 +106,7 @@ int init_var() {
 	int i=0;
 	var_cnt=0;
 	for (i=0;i!=nr_symtab_entry;++i) {
-		if (symtab[i].st_info & STT_OBJECT) {
+		if ((symtab[i].st_info & 0xf) == STT_OBJECT) {
 			Assert(var_cnt<VAR_MAX,"Resize VAR_MAX!\n");
 			if (symtab[i].st_name!=0){
 				strcpy(var[var_cnt].str, symtab[i].st_name + strtab);
@@ -117,7 +117,7 @@ int init_var() {
 			var[var_cnt].key=(int)symtab[i].st_value;
 			++var_cnt;
 		}
-		else if (symtab[i].st_info & STT_FUNC) {
+		else if ((symtab[i].st_info & 0xf) == STT_FUNC) {
 			Assert(func_cnt<VAR_MAX,"Too many funcs, Resize VAR_MAX!\n");
 			if (symtab[i].st_name!=0){
 				strcpy(all_elf_funcs[func_cnt].str, symtab[i].st_name + strtab);
