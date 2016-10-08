@@ -8,6 +8,7 @@ extern char *exec_file;
 
 void load_elf_tables(int, char *[]);
 int init_var();
+int sort_funcs();
 void init_regex();
 void init_wp_pool();
 void init_ddr3();
@@ -35,6 +36,7 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Load the string table into expr */
 	init_var();
+	int sort_funcs();
 
 	/* Compile the regular expressions. */
 	init_regex();

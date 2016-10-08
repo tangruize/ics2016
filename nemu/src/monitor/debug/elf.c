@@ -5,6 +5,8 @@
 
 char *exec_file = NULL;
 
+Funcs all_elf_funcs[VAR_MAX];
+int func_cnt;
 
 
 static char *strtab = NULL;
@@ -104,17 +106,52 @@ int init_var() {
 	int i=0;
 	var_cnt=0;
 	for (i=0;i!=nr_symtab_entry;++i) {
-		if (symtab[i].st_info&STT_OBJECT) {
+		if (symtab[i].st_info & STT_OBJECT) {
 			Assert(var_cnt<VAR_MAX,"Resize VAR_MAX!\n");
 			if (symtab[i].st_name!=0){
 				strcpy(var[var_cnt].str, symtab[i].st_name + strtab);
 			}
 			else {
-				var[var_cnt].str[0]='\0';
+				strcpy(var[var_cnt].str, NO_NAME);
 			}
 			var[var_cnt].key=(int)symtab[i].st_value;
 			++var_cnt;
 		}
+		else if (symtab[i].st_info & STT_FUNC) {
+			Assert(func_cnt<VAR_MAX,"Too many funcs, Resize VAR_MAX!\n");
+			if (symtab[i].st_name!=0){
+				strcpy(all_elf_funcs[func_cnt].str, symtab[i].st_name + strtab);
+			}
+			else {
+				strcpy(all_elf_funcs[func_cnt].str, NO_NAME);
+			}
+			all_elf_funcs[func_cnt].start=(int)symtab[i].st_value;
+			all_elf_funcs[func_cnt].end=(int)symtab[i].st_value + (int)symtab[i].st_size;
+			++func_cnt;
+		}
+	}
+	return 0;
+}
+
+int sort_funcs() {
+	int i,j;
+	for (i=0; i<func_cnt-1; ++i) {
+		int min=all_elf_funcs[i].start;
+		int min_index=i;
+		for (j=i+1; j<func_cnt; ++j) {
+			if (min > all_elf_funcs[j].start) {
+				min = all_elf_funcs[j].start;
+				min_index = j;
+			}
+		}
+		if (min_index!=i) {
+			Funcs tmp=all_elf_funcs[min_index];
+			all_elf_funcs[min_index]=all_elf_funcs[i];
+			all_elf_funcs[i]=tmp;
+		}
+	}
+	for (i=0;i<func_cnt;++i) {
+		printf("%-12s0x%10x0x%10x\n",all_elf_funcs[i].str, all_elf_funcs[i].start, all_elf_funcs[i].end);
 	}
 	return 0;
 }
