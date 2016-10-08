@@ -149,7 +149,7 @@ void print_bin_instr(swaddr_t eip, int len) {
 		//printf("%s\n", asm_buf);
 	}
 	else {
-		l += sprintf(asm_buf + l, "<UNKNOWN>:   ");
+		l += sprintf(asm_buf + l, "<UNKNOWN>   ");
 	}
   //printf("%d\n", l);
 	if (l!=33) {
