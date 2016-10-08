@@ -4,6 +4,8 @@
 
 char *exec_file = NULL;
 
+
+
 static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
@@ -82,7 +84,7 @@ void load_elf_tables(int argc, char *argv[]) {
 	//{
 	//	printf("%s\n", strtab);
 	//}
-	for (i=0;i!=nr_symtab_entry;++i)
+	/*for (i=0;i!=nr_symtab_entry;++i)
 	{
 		printf("name: %s\n", symtab[i].st_name + strtab);
 		printf("st_name: %x\n", symtab[i].st_name);
@@ -92,7 +94,8 @@ void load_elf_tables(int argc, char *argv[]) {
 		printf("st_other: %hhx\n", symtab[i].st_other);
 		printf("st_shndx: %hx\n\n", symtab[i].st_shndx);
 
-	}
+	}*/
+
 
 	fclose(fp);
 }
