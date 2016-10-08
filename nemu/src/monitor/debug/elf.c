@@ -54,7 +54,7 @@ void load_elf_tables(int argc, char *argv[]) {
 
 	int i;
 	for(i = 0; i < elf->e_shnum; i ++) {
-		if(sh[i].sh_type == SHT_SYMTAB && 
+		if(sh[i].sh_type == SHT_SYMTAB &&
 				strcmp(shstrtab + sh[i].sh_name, ".symtab") == 0) {
 			/* Load symbol table from exec_file */
 			symtab = malloc(sh[i].sh_size);
@@ -63,7 +63,7 @@ void load_elf_tables(int argc, char *argv[]) {
 			assert(ret == 1);
 			nr_symtab_entry = sh[i].sh_size / sizeof(symtab[0]);
 		}
-		else if(sh[i].sh_type == SHT_STRTAB && 
+		else if(sh[i].sh_type == SHT_STRTAB &&
 				strcmp(shstrtab + sh[i].sh_name, ".strtab") == 0) {
 			/* Load string table from exec_file */
 			strtab = malloc(sh[i].sh_size);
@@ -78,6 +78,20 @@ void load_elf_tables(int argc, char *argv[]) {
 
 	assert(strtab != NULL && symtab != NULL);
 
+	//for (i=0;strtab[i]!=NULL;++i)
+	//{
+		printf("%s\n", strtab);
+	//}
+	for (i=0;i!=nr_symtab_entry;++i)
+	{
+		printf("st_name: %x\n", symtab[i].st_name);
+		printf("st_value: %x\n", (unsigned)symtab[i].st_value);
+		printf("st_size: %x\n", symtab[i].st_size);
+		printf("st_info: %hhx\n", symtab[i].st_info);
+		printf("st_other: %hhx\n", symtab[i].st_other);
+		printf("st_shndx: %hx\n", symtab[i].st_shndx);
+
+	}
+
 	fclose(fp);
 }
-
