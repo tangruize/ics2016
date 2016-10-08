@@ -60,7 +60,6 @@ int set_in_func(swaddr_t eip){
 void print_bin_instr(swaddr_t eip, int len) {
   int i, l=0;
   l = sprintf(asm_buf, "%8x ", eip);
-  set_in_func(eip);
   if (in_func.is_in) {
     l += snprintf(asm_buf + l, 8, "<%s", all_elf_funcs[in_func.index].str);
     l += snprintf(asm_buf + l, 12, "+0x%x>    ", in_func.off);
@@ -100,6 +99,7 @@ void cpu_exec(volatile uint32_t n) {
   for(; n > 0; n --) {
     #ifdef DEBUG
     swaddr_t eip_temp = cpu.eip;
+    set_in_func(eip_temp);
     if((n & 0xffff) == 0) {
       /* Output some dots while executing the program. */
       fputc('.', stderr);
