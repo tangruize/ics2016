@@ -3,7 +3,7 @@
 
 #define VAR_MAX 256
 #define MAX_LEN 128
-#define NO_NAME "NO_NAME"
+#define NO_NAME "UNKNOWN"
 
 typedef struct variables {
 	char str[MAX_LEN];
