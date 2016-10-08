@@ -104,7 +104,7 @@ int init_var() {
 	int i=0;
 	var_cnt=0;
 	for (i=0;i!=nr_symtab_entry;++i) {
-		if (symtab[i].st_info==1) {
+		if (symtab[i].st_info&STT_OBJECT) {
 			Assert(var_cnt<VAR_MAX,"Resize VAR_MAX!\n");
 			if (symtab[i].st_name!=0){
 				strcpy(var[var_cnt].str, symtab[i].st_name + strtab);
