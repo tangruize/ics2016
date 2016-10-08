@@ -46,6 +46,7 @@ int set_in_func(swaddr_t eip){
 	}
 	//printf("eip: %x\n", (unsigned)eip);
 	if ((all_elf_funcs[in_func.index].end - eip) <= 3) {
+    printf("addr: %x\n", (unsigned)eip);
 		is_return = true;
     if (set_finish) {
       //printf("%d\n", call_cnt);
