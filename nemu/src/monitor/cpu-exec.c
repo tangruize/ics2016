@@ -29,8 +29,12 @@ struct {
 } in_func={false,0,0};
 
 int set_in_func(){
+  if (func_cnt==0) {
+    in_func.is_in=false;
+    return 1;
+  }
   if (in_func.is_in) {
-    if (cpu.eip >= all_elf_funcs[in_func.index].end) {
+    if (cpu.eip >= all_elf_funcs[in_func.index].end || cpu.eip < all_elf_funcs[in_func.index].start) {
       in_func.is_in=false;
     }
     else {
