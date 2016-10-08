@@ -55,6 +55,8 @@ static int cmd_b(char *args);
 
 static int cmd_assign(char *args);
 
+static int cmd_bt(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -71,6 +73,7 @@ static struct {
 { "p", "Print value of expression EXP.", cmd_p},
 { "b", "Set breakpoint at specified line", cmd_b},
 { "assign", "Assign a specific register or memory address", cmd_assign},
+{ "bt", "Print backtrace of all stack frames", cmd_bt},
 
 /* TODO: Add more commands */
 
@@ -125,6 +128,38 @@ static int cmd_si(char *args) {
 		n = getNum;
 	}
 	cpu_exec(n);
+	return 0;
+}
+
+static int cmd_bt(char *args) {
+  if (bt_first==NULL) {
+    printf("(NULL)\n");
+    return 0;
+  }
+	char *arg = strtok(NULL, " ");
+  uint32_t getNum;
+	if(arg != NULL) {
+    getNum = (uint32_t) strtol(arg, NULL, 0);
+	}
+  else {
+    getNum = -1;
+  }
+  PartOfStackFrame *p=bt_first;
+  int counter=0;
+  for (;p!=NULL && counter < getNum; p=p->next, ++counter) {
+    if (p->caller_name[0]=='\0') {
+      printf("#%d 0x%x start %s\n", counter, p->caller_addr,
+        p->name);
+    }
+    else if (p->is_return) {
+      printf("#%d 0x%x in %s, return to %s, return val 0x%x\n", counter, p->caller_addr, p->caller_name,
+        p->name, p->args[0]);
+    }
+    else {
+      printf("#%d 0x%x in %s, call %s(0x%x, 0x%x, 0x%x, 0x%x)\n", counter, p->caller_addr, p->caller_name,
+        p->name, p->args[0], p->args[1], p->args[2], p->args[3]);
+    }
+  }
 	return 0;
 }
 
