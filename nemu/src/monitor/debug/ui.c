@@ -141,6 +141,12 @@ static int cmd_r(char *args) {
 	}
 	else if(strcmp(arg, "-r")==0) {
 		restart();
+		extern PartOfStackFrame *bt_first;
+		while (bt_first!=NULL) {
+			PartOfStackFrame *p=bt_first->next;
+			free(bt_first);
+			bt_first=p;
+		}
 		nemu_state=RUNNING;
 	}
 	return 0;
