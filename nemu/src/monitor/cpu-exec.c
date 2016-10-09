@@ -48,22 +48,6 @@ int set_in_func(swaddr_t eip){
 		in_func.is_in=false;
 		return 1;
 	}
-	uint8_t next_instr=(uint8_t)instr_fetch(eip, 1);
-	if (next_instr==0xf3) {
-		next_instr=(uint8_t)instr_fetch(eip+1, 1);
-	}
-	if (next_instr==0xc2 || next_instr==0xc3) {
-		is_return = true;
-		pre_eip=eip;
-		if (set_finish) {
-			if (call_cnt==0) {
-				nemu_state = STOP;
-				set_finish=false;
-				call_cnt=1;
-			}
-			--call_cnt;
-		}
-	}
 
 	if (in_func.is_in) {
 		if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
@@ -101,13 +85,14 @@ int set_in_func(swaddr_t eip){
 		if (set_finish && !is_return) {
 			++call_cnt;
 		}
-		if (bt_first!=NULL && in_func.is_in) {
-			strcpy(p->caller_name, all_elf_funcs[pre_index_func].str);
+		if (is_return) {
+			strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
+			strcpy(p->name, all_elf_funcs[pre_index_func].str);
 		}
 		else {
-			strcpy(p->caller_name, NO_NAME);
+			strcpy(p->name, all_elf_funcs[in_func.index].str);
+			strcpy(p->caller_name, all_elf_funcs[pre_index_func].str);
 		}
-		strcpy(p->name, all_elf_funcs[in_func.index].str);
 		if (is_return) {
 			p->args[0] = cpu.gpr[R_EAX]._32;
 		}
@@ -123,6 +108,24 @@ int set_in_func(swaddr_t eip){
 
 		is_return=false;
 		set_next_call=0;
+	}
+
+	uint8_t next_instr=(uint8_t)instr_fetch(eip, 1);
+
+	if (next_instr==0xf3) {
+		next_instr=(uint8_t)instr_fetch(eip+1, 1);
+	}
+	if (next_instr==0xc2 || next_instr==0xc3) {
+		is_return = true;
+		pre_eip=eip;
+		if (set_finish) {
+			if (call_cnt==0) {
+				nemu_state = STOP;
+				set_finish=false;
+				call_cnt=1;
+			}
+			--call_cnt;
+		}
 	}
 
 	if (next_instr==0xe8 || (next_instr == 0xff && (instr_fetch(eip+1, 1) & 0x30) == 0x10)) {
