@@ -126,6 +126,7 @@ int set_in_func(swaddr_t eip){
 				bt_first=p;
 
 				is_return=false;
+				set_next_call=0;
 
 				break;
 			}
