@@ -93,7 +93,7 @@ int set_in_func(swaddr_t eip){
 				// bt
 				PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
 				assert(p!=NULL);
-				p->caller_addr=eip;
+				p->caller_addr=pre_eip;
 				p->is_return=is_return;
         if (set_finish && !is_return) {
           //printf("call: %d\n", call_cnt);
@@ -201,7 +201,7 @@ void cpu_exec(volatile uint32_t n) {
 
 // bt needs set_in_func
 #ifdef DEBUG
-		set_in_func(pre_eip);
+		set_in_func(eip_temp);
 #endif
 
 
