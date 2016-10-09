@@ -105,7 +105,7 @@ int set_in_func(swaddr_t eip){
 			strcpy(p->caller_name, all_elf_funcs[pre_index_func].str);
 		}
 		else {
-			p->caller_name[0]='\0';
+			strcpy(p->caller_name, NO_NAME);
 		}
 		strcpy(p->name, all_elf_funcs[in_func.index].str);
 		if (is_return) {
