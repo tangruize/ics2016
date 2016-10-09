@@ -39,6 +39,8 @@ static int call_cnt = 0;
 
 static int set_next_call = 0;
 
+static int pre_eip_off=0;
+
 //static int pre_index=0;
 
 int set_in_func(swaddr_t eip){
@@ -91,7 +93,7 @@ int set_in_func(swaddr_t eip){
 				// bt
 				PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
 				assert(p!=NULL);
-				p->caller_addr=eip;
+				p->caller_addr=eip-pre_eip_off;
 				p->is_return=is_return;
         if (set_finish && !is_return) {
           //printf("call: %d\n", call_cnt);
@@ -206,6 +208,8 @@ void cpu_exec(volatile uint32_t n) {
 		/* Execute one instruction, including instruction fetch,
 	 * instruction decode, and the actual execution. */
 		int instr_len = exec(cpu.eip);
+
+		pre_eip_off=instr_len;
 
 		cpu.eip += instr_len;
 
