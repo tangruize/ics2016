@@ -71,14 +71,8 @@ int set_in_func(swaddr_t eip){
 					if (set_finish && !is_return) {
 						++call_cnt;
 					}
-					if (is_return) {
-						strcpy(p->name, all_elf_funcs[in_func.index].str);
-						strcpy(p->caller_name, all_elf_funcs[i].str);
-					}
-					else {
-						strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
-						strcpy(p->name, all_elf_funcs[i].str);
-					}
+					strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
+					strcpy(p->name, all_elf_funcs[i].str);
 					if (is_return) {
 						p->args[0] = cpu.gpr[R_EAX]._32;
 					}
