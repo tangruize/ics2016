@@ -197,6 +197,12 @@ void cpu_exec(volatile uint32_t n) {
 		}
 #endif
 
+// bt needs set_in_func
+#ifdef DEBUG
+		set_in_func(eip_temp);
+#endif
+
+
 		/* Execute one instruction, including instruction fetch,
 	 * instruction decode, and the actual execution. */
 		int instr_len = exec(cpu.eip);
@@ -241,12 +247,6 @@ void cpu_exec(volatile uint32_t n) {
 		if (is_changed==true) {
 			nemu_state=STOP;
 		}
-
-    // bt needs set_in_func
-#ifdef DEBUG
-    set_in_func(eip_temp);
-#endif
-
 
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);
