@@ -224,7 +224,7 @@ extern struct in_func {
 } in_func;
 static int cmd_fin(char *args) {
   set_finish=true;
-	/*bool no_arg=0;
+	bool no_arg=0;
 	if (bt_first==NULL || bt_first->next == NULL) {
 		no_arg=1;
 	}
@@ -233,10 +233,10 @@ static int cmd_fin(char *args) {
 		printf("Run still %s return, with return value 0x%x\n",
   		all_elf_funcs[in_func.index].str, cpu.gpr[R_EAX]._32 );
 	}
-	else {*/
+	else {
   	printf("Run still %s(0x%x, 0x%x, 0x%x, 0x%x) return, with return value 0x%x\n",
   		all_elf_funcs[in_func.index].str, bt_first->args[0], bt_first->args[1], bt_first->args[2], bt_first->args[3], cpu.gpr[R_EAX]._32 );
-	//}
+	}
   //cpu_exec(1);
   return 0;
 }
