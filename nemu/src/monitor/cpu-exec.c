@@ -131,6 +131,7 @@ int set_in_func(swaddr_t eip){
 	if (next_instr==0xe8 || (next_instr == 0xff && (instr_fetch(eip+1, 1) & 0x30) == 0x10)) {
 		set_next_call = 1;
 		pre_eip=eip;
+		pre_index_func=in_func.index;
 	}
 	return 0;
 }
