@@ -204,6 +204,9 @@ static int cmd_bt(char *args) {
       	printf("#%d 0x%x in %s, return to %s, return value 0x%x\n", counter, p->caller_addr, p->caller_name,
         	p->name, p->args[0]);
 			}
+			else {
+				--counter;
+			}
     }
     else {
       printf("#%d 0x%x in %s, call %s(0x%x, 0x%x, 0x%x, 0x%x)\n", counter, p->caller_addr, p->caller_name,
