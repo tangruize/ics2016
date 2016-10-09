@@ -175,7 +175,7 @@ static int cmd_si(char *args) {
 
 static int cmd_bt(char *args) {
   if (bt_first==NULL) {
-    printf("(NULL)\n");
+    printf("No stack\n");
     return 0;
   }
 	char *arg = strtok(NULL, " ");
@@ -186,16 +186,20 @@ static int cmd_bt(char *args) {
   else {
     getNum = -1;
   }
+	char *arg2 = strtok(NULL, " ");
+	bool print_return=1;
+	if (arg2!=NULL && strcmp(arg2, "-c")==0) {
+		print_return=0;
+	}
   PartOfStackFrame *p=bt_first;
   int counter=0;
   for (;p!=NULL && counter < getNum; p=p->next, ++counter) {
-    if (p->caller_name[0]=='\0') {
-      printf("#%d 0x%x start %s\n", counter, p->caller_addr,
-        p->name);
-    }
-    else if (p->is_return) {
-      printf("#%d 0x%x in %s, return to %s, return value 0x%x\n", counter, p->caller_addr, p->caller_name,
-        p->name, p->args[0]);
+    if (p->is_return) {
+			if (print_return)
+			{
+      	printf("#%d 0x%x in %s, return to %s, return value 0x%x\n", counter, p->caller_addr, p->caller_name,
+        	p->name, p->args[0]);
+			}
     }
     else {
       printf("#%d 0x%x in %s, call %s(0x%x, 0x%x, 0x%x, 0x%x)\n", counter, p->caller_addr, p->caller_name,
