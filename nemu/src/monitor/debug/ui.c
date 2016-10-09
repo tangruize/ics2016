@@ -180,14 +180,18 @@ static int cmd_bt(char *args) {
   }
 	char *arg = strtok(NULL, " ");
   uint32_t getNum;
+	bool print_return=1;
 	if(arg != NULL) {
     getNum = (uint32_t) strtol(arg, NULL, 0);
+		if (getNum==0 && strcmp(arg, "-c")==0) {
+			print_return=0;
+			getNum = -1;
+		}
 	}
   else {
     getNum = -1;
   }
 	char *arg2 = strtok(NULL, " ");
-	bool print_return=1;
 	if (arg2!=NULL && strcmp(arg2, "-c")==0) {
 		print_return=0;
 	}
