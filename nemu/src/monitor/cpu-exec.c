@@ -39,7 +39,7 @@ static int call_cnt = 0;
 
 static int set_next_call = 0;
 
-static int pre_eip=0x10000;
+static int pre_eip=0x100000;
 
 //static int pre_index=0;
 
