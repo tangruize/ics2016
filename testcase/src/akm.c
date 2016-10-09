@@ -18,7 +18,7 @@ int akm(int m, int n)
 
 int main()
 {
-    int i=akm(3,8);
-		nemu_assert(i == 2045);
+    int i=akm(3,6);
+		nemu_assert(i == 509);
     return 0;
 }
