@@ -57,11 +57,11 @@ int set_in_func(swaddr_t eip){
 			in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
 		}
 	}
+	
 	if (!in_func.is_in || is_return || set_next_call) {
 		int i;
 		for (i=0;i<func_cnt;++i) {
 			if (eip >= all_elf_funcs[i].start && eip < all_elf_funcs[i].end) {
-
 				if (is_return || set_next_call) {
 					// bt
 					PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
@@ -93,7 +93,6 @@ int set_in_func(swaddr_t eip){
 				in_func.is_in=true;
 				in_func.index=i;
 				in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
-
 
 				break;
 			}
