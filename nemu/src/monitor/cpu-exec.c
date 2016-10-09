@@ -45,12 +45,12 @@ int set_in_func(swaddr_t eip){
 		return 1;
 	}
 	//printf("eip: %x\n", (unsigned)eip);
-  uint8_t is_ret_instr=(uint8_t)instr_fetch(eip, 1);
-	if (is_ret_instr==0xf3) {
-		is_ret_instr=(uint8_t)instr_fetch(eip+1, 1);
+  uint8_t next_instr=(uint8_t)instr_fetch(eip, 1);
+	if (next_instr==0xf3) {
+		next_instr=(uint8_t)instr_fetch(eip+1, 1);
 	}
-	//printf("%hhx\n", is_ret_instr);
-	if (is_ret_instr==0xc2 || is_ret_instr==0xc3) {
+	//printf("%hhx\n", next_instr);
+	if (next_instr==0xc2 || next_instr==0xc3) {
     //printf("addr: %x\t%x\n", (unsigned)eip, all_elf_funcs[in_func.index].end);
 		is_return = true;
     if (set_finish) {
@@ -81,7 +81,7 @@ int set_in_func(swaddr_t eip){
 			in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
 		}
 	}
-	if (!in_func.is_in) {
+	if (!in_func.is_in || (next_instr==0xe8 || (next_instr == 0xff && (instr_fetch(eip+1, 1) & 0x30) == 0x10))) {
 		int i;
 		for (i=0;i<func_cnt;++i) {
 			if (eip >= all_elf_funcs[i].start && eip < all_elf_funcs[i].end) {
