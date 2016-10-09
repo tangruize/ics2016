@@ -225,7 +225,7 @@ extern struct in_func {
 static int cmd_fin(char *args) {
   set_finish=true;
 	bool no_arg=0;
-	if (bt_first==NULL || bt_first->next == NULL) {
+	if (bt_first==NULL) {
 		no_arg=1;
 	}
   cpu_exec(-1);
