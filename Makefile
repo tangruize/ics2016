@@ -74,4 +74,4 @@ count:
 	$(call git_commit, "count lines")
 	@bash count.sh
 submit: clean
-	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
+	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2.`date +%F_%T`
