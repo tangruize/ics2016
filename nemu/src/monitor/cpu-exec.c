@@ -101,7 +101,7 @@ int set_in_func(swaddr_t eip){
 		if (set_finish && !is_return) {
 			++call_cnt;
 		}
-		if (bt_first!=NULL) {
+		if (bt_first!=NULL && in_func.is_in) {
 			strcpy(p->caller_name, all_elf_funcs[pre_index_func].str);
 		}
 		else {
