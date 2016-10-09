@@ -37,6 +37,8 @@ PartOfStackFrame *bt_first=NULL;
 bool set_finish = false;
 static int call_cnt = 0;
 
+static int set_next_call = 0;
+
 //static int pre_index=0;
 
 int set_in_func(swaddr_t eip){
@@ -81,7 +83,7 @@ int set_in_func(swaddr_t eip){
 			in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
 		}
 	}
-	if (!in_func.is_in || (next_instr==0xe8 || (next_instr == 0xff && (instr_fetch(eip+1, 1) & 0x30) == 0x10))) {
+	if (!in_func.is_in || set_next_call) {
 		int i;
 		for (i=0;i<func_cnt;++i) {
 			if (eip >= all_elf_funcs[i].start && eip < all_elf_funcs[i].end) {
@@ -131,6 +133,9 @@ int set_in_func(swaddr_t eip){
 		if (i==func_cnt) {
 			return 1;
 		}
+	}
+	if (next_instr==0xe8 || (next_instr == 0xff && (instr_fetch(eip+1, 1) & 0x30) == 0x10)) {
+		set_next_call = 1;
 	}
 	return 0;
 }
