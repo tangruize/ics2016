@@ -130,16 +130,22 @@ void restart();
 
 static int cmd_r(char *args) {
 	char *arg = strtok(NULL, " ");
+	int confirm=0;
 	if (arg==NULL) {
 		if (nemu_state!=END) {
 			printf("The program is still running, specify -r to restart.\n");
 		}
 		else {
-			restart();
-			nemu_state=RUNNING;
+			confirm=1;
 		}
 	}
 	else if(strcmp(arg, "-r")==0) {
+		confirm=1;
+	}
+	else {
+		my_help("r");
+	}
+	if (confirm) {
 		restart();
 		extern PartOfStackFrame *bt_first;
 		while (bt_first!=NULL) {
