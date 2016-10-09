@@ -39,96 +39,50 @@ static int call_cnt = 0;
 
 static int set_next_call = 0;
 
-static int pre_eip=0x100000;
+static int pre_index_func=0;
 
-//static int pre_index=0;
+static int pre_eip=0x100000;
 
 int set_in_func(swaddr_t eip){
 	if (func_cnt==0) {
 		in_func.is_in=false;
 		return 1;
 	}
-	//printf("eip: %x\n", (unsigned)eip);
-  uint8_t next_instr=(uint8_t)instr_fetch(eip, 1);
+	uint8_t next_instr=(uint8_t)instr_fetch(eip, 1);
 	if (next_instr==0xf3) {
 		next_instr=(uint8_t)instr_fetch(eip+1, 1);
 	}
-	//printf("%hhx\n", next_instr);
 	if (next_instr==0xc2 || next_instr==0xc3) {
-    //printf("addr: %x\t%x\n", (unsigned)eip, all_elf_funcs[in_func.index].end);
 		is_return = true;
-    if (set_finish) {
-      //printf("ret: %d\n", call_cnt);
-      if (call_cnt==0) {
-        nemu_state = STOP;
-        set_finish=false;
-        call_cnt=1;
-      }
-      --call_cnt;
-    }
+		pre_eip=eip;
+		if (set_finish) {
+			if (call_cnt==0) {
+				nemu_state = STOP;
+				set_finish=false;
+				call_cnt=1;
+			}
+			--call_cnt;
+		}
 	}
 
 	if (in_func.is_in) {
 		if (eip >= all_elf_funcs[in_func.index].end || eip < all_elf_funcs[in_func.index].start) {
-			// return
 			in_func.is_in=false;
-			//printf("end: %x\n", (unsigned)all_elf_funcs[in_func.index].end);
-			//printf("eip: %x\n", (unsigned)eip);
-			//printf("cpu: %x\n", (unsigned)cpu.eip);
-
-			/*if (eip == all_elf_funcs[pre_index].end) {
-		is_return=true;
-	  }*/
-
 		}
 		else {
 			in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
 		}
 	}
-	if (!in_func.is_in || set_next_call) {
+	if (!in_func.is_in) {
 		int i;
 		for (i=0;i<func_cnt;++i) {
 			if (eip >= all_elf_funcs[i].start && eip < all_elf_funcs[i].end) {
 
-				// bt
-				PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
-				assert(p!=NULL);
-				p->caller_addr=pre_eip;
-				p->is_return=is_return;
-        if (set_finish && !is_return) {
-          //printf("call: %d\n", call_cnt);
-          ++call_cnt;
-        }
-				if (bt_first!=NULL) {
-					strcpy(p->caller_name, all_elf_funcs[in_func.index].str);
-				}
-				else {
-					p->caller_name[0]='\0';
-				}
+				pre_index_func=in_func.index;
 
-				// call
 				in_func.is_in=true;
-				//pre_index=in_func.index;
 				in_func.index=i;
 				in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
-
-				//bt
-				strcpy(p->name, all_elf_funcs[in_func.index].str);
-				if (is_return) {
-					p->args[0] = cpu.gpr[R_EAX]._32;
-				}
-				else {
-					p->args[0] = instr_fetch(cpu.gpr[R_ESP]._32+4, 4);
-					p->args[1] = instr_fetch(cpu.gpr[R_ESP]._32+8, 4);
-					p->args[2] = instr_fetch(cpu.gpr[R_ESP]._32+12, 4);
-					p->args[3] = instr_fetch(cpu.gpr[R_ESP]._32+16, 4);
-				}
-
-				p->next=bt_first;
-				bt_first=p;
-
-				is_return=false;
-				set_next_call=0;
 
 				break;
 			}
@@ -137,8 +91,43 @@ int set_in_func(swaddr_t eip){
 			return 1;
 		}
 	}
+
+	if (is_return || set_next_call) {
+		// bt
+		PartOfStackFrame *p=malloc(sizeof(PartOfStackFrame));
+		assert(p!=NULL);
+		p->caller_addr=pre_eip;
+		p->is_return=is_return;
+		if (set_finish && !is_return) {
+			++call_cnt;
+		}
+		if (bt_first!=NULL) {
+			strcpy(p->caller_name, all_elf_funcs[pre_index_func].str);
+		}
+		else {
+			p->caller_name[0]='\0';
+		}
+		strcpy(p->name, all_elf_funcs[in_func.index].str);
+		if (is_return) {
+			p->args[0] = cpu.gpr[R_EAX]._32;
+		}
+		else {
+			p->args[0] = instr_fetch(cpu.gpr[R_ESP]._32+4, 4);
+			p->args[1] = instr_fetch(cpu.gpr[R_ESP]._32+8, 4);
+			p->args[2] = instr_fetch(cpu.gpr[R_ESP]._32+12, 4);
+			p->args[3] = instr_fetch(cpu.gpr[R_ESP]._32+16, 4);
+		}
+
+		p->next=bt_first;
+		bt_first=p;
+
+		is_return=false;
+		set_next_call=0;
+	}
+
 	if (next_instr==0xe8 || (next_instr == 0xff && (instr_fetch(eip+1, 1) & 0x30) == 0x10)) {
 		set_next_call = 1;
+		pre_eip=eip;
 	}
 	return 0;
 }
@@ -159,7 +148,7 @@ void print_bin_instr(swaddr_t eip, int len) {
 	else {
 		l += sprintf(asm_buf + l, "<UNKNOWN>   ");
 	}
-  //printf("%d\n", l);
+	//printf("%d\n", l);
 	if (l!=33) {
 		l += sprintf(asm_buf + l, "%*s", 33-l, "");
 	}
@@ -199,7 +188,7 @@ void cpu_exec(volatile uint32_t n) {
 		}
 #endif
 
-// bt needs set_in_func
+		// bt needs set_in_func
 #ifdef DEBUG
 		set_in_func(eip_temp);
 #endif
@@ -211,7 +200,6 @@ void cpu_exec(volatile uint32_t n) {
 
 		cpu.eip += instr_len;
 
-		pre_eip=cpu.eip;
 
 		/* TODO: check watchpoints here. */
 		WP *p=head;
@@ -261,7 +249,7 @@ void cpu_exec(volatile uint32_t n) {
 		}
 #endif
 
-/*#ifndef DEBUG
+		/*#ifndef DEBUG
 		print_bin_instr(eip_temp, instr_len);
 		strcat(asm_buf, assembly);
 		printf("%s\n", asm_buf);
