@@ -57,7 +57,7 @@ int set_in_func(swaddr_t eip){
 			in_func.off=(unsigned)eip-(unsigned)all_elf_funcs[in_func.index].start;
 		}
 	}
-	
+
 	if (!in_func.is_in || is_return || set_next_call) {
 		int i;
 		for (i=0;i<func_cnt;++i) {
@@ -136,8 +136,8 @@ void print_bin_instr(swaddr_t eip, int len) {
 		strncpy(tmp_str, all_elf_funcs[in_func.index].str, 12);
 		tmp_str[11]='\0';
 		l += snprintf(asm_buf + l, 12, "<%s", tmp_str);
-		//printf("%s\n", asm_buf);
-		//printf("%d\n",l );
+		printf("%s\n", asm_buf);
+		printf("%d\n",l );
 		l += snprintf(asm_buf + l, 12, "+0x%x> ", in_func.off);
 		//printf("%s\n", asm_buf);
 	}
