@@ -139,6 +139,8 @@ void print_bin_instr(swaddr_t eip, int len) {
 		printf("%s\n", asm_buf);
 		printf("%d\n",l );
 		l += snprintf(asm_buf + l, 12, "+0x%x> ", in_func.off);
+		printf("%s\n", asm_buf);
+		printf("%d\n",l );
 		//printf("%s\n", asm_buf);
 	}
 	else {
