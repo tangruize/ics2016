@@ -43,6 +43,8 @@ static int pre_index_func=0;
 
 static int pre_eip=0x100000;
 
+static unsigned till_now_si=0;
+
 int set_in_func(swaddr_t eip){
 	if (func_cnt==0) {
 		in_func.is_in=false;
@@ -198,6 +200,8 @@ void cpu_exec(volatile uint32_t n) {
 
 		cpu.eip += instr_len;
 
+		++till_now_si;
+
 
 		/* TODO: check watchpoints here. */
 		WP *p=head;
@@ -225,10 +229,12 @@ void cpu_exec(volatile uint32_t n) {
 				if (!p->is_break) {
 					printf("watchpoint %d: %s\n", p->NO, p->str);
 					printf("Old value: %d\nNew value: %d\n", p->key, result);
+					printf("si %d\n", till_now_si);
 					p->key=result;
 				}
 				else {
 					printf("Hit breakpoint %d: %s\n", p->NO, p->str+6);
+					printf("si %d\n", till_now_si);
 					nemu_state = STOP;
 					p->key=0;
 				}
