@@ -87,7 +87,7 @@ void load_elf_tables(int argc, char *argv[]) {
 	//{
 	//	printf("%s\n", strtab);
 	//}
-	for (i=0;i!=nr_symtab_entry;++i)
+	/*for (i=0;i!=nr_symtab_entry;++i)
 	{
 		printf("name: %s\n", symtab[i].st_name + strtab);
 		printf("st_name: %x\n", symtab[i].st_name);
@@ -97,7 +97,7 @@ void load_elf_tables(int argc, char *argv[]) {
 		printf("st_other: %hhx\n", symtab[i].st_other);
 		printf("st_shndx: %hx\n\n", symtab[i].st_shndx);
 
-	}
+	}*/
 	/*printf("%d\n", nr_symtab_entry);*/
 
 	fclose(fp);
@@ -152,8 +152,8 @@ int sort_funcs() {
 			all_elf_funcs[i]=tmp;
 		}
 	}
-	/*for (i=0;i<func_cnt;++i) {
+	for (i=0;i<func_cnt;++i) {
 		printf("%-12s\t0x%x\t0x%x\n",all_elf_funcs[i].str, all_elf_funcs[i].start, all_elf_funcs[i].end);
-	}*/
+	}
 	return 0;
 }
