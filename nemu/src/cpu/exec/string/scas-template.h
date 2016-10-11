@@ -25,6 +25,7 @@ make_helper(concat(scas_, SUFFIX))  {
   #endif
   eflags(SF) = set_sf(tmp, DATA_BYTE);
   eflags(ZF) = set_zf(tmp);
+  printf("%d\n",   eflags(ZF));
   eflags(PF) = set_pf(tmp);
   if (op_src->val) {
     eflags(CF) = !set_cf((unsigned)op_dest->val, (unsigned)-op_src->val, DATA_BYTE);
