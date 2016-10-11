@@ -134,13 +134,13 @@ void print_bin_instr(swaddr_t eip, int len) {
 	if (in_func.is_in) {
 		char tmp_str[12];
 		strncpy(tmp_str, all_elf_funcs[in_func.index].str, 12);
-		tmp_str[11]='\0';
+		//tmp_str[11]='\0';
 		l += snprintf(asm_buf + l, 12, "<%s", tmp_str);
-		printf("%s\n", asm_buf);
-		printf("%d\n",l );
+		/*printf("%s\n", asm_buf);
+		printf("%d\n",l );*/
 		l += snprintf(asm_buf + l, 12, "+0x%x> ", in_func.off);
-		printf("%s\n", asm_buf);
-		printf("%d\n",l );
+		/*printf("%s\n", asm_buf);
+		printf("%d\n",l );*/
 		//printf("%s\n", asm_buf);
 	}
 	else {
