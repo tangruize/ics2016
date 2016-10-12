@@ -1,29 +1,20 @@
 #include "trap.h"
 
-int switch_case(int n) {
-	int ret;
-	switch(n) {
-		case 0: ret = 0; break;
-		case 1: ret = 2; break;
-		case 2: case 3: ret = 5; break;
-		case 4: case 5: case 6: case 7: ret = 8; break;
-		case 8: case 9: case 10: case 11: ret = 10; break;
-		case 12: ret = 15; break;
-		default: ret = -1; break;
-	}
-
-	return ret;
+char to_lower_case(char c) {
+	return (c >= 'A' && c <= 'Z' ? (c + 32) : c);
 }
 
-int ans[] = {-1, 0, 2, 5, 5, 8, 8, 8, 8, 10, 10, 10, 10, 15, -1};
+char ans [] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 
+	97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+	91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127};
 
 int main() {
 	int i;
-	for(i = 0; i < 15; i ++) {
-		nemu_assert(switch_case(i - 1) == ans[i]);
+	for(i = 0; i < 128; i ++) {
+		nemu_assert(to_lower_case(i) == ans[i]);
 	}
 
-	nemu_assert(i == 15);
+	nemu_assert(i == 128);
 
 	return 0;
 }
