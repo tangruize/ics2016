@@ -1,3 +1,6 @@
++ as testcase/src/start.S
++ cc testcase/src/tmp.c
++ ld obj/testcase/tmp
 objcopy -S -O binary obj/testcase/tmp entry
 obj/nemu/nemu obj/testcase/tmp
 Welcome to NEMU!
