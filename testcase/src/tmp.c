@@ -1,26 +1,28 @@
+#include <stdio.h>
+#include <string.h>
+#include "FLOAT.h"
+
 #include "trap.h"
 
-int ans[] = {101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199};
+char buf[128];
 
 int main() {
-	int m, i, n = 0;
-	int prime;
-	for(m = 101; m <= 200; m += 2) {
-		prime = 1;
-		for(i = 2; i < m; i ++) {
-			if(m % i == 0) {
-				prime = 0;
-				break;
-			}
-		}
-		if(prime) {
-			nemu_assert(i == ans[n]);
-			n ++;
-		}
-	}
+	init_FLOAT_vfprintf();
 
-	nemu_assert(m == 201);
-	nemu_assert(n == 21);
+#ifdef LINUX_RT
+	printf("%f\n", FLOAT_ARG(0x00010000));
+	printf("%f\n", FLOAT_ARG(0x00013333));
+	printf("%f %d\n", FLOAT_ARG(0xfffecccd), 123456);
+#else
+	sprintf(buf, "%f", FLOAT_ARG(0x00010000));
+	nemu_assert(strcmp(buf, "1.000000") == 0);
+	
+	sprintf(buf, "%f", FLOAT_ARG(0x00013333));
+	nemu_assert(strcmp(buf, "1.199996") == 0);
+
+	sprintf(buf, "%f %d", FLOAT_ARG(0xfffecccd), 123456);
+	nemu_assert(strcmp(buf, "-1.199996 123456") == 0);
+#endif
 
 	return 0;
 }
