@@ -1,28 +1,24 @@
-#include <stdio.h>
-#include <string.h>
+#include "trap.h"
 #include "FLOAT.h"
 
-#include "trap.h"
-
-char buf[128];
+/* solve 0.5x^2 + 0.5x - 0.5 = 0 */
 
 int main() {
-	init_FLOAT_vfprintf();
+	FLOAT a = f2F(0.5);
+	FLOAT b = f2F(0.5);
+	FLOAT c = f2F(-0.5);
 
-#ifdef LINUX_RT
-	printf("%f\n", FLOAT_ARG(0x00010000));
-	printf("%f\n", FLOAT_ARG(0x00013333));
-	printf("%f %d\n", FLOAT_ARG(0xfffecccd), 123456);
-#else
-	sprintf(buf, "%f", FLOAT_ARG(0x00010000));
-	nemu_assert(strcmp(buf, "1.000000") == 0);
-	
-	sprintf(buf, "%f", FLOAT_ARG(0x00013333));
-	nemu_assert(strcmp(buf, "1.199996") == 0);
+	FLOAT dt = F_mul_F(b, b) - F_mul_F(F_mul_int(a, 4), c);
+	FLOAT sqrt_dt = sqrt(dt);
 
-	sprintf(buf, "%f %d", FLOAT_ARG(0xfffecccd), 123456);
-	nemu_assert(strcmp(buf, "-1.199996 123456") == 0);
-#endif
+	FLOAT x1 = F_div_F(-b + sqrt_dt, F_mul_int(a, 2));
+	FLOAT x2 = F_div_F(-b - sqrt_dt, F_mul_int(a, 2));
+
+	FLOAT x1_ans = f2F(0.618);
+	FLOAT x2_ans = f2F(-1.618);
+
+	nemu_assert(Fabs(x1_ans - x1) < f2F(1e-4));
+	nemu_assert(Fabs(x2_ans - x2) < f2F(1e-4));
 
 	return 0;
 }
