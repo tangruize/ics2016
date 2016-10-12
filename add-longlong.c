@@ -1,7 +1,5 @@
 + as testcase/src/start.S
 + cc testcase/src/tmp.c
-+ cc obj/lib-common/FLOAT/FLOAT.o
-+ cc obj/lib-common/FLOAT/FLOAT_vfprintf.o
 + ld obj/testcase/tmp
 objcopy -S -O binary obj/testcase/tmp entry
 obj/nemu/nemu obj/testcase/tmp
