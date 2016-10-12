@@ -1,28 +1,31 @@
 #include "trap.h"
-#include <string.h>
 
-char *s[] = {
-	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
-	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
-	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-	", World!\n",
-	"Hello, World!\n",
-	"#####"
-};
+#define N 100
 
-char str1[] = "Hello";
-char str[20];
+struct dummy {
+	int pad1[N];
+	char pad2[N];
+} d;
+
+struct dummy fun(struct dummy a) {
+	return a;
+}
 
 int main() {
-	nemu_assert(strcmp(s[0], s[2]) == 0);
-	nemu_assert(strcmp(s[0], s[1]) == -1);
-	nemu_assert(strcmp(s[0] + 1, s[1] + 1) == -1);
-	nemu_assert(strcmp(s[0] + 2, s[1] + 2) == -1);
-	nemu_assert(strcmp(s[0] + 3, s[1] + 3) == -1);
+	int i;
+	for(i = 0; i < N; i ++) {
+		d.pad1[i] = i + 128;
+		d.pad2[i] = i;
+	}
 
-	nemu_assert(strcmp( strcat(strcpy(str, str1), s[3]), s[4]) == 0);
+	struct dummy t = fun(d);
 
-	nemu_assert(memcmp(memset(str, '#', 5), s[5], 5) == 0);
+	for(i = 0; i < N; i ++) {
+		nemu_assert(t.pad1[i] == i + 128);
+		nemu_assert(t.pad2[i] == i);
+	}
+
+	nemu_assert(i == N);
 
 	return 0;
 }
