@@ -148,12 +148,14 @@ static int cmd_r(char *args) {
 	if (confirm) {
 		restart();
 		extern PartOfStackFrame *bt_first;
+		extern unsigned till_now_si;
 		while (bt_first!=NULL) {
 			PartOfStackFrame *p=bt_first->next;
 			free(bt_first);
 			bt_first=p;
 		}
 		nemu_state=RUNNING;
+		till_now_si=0;
 	}
 	return 0;
 }

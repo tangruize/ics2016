@@ -43,7 +43,7 @@ static int pre_index_func=0;
 
 static int pre_eip=0x100000;
 
-static unsigned till_now_si=0;
+unsigned till_now_si=0;
 
 int set_in_func(swaddr_t eip){
 	if (func_cnt==0) {
