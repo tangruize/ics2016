@@ -1,35 +1,27 @@
 #include "trap.h"
 
-int A[10];
-int b;
-char C[10];
-int main() {
-	A[0] = 0;
-	A[1] = 1;
-	A[2] = 2;
-	A[3] = 3;
-	A[4] = 4;
+long long mul(long long a,long long b) {
+	long long ans = a*b;
+	return ans;
+}
 
-	b = A[3];
-	A[5] = b;
-	C[0] = 'a';
-	nemu_assert(C[0] == 'a');
-	C[1] = C[0];
-	nemu_assert(C[1] == 'a');
-	A[0] = (int)C[0];
-	nemu_assert(A[0] == 'a');
-	C[1] = 0x80;
-	//set_bp();
-	A[0] = (int)C[1];
-	//set_bp();
-	nemu_assert(A[1] == 1);
-	nemu_assert(A[2] == 2);
-	nemu_assert(A[3] == 3);
-	nemu_assert(A[4] == 4);
-	nemu_assert(b == 3);
-	nemu_assert(A[5] == 3);
-	nemu_assert(C[1] == 0xffffff80);
-	nemu_assert(A[0] == 0xffffff80);
+int test_data[] = { -1364082006, 1157693227, -2022600529, 301212728};
+long long ans[] = { 1860719719092984036LL, -1579188499418773362LL, 2758992986934981174LL, -410878862242972368LL, 1340253607841673529LL, -2341550933349917083LL, 348711935091793256LL, 4090912899911079841LL, -609233022994333112LL, 90729107509201984LL};
+
+#define NR_DATA (sizeof(test_data) / sizeof(test_data[0]))
+
+int main() {
+	int i,j,ans_idx = 0;
+	int loop = 0;
+	for (i = 0;i < NR_DATA;i++) {
+		for (j = i;j < NR_DATA;j++) { 
+			nemu_assert(ans[ans_idx++] == mul(test_data[i],test_data[j]));
+			loop ++;
+		}
+	}
+
+	nemu_assert(loop == NR_DATA * (NR_DATA + 1) / 2);
 
 	return 0;
 }
+			
