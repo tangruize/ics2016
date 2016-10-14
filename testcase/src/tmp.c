@@ -1,13 +1,18 @@
+#include <stdio.h>
+#include <string.h>
 #include "trap.h"
 
-const char str[] = "Hello, world!\n";
+char buf[128];
 
 int main() {
-	asm volatile (  "movl $4, %eax;"	// system call ID, 4 = SYS_write
-					"movl $1, %ebx;"	// file descriptor, 1 = stdout
-					"movl $str, %ecx;"	// buffer address
-					"movl $14, %edx;"	// length
-					"int $0x80");
+	sprintf(buf, "%s", "Hello world!\n");
+	nemu_assert(strcmp(buf, "Hello world!\n") == 0);
+
+	sprintf(buf, "%d + %d = %d\n", 1, 1, 2);
+	nemu_assert(strcmp(buf, "1 + 1 = 2\n") == 0);
+
+	sprintf(buf, "%d + %d = %d\n", 2, 10, 12);
+	nemu_assert(strcmp(buf, "2 + 10 = 12\n") == 0);
 
 	return 0;
 }
