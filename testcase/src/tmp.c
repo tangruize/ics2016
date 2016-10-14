@@ -1,27 +1,28 @@
 #include "trap.h"
+#include <string.h>
 
-int ans[] = {153, 370, 371, 407};
+char *s[] = {
+	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
+	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+	", World!\n",
+	"Hello, World!\n",
+	"#####"
+};
 
-int cube(int n) {
-	return n * n * n;
-}
+char str1[] = "Hello";
+char str[20];
 
 int main() {
-	int n, n2, n1, n0;
-	int k = 0;
-	for(n = 100; n < 1000; n ++) {
-		n2 = n / 100;
-		n1 = (n / 10) % 10;
-		n0 = n % 10;
+	nemu_assert(strcmp(s[0], s[2]) == 0);
+	nemu_assert(strcmp(s[0], s[1]) == -1);
+	nemu_assert(strcmp(s[0] + 1, s[1] + 1) == -1);
+	nemu_assert(strcmp(s[0] + 2, s[1] + 2) == -1);
+	nemu_assert(strcmp(s[0] + 3, s[1] + 3) == -1);
 
-		if(n == cube(n2) + cube(n1) + cube(n0)) {
-			nemu_assert(n == ans[k]);
-			k ++;
-		}
-	}
+	nemu_assert(strcmp( strcat(strcpy(str, str1), s[3]), s[4]) == 0);
 
-	nemu_assert(n == 1000);
-	nemu_assert(k == 4);
+	nemu_assert(memcmp(memset(str, '#', 5), s[5], 5) == 0);
 
 	return 0;
 }
