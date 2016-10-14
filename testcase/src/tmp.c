@@ -1,22 +1,36 @@
 #include "trap.h"
 
-int f[15];
-int ans[] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600};
+int is_prime(int n) {
+	if(n < 2) return 0;
 
-int fact(int n) {
-	if(n == 0 || n == 1) return 1;
-	else return fact(n - 1) * n;
-}
-
-int main() {
 	int i;
-	for(i = 0; i < 13; i ++) {
-		f[i] = fact(i);
-		nemu_assert(f[i] == ans[i]);
+	for(i = 2; i < n; i ++) {
+		if(n % i == 0) {
+			return 0;
+		}
 	}
 
-	nemu_assert(i == 13);
+	return 1;
+}
+
+int gotbaha(int n) {
+	int i;
+	for(i = 2; i < n; i ++) {
+		if(is_prime(i) && is_prime(n - i)) {
+			return 1;
+		}
+	}
 
 	return 0;
 }
 
+int main() {
+	int n;
+	for(n = 4; n <= 100; n += 2) {
+		nemu_assert(gotbaha(n) == 1);
+	}
+
+	nemu_assert(n == 102);
+
+	return 0;
+}
