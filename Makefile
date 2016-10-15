@@ -76,3 +76,6 @@ count:
 	@bash count.sh
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).`date +%F_%T`.tar.bz2
+
+myrun: $(nemu_BIN) $(USERPROG) entry
+	$(nemu_BIN) $(USERPROG)
