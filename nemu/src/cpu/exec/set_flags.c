@@ -25,7 +25,7 @@ int set_pf(unsigned to_check) {
   }
 }
 
-inline int set_zf(unsigned to_check) {
+int set_zf(unsigned to_check) {
   return !to_check;
 }
 

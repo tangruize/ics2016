@@ -2,8 +2,8 @@
 #define __SET_FLAGS_H__
 
 int set_pf(unsigned to_check);
-inline int set_zf(unsigned to_check);
-inline int set_sf(int to_check, int size);
+int set_zf(unsigned to_check);
+int set_sf(int to_check, int size);
 int set_of(int left, int right, int size);
 int set_sub_of(int left, int right, int size);
 int set_cf(unsigned left, unsigned right, int size);
