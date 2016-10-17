@@ -54,8 +54,8 @@ clean: clean-cpp
 ##### some convinient rules #####
 
 USERPROG := obj/testcase/integral
-ENTRY := $(USERPROG)
-#ENTRY = $(kernel_BIN)
+#ENTRY := $(USERPROG)
+ENTRY = $(kernel_BIN)
 
 entry: $(ENTRY)
 	objcopy -S -O binary $(ENTRY) entry
@@ -76,4 +76,3 @@ count:
 	@bash count.sh
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
-
