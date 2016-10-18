@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/mman.h>
 #include "FLOAT.h"
 
 extern char _vfprintf_internal;
@@ -16,8 +17,20 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 */
 
 	char buf[80];
-	int len = sprintf(buf, "0x%08x", f);
-	return __stdio_fwrite(buf, len, stream);
+	int round_num;
+	int decimal;
+	int is_neg=(f<0);
+	f=is_neg?-f:f;
+	decimal=(((long long)f&0xffff)*1000000)>>16;
+	round_num =(f&0x7fffffff)>>16;
+	int len = sprintf(buf, "%d.", is_neg?-round_num:round_num);
+	int len2 = sprintf(buf+len, "%d", decimal);
+	while (len2<6) {
+		buf[len+len2]='0';
+		++len2;
+	}
+	buf[len+len2]='\0';
+	return __stdio_fwrite(buf, len+len2, stream);
 }
 
 static void modify_vfprintf() {
@@ -26,6 +39,10 @@ static void modify_vfprintf() {
 	 * is the code section in _vfprintf_internal() relative to the
 	 * hijack.
 	 */
+	 // offset = 775
+	 mprotect((void *)((0x08048000) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+	 int *addr_to_write=(int*)(&_vfprintf_internal+775);
+	 *addr_to_write=(int)((unsigned)&format_FLOAT-(unsigned)&_fpmaxtostr)+*addr_to_write;
 
 #if 0
 	else if (ppfs->conv_num <= CONV_A) {  /* floating point */
