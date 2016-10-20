@@ -14,6 +14,7 @@ int main() {
 	
 	//decimal=(((long long)f&0xffff)*1000000)>>16;
 	round_num =(f&0x7fffffff)>>16;
+	nemu_assert(round_num == 1);
 	/*int len = */sprintf(buf, "%d.", is_neg?-round_num:round_num);
 	nemu_assert(strcmp(buf, "-1.") == 0);
 	/*
