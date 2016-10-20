@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <sys/mman.h>
+//#include <sys/mman.h>
 #include "FLOAT.h"
 
 extern char _vfprintf_internal;
@@ -40,7 +40,7 @@ static void modify_vfprintf() {
 	 * hijack.
 	 */
 	 // offset = 775
-	 mprotect((void *)((0x08048000) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+	 //mprotect((void *)((0x08048000) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
 	 int *addr_to_write=(int*)(&_vfprintf_internal+775);
 	 *addr_to_write=(int)((unsigned)&format_FLOAT-(unsigned)&_fpmaxtostr)+*addr_to_write;
 
