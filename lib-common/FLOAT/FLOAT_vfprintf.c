@@ -96,9 +96,9 @@ static void modify_ppfs_setargs() {
 	 * Below is the code section in _vfprintf_internal() relative to
 	 * the modification.
 	 */
-	 extern char _ppfs_setargs;
+	 /*extern char _ppfs_setargs;
 	 *(unsigned short*)(&_ppfs_setargs+0x71)=0x30eb;
-	 *(unsigned char*)(&_ppfs_setargs+0x73)=0x90;
+	 *(unsigned char*)(&_ppfs_setargs+0x73)=0x90;*/
 
 #if 0
 	enum {                          /* C type: */

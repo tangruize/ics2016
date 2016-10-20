@@ -5,7 +5,7 @@
 
 int main() {
 	char buf[80];
-	sprintf(buf, "%d", (long long)-1);
+	sprintf(buf, "%d", -1);
 	nemu_assert(strcmp(buf, "-1") == 0);
 
 	/*FLOAT f=0xfffecccd;
