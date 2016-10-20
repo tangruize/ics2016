@@ -3,12 +3,12 @@
 #define instr neg
 
 static void do_execute() {
-	if (op_src->val==0) {
+	/*if (op_src->val==0) {
 		eflags(CF)=0;
 	}
 	else {
 		eflags(CF)=1;
-	}
+	}*/
 	DATA_TYPE result = -op_src->val;
 	OPERAND_W(op_src, result);
 
