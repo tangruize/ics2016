@@ -3,20 +3,22 @@
 #define instr push
 
 static void do_execute() {
-  #if DATA_BYTE == 2
-  cpu.gpr[R_ESP]._16 -= 2;
-  op_dest->addr = cpu.gpr[R_ESP]._16;
-  #else
-  cpu.gpr[R_ESP]._32 -= 4;
-  op_dest->addr = cpu.gpr[R_ESP]._32;
-  #endif
   op_dest->type = OP_TYPE_MEM;
   op_dest->size = (DATA_BYTE == 2 ? 2 : 4);
   snprintf(op_dest->str, OP_STR_SIZE, "%s", REG_NAME(R_ESP));
-  OPERAND_W(op_dest, op_src->val);
-  printf("%x\n", op_src->val);
+
+  #if DATA_BYTE == 2
+  cpu.gpr[R_ESP]._16 -= 2;
+  op_dest->addr = cpu.gpr[R_ESP]._16;
+  swaddr_write(op_dest->addr, 2, op_src->val);
+  #else
+  cpu.gpr[R_ESP]._32 -= 4;
+  op_dest->addr = cpu.gpr[R_ESP]._32;
+  swaddr_write(op_dest->addr, 4, op_src->val);
+  #endif
+
+  //OPERAND_W(op_dest, op_src->val); //jukeng!
   print_asm_template1();
-  //print_asm(str(instr) " %s", op_src->str);
 }
 
 #if DATA_BYTE == 1
