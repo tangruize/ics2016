@@ -44,6 +44,13 @@ static void modify_vfprintf() {
 	 int *addr_to_write=(int*)(&_vfprintf_internal+775);
 	 *addr_to_write=(int)((unsigned)&format_FLOAT-(unsigned)&_fpmaxtostr)+*addr_to_write;
 
+	 *(unsigned short*)(&_vfprintf_internal+0x2e4)=0x9090;
+	 *(unsigned short*)(&_vfprintf_internal+0x2e8)=0x9090;
+	 *(unsigned char*)(&_vfprintf_internal+0x2fb)=0x08;
+	 *(unsigned short*)(&_vfprintf_internal+0x2fc)=0x32ff;
+	 *(unsigned char*)(&_vfprintf_internal+0x2fe)=0x90;
+
+
 #if 0
 	else if (ppfs->conv_num <= CONV_A) {  /* floating point */
 		ssize_t nf;
@@ -89,12 +96,9 @@ static void modify_ppfs_setargs() {
 	 * Below is the code section in _vfprintf_internal() relative to
 	 * the modification.
 	 */
-
-	 *(unsigned short*)(&_vfprintf_internal+0x2e4)=0x9090;
-	 *(unsigned short*)(&_vfprintf_internal+0x2e8)=0x9090;
-	 *(unsigned char*)(&_vfprintf_internal+0x2fb)=0x08;
-	 *(unsigned short*)(&_vfprintf_internal+0x2fc)=0x32ff;
-	 *(unsigned char*)(&_vfprintf_internal+0x2fe)=0x90;
+	 extern char _ppfs_setargs;
+	 *(unsigned short*)(&_ppfs_setargs+0x71)=0x30eb;
+	 *(unsigned char*)(&_ppfs_setargs+0x73)=0x90;
 
 #if 0
 	enum {                          /* C type: */
