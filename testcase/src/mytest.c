@@ -4,7 +4,7 @@
 #include <string.h>
 
 int main() {
-	FLOAT f=0xfffecccd;
+	FLOAT f=0x00013333;
 	char buf[80];
 	int round_num;
 	int decimal;
@@ -19,6 +19,6 @@ int main() {
 		++len2;
 	}
 	buf[len+len2]='\0';
-	nemu_assert(strcmp(buf, "-1.199996") == 0);
+	nemu_assert(strcmp(buf, "1.199996") == 0);
 	return 0;
 }
