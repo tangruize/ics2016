@@ -10,6 +10,7 @@ extern FILE* log_fp;
 #	define Log_write(format, ...) fprintf(log_fp, format, ## __VA_ARGS__), fflush(log_fp)
 #else
 #	define Log_write(format, ...)
+volatile static int dummy;
 #endif
 
 #define Log(format, ...) \
@@ -35,4 +36,5 @@ extern FILE* log_fp;
 #define panic(format, ...) \
 	Assert(0, format, ## __VA_ARGS__)
 
+volatile static int dummy;
 #endif
