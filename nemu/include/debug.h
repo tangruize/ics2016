@@ -10,7 +10,6 @@ extern FILE* log_fp;
 #	define Log_write(format, ...) fprintf(log_fp, format, ## __VA_ARGS__), fflush(log_fp)
 #else
 #	define Log_write(format, ...)
-volatile static int dummy;
 #endif
 
 #define Log(format, ...) \
