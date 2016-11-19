@@ -118,6 +118,7 @@ static int cmd_cache(char *args) {
 			return 1;
 		}
 		hwaddr_read(addr, 4);
+		cache_dry_run=false;
 	}
 	else {
 	}
