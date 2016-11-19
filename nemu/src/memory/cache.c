@@ -100,7 +100,7 @@ static void cache_L2_read_once(hwaddr_t addr, void *data) {
         if (j==tmp.blk) {
           printf("\33[0m");
         }
-        if (j % 16 == 15) {
+        if (j % 16 == 12) {
           fputc('\n', stdout);
         }
       }
@@ -299,7 +299,7 @@ static void cache_L1_read_once(hwaddr_t addr, void *data) {
         if (j==tmp.blk) {
           printf("\33[0m");
         }
-        if (j % 16 == 15) {
+        if (j % 16 == 12) {
           fputc('\n', stdout);
         }
       }
