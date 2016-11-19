@@ -94,7 +94,7 @@ static void cache_L2_read_once(hwaddr_t addr, void *data) {
           printf("0x%x:\t", (addr&~CA_L2_BLK_S_MASK)+j);
         }
         if (j==tmp.blk) {
-          printf("\33[1;31");
+          printf("\33[1;31m");
         }
         printf("0x%08x\t", cache_L2_groups[tmp.group].line[i].block[j]);
         if (j==tmp.blk) {
@@ -293,7 +293,7 @@ static void cache_L1_read_once(hwaddr_t addr, void *data) {
           printf("0x%x:\t", (addr&~CA_L1_BLK_S_MASK)+j);
         }
         if (j==tmp.blk) {
-          printf("\33[1;31");
+          printf("\33[1;31m");
         }
         printf("0x%08x\t", cache_groups[tmp.group].line[i].block[j]);
         if (j==tmp.blk) {
