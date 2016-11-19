@@ -308,8 +308,8 @@ static void cache_L1_read_once(hwaddr_t addr, void *data) {
       if (j % 16 != 0) {
         fputc('\n', stdout);
       }
+      return;
     }
-    return;
   }
   if (cache_miss) {
     if (cache_dry_run) {
