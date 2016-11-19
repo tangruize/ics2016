@@ -5,6 +5,7 @@
 #include "nemu.h"
 
 #include <stdlib.h>
+#include <errno.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -62,6 +63,8 @@ static int cmd_fin(char *args);
 
 static int cmd_r(char *args);
 
+static int cmd_cache(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -81,7 +84,7 @@ static struct {
 { "bt", "Print backtrace of all stack frames", cmd_bt},
 { "fin", "Execute until selected stack frame returns.", cmd_fin},
 { "r", "Start debugged program.", cmd_r},
-
+{ "cache", "Search a specified ADDE in cache L1 and cache L2.", cmd_cache},
 
 
 
@@ -100,6 +103,24 @@ static int my_help(const char *args) {
 		}
 	}
 	printf("Unknown command '%s'\n", args);
+	return 0;
+}
+
+extern bool cache_dry_run;
+static int cmd_cache(char *args) {
+	char *arg = strtok(NULL, " ");
+	if(arg != NULL) {
+		cache_dry_run=true;
+		errno=0;
+		hwaddr_t addr=(hwaddr_t)strtol(arg,NULL,0);
+		if (errno!=0) {
+			fputs("Bad addr\n", stderr);
+			return 1;
+		}
+		hwaddr_read(addr, 4);
+	}
+	else {
+	}
 	return 0;
 }
 

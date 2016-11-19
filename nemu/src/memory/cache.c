@@ -6,6 +6,8 @@
 uint32_t dram_read(hwaddr_t addr, size_t len);
 void dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
+bool cache_dry_run=false;
+
 #define CA_ADDR(addr)    (addr&0x7ffffff)
 
 #define CA_L2_BLK_SIZE   6
@@ -26,9 +28,9 @@ void dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
 typedef union {
   struct {
-    unsigned blk      :CA_L2_BLK_SIZE;
-    unsigned group    :CA_L2_GROUP_SIZE;
-    unsigned tag      :CA_L2_TAG_SIZE;
+    unsigned blk         :CA_L2_BLK_SIZE;
+    unsigned group       :CA_L2_GROUP_SIZE;
+    unsigned tag         :CA_L2_TAG_SIZE;
   };
   unsigned addr;
 } cache_L2_addr;
@@ -78,6 +80,36 @@ static void cache_L2_read_once(hwaddr_t addr, void *data) {
       not_valid=i;
     }
   }
+  if (cache_dry_run) {
+    if (cache_miss) {
+      printf("Cache L2 miss.\n");
+    }
+    else {
+      printf("---Cache L2---\nAddr : %x\nDirty:%d\n",
+        addr, cache_L2_groups[tmp.group].line[i].dir);
+      printf("Block:\n");
+      int j;
+      for (j=0;j<NR_CA_L2_BLK;j+=4) {
+        if (j%16==0) {
+          printf("0x%x:\t", (addr&~CA_L2_BLK_S_MASK)+j);
+        }
+        if (j==tmp.blk) {
+          printf("\33[1;31");
+        }
+        printf("0x%08x\t", cache_L2_groups[tmp.group].line[i].block[j]);
+        if (j==tmp.blk) {
+          printf("\33[0m");
+        }
+        if (j % 16 == 15) {
+          fputc('\n', stdout);
+        }
+      }
+      if (j % 16 != 0) {
+        fputc('\n', stdout);
+      }
+      return;
+    }
+  }
   if (cache_miss) {
     if (not_valid==-1) {
       srandom(time(NULL));
@@ -107,7 +139,9 @@ uint32_t cache_L2_read(hwaddr_t addr, size_t len) {
 		/* data cross the burst boundary */
 		cache_L2_read_once(addr + CA_L2_BLK_LEN, temp + CA_L2_BLK_LEN);
 	}
-
+  if (cache_dry_run) {
+    return 0;
+  }
 	return unalign_rw(temp + offset, 4);
 }
 
@@ -196,9 +230,9 @@ void cache_L2_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 typedef union {
   struct {
-    unsigned blk      :CA_L1_BLK_SIZE;
-    unsigned group    :CA_L1_GROUP_SIZE;
-    unsigned tag      :CA_L1_TAG_SIZE;
+    unsigned blk         :CA_L1_BLK_SIZE;
+    unsigned group       :CA_L1_GROUP_SIZE;
+    unsigned tag         :CA_L1_TAG_SIZE;
   };
   unsigned addr;
 } cache_addr;
@@ -246,7 +280,40 @@ static void cache_L1_read_once(hwaddr_t addr, void *data) {
       not_valid=i;
     }
   }
+  if (cache_dry_run) {
+    if (cache_miss) {
+      printf("Cache L1 miss.\n");
+    }
+    else {
+      printf("---Cache L1---\nAddr : %x\n", addr);
+      printf("Block:\n");
+      int j;
+      for (j=0;j<NR_CA_L2_BLK;j+=4) {
+        if (j%16==0) {
+          printf("0x%x:\t", (addr&~CA_L1_BLK_S_MASK)+j);
+        }
+        if (j==tmp.blk) {
+          printf("\33[1;31");
+        }
+        printf("0x%08x\t", cache_groups[tmp.group].line[i].block[j]);
+        if (j==tmp.blk) {
+          printf("\33[0m");
+        }
+        if (j % 16 == 15) {
+          fputc('\n', stdout);
+        }
+      }
+      if (j % 16 != 0) {
+        fputc('\n', stdout);
+      }
+    }
+    return;
+  }
   if (cache_miss) {
+    if (cache_dry_run) {
+      cache_L2_read(addr&~CA_L1_BLK_MASK, 4);
+      return;
+    }
     if (not_valid==-1) {
       srandom(time(NULL));
       i=random()%NR_CA_L1_LINE;
@@ -276,7 +343,9 @@ uint32_t cache_L1_read(hwaddr_t addr, size_t len) {
 		/* data cross the burst boundary */
 		cache_L1_read_once(addr + CA_L1_BLK_LEN, temp + CA_L1_BLK_LEN);
 	}
-
+  if (cache_dry_run) {
+    return 0;
+  }
 	return unalign_rw(temp + offset, 4);
 }
 
