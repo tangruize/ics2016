@@ -13,6 +13,7 @@ void init_regex();
 void init_wp_pool();
 void init_ddr3();
 void clear_cache_L1();
+void clear_cache_L2();
 
 FILE *log_fp = NULL;
 
@@ -100,4 +101,7 @@ void restart() {
 
 	/* Initialize CACHE L1. */
 	clear_cache_L1();
+
+	/* Initialize CACHE L2. */
+	clear_cache_L2();
 }
