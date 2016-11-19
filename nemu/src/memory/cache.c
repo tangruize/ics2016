@@ -87,6 +87,7 @@ static void cache_L2_read_once(hwaddr_t addr, void *data) {
     else {
       printf("---Cache L2---\nAddr : %x\nDirty:%d\n",
         addr, cache_L2_groups[tmp.group].line[i].dir);
+      printf("Group: %d\nLine :%d\n",tmp.group, i);
       printf("Block:\n");
       int j;
       for (j=0;j<NR_CA_L2_BLK;j+=4) {
@@ -286,6 +287,7 @@ static void cache_L1_read_once(hwaddr_t addr, void *data) {
     }
     else {
       printf("---Cache L1---\nAddr : %x\n", addr);
+      printf("Group: %d\nLine :%d\n",tmp.group, i);
       printf("Block:\n");
       int j;
       for (j=0;j<NR_CA_L2_BLK;j+=4) {
