@@ -8,7 +8,8 @@ void cache_L1_write(hwaddr_t addr, size_t len, uint32_t data);
 /* Memory accessing interfaces */
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
+	//return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
+	return cache_L1_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
@@ -17,8 +18,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	//return hwaddr_read(addr, len);
-	return cache_L1_read(addr, len);
+	return hwaddr_read(addr, len);
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
