@@ -7,6 +7,10 @@ uint32_t dram_read(hwaddr_t addr, size_t len);
 void dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
 bool cache_dry_run=false;
+unsigned long long cache_L1_ac_cnt=1;
+unsigned cache_L1_miss_cnt=0;
+unsigned long long cache_L2_ac_cnt=1;
+unsigned cache_L2_miss_cnt=0;
 
 #define CA_ADDR(addr)    (addr&0x7ffffff)
 
@@ -64,6 +68,7 @@ void clear_cache_L2() {
 }
 
 static void cache_L2_read_once(hwaddr_t addr, void *data) {
+  ++cache_L2_ac_cnt;
   cache_L2_addr tmp;
   tmp.addr=addr&~CA_L2_BLK_MASK;
   bool cache_miss=true;
@@ -112,6 +117,7 @@ static void cache_L2_read_once(hwaddr_t addr, void *data) {
     return;
   }
   if (cache_miss) {
+    ++cache_L2_miss_cnt;
     if (not_valid==-1) {
       srandom(time(NULL));
       i=random()%NR_CA_L2_LINE;
@@ -147,6 +153,7 @@ uint32_t cache_L2_read(hwaddr_t addr, size_t len) {
 }
 
 static void cache_L2_write_once(hwaddr_t addr, void *data, uint8_t *mask) {
+  ++cache_L2_ac_cnt;
   cache_L2_addr tmp;
   tmp.addr=addr&~CA_L2_BLK_MASK;
   bool cache_miss=true;
@@ -167,6 +174,7 @@ static void cache_L2_write_once(hwaddr_t addr, void *data, uint8_t *mask) {
     }
   }
   if (cache_miss) {
+    ++cache_L1_miss_cnt;
     if (not_valid==-1) {
       srandom(time(NULL));
       i=random()%NR_CA_L2_LINE;
@@ -265,6 +273,7 @@ void clear_cache_L1() {
 }
 
 static void cache_L1_read_once(hwaddr_t addr, void *data) {
+  ++cache_L1_ac_cnt;
   cache_addr tmp;
   tmp.addr=addr&~CA_L1_BLK_MASK;
   bool cache_miss=true;
@@ -312,6 +321,7 @@ static void cache_L1_read_once(hwaddr_t addr, void *data) {
     }
   }
   if (cache_miss) {
+    ++cache_L1_miss_cnt;
     if (cache_dry_run) {
       cache_L2_read(addr&~CA_L1_BLK_MASK, 4);
       return;
@@ -352,6 +362,7 @@ uint32_t cache_L1_read(hwaddr_t addr, size_t len) {
 }
 
 static void cache_L1_write_once(hwaddr_t addr, void *data, uint8_t *mask) {
+  ++cache_L1_ac_cnt;
   cache_addr tmp;
   tmp.addr=addr&~CA_L1_BLK_MASK;
   bool cache_miss=true;
@@ -365,6 +376,9 @@ static void cache_L1_write_once(hwaddr_t addr, void *data, uint8_t *mask) {
   }
   if (!cache_miss) {
     memcpy_with_mask(cache_groups[tmp.group].line[i].block+tmp.blk, data, CA_L1_BLK_LEN, mask);
+  }
+  else {
+    ++cache_L1_miss_cnt;
   }
 }
 

@@ -107,6 +107,10 @@ static int my_help(const char *args) {
 }
 
 extern bool cache_dry_run;
+extern unsigned long long cache_L1_ac_cnt;
+extern unsigned cache_L1_miss_cnt;
+extern unsigned long long cache_L2_ac_cnt;
+extern unsigned cache_L2_miss_cnt;
 static int cmd_cache(char *args) {
 	char *arg = strtok(NULL, " ");
 	if(arg != NULL) {
@@ -121,6 +125,8 @@ static int cmd_cache(char *args) {
 		cache_dry_run=false;
 	}
 	else {
+		printf("Cache L1 hit rate: %f\n", (double)(cache_L1_ac_cnt-cache_L1_miss_cnt)/cache_L1_ac_cnt);
+		printf("Cache L2 hit rate: %f\n", (double)(cache_L2_ac_cnt-cache_L2_miss_cnt)/cache_L2_ac_cnt);
 	}
 	return 0;
 }
