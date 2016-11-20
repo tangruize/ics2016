@@ -59,6 +59,8 @@ cache_L2_group cache_L2_groups[NR_CA_L2_GROUP];
 
 void clear_cache_L2() {
   int i,j;
+  cache_L2_ac_cnt=1;
+  cache_L2_miss_cnt=0;
   for (i=0; i<NR_CA_L2_GROUP; ++i) {
     for (j=0; j<NR_CA_L2_LINE; ++j) {
       cache_L2_groups[i].line[j].valid=0;
@@ -264,6 +266,8 @@ typedef struct {
 cache_L1_group cache_groups[NR_CA_L1_GROUP];
 
 void clear_cache_L1() {
+  cache_L1_ac_cnt=1;
+  cache_L1_miss_cnt=0;
   int i,j;
   for (i=0; i<NR_CA_L1_GROUP; ++i) {
     for (j=0; j<NR_CA_L1_LINE; ++j) {
