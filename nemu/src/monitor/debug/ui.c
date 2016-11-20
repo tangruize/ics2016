@@ -125,9 +125,8 @@ static int cmd_cache(char *args) {
 		cache_dry_run=false;
 	}
 	else {
-		printf("0x%llx\t0x%x\n",cache_L1_ac_cnt, cache_L1_miss_cnt );
-		printf("Cache L1 hit rate: %f\n", (double)(cache_L1_ac_cnt*2-cache_L1_miss_cnt*200)/cache_L1_ac_cnt*2);
-		printf("Cache L2 hit rate: %f\n", (double)(cache_L2_ac_cnt*2-cache_L2_miss_cnt*200)/cache_L2_ac_cnt*2);
+		printf("Cache L1 hit rate: %f\n", (double)(cache_L1_ac_cnt*2-cache_L1_miss_cnt*200)/(cache_L1_ac_cnt*2));
+		printf("Cache L2 hit rate: %f\n", (double)(cache_L2_ac_cnt*2-cache_L2_miss_cnt*200)/(cache_L2_ac_cnt*2));
 		printf("Total hit rate   : %f\n",
 			(double)(cache_L1_ac_cnt*2+cache_L2_ac_cnt*2-cache_L1_miss_cnt*200-cache_L2_miss_cnt*200)/(cache_L1_ac_cnt*2+cache_L2_ac_cnt*2));
 	}
