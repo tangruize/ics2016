@@ -104,4 +104,6 @@ void restart() {
 
 	/* Initialize CACHE L2. */
 	clear_cache_L2();
+
+	cpu.CR0.PE=0;
 }

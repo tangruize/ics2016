@@ -49,3 +49,6 @@
 
 #include "condition/test.h"
 #include "condition/cmp.h"
+
+#include "segment/lgdt.h"
+#include "segment/movcr.h"

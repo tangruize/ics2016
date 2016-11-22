@@ -121,7 +121,6 @@ make_helper(concat(decode_r2rm_, SUFFIX)) {
 	return decode_rm_internal(eip, op_dest, op_src);
 }
 
-
 /* Gb <- Eb
  * Gv <- Ev
  */

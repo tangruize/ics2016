@@ -10,7 +10,14 @@ typedef struct {
 	size_t size;
 	union {
 		uint32_t reg;
+		#ifdef IA32_SEG
+		struct {
+			swaddr_t addr;
+			uint8_t sreg;
+		};
+		#else
 		swaddr_t addr;
+		#endif
 		uint32_t imm;
 		int32_t simm;
 	};
