@@ -54,6 +54,7 @@ make_helper(jmp_ptr)  {
     } Merge;
   }SD;
   SegDesc tmp;
+  printf("%x\n", cpu.GDTR.base);
   int x=swaddr_read(((int32_t)op_src->val+cpu.GDTR.base), 4, R_DS);
   memcpy((void*)&tmp, (void*)&x, 4);
   x=swaddr_read(((int32_t)op_src->val+cpu.GDTR.base)+4, 4, R_DS);
