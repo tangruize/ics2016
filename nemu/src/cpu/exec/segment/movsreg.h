@@ -1,0 +1,50 @@
+#ifndef __MOV_SREG__
+#define __MOV_SREG__
+
+#include "cpu/exec/helper.h"
+typedef struct SegmentDescriptor {
+	uint32_t limit_15_0          : 16;
+	uint32_t base_15_0           : 16;
+	uint32_t base_23_16          : 8;
+	uint32_t type                : 4;
+	uint32_t segment_type        : 1;
+	uint32_t privilege_level     : 2;
+	uint32_t present             : 1;
+	uint32_t limit_19_16         : 4;
+	uint32_t soft_use            : 1;
+	uint32_t operation_size      : 1;
+	uint32_t pad0                : 1;
+	uint32_t granularity         : 1;
+	uint32_t base_31_24          : 8;
+} SegDesc;
+static union {
+  struct {
+    uint32_t limit_15_0        : 16;
+    uint32_t limit_19_16       : 4;
+    uint32_t base_15_0         : 16;
+	  uint32_t base_23_16        : 8;
+    uint32_t base_31_24        : 8;
+  } Split;
+  struct {
+  	uint32_t limit             : 20;
+    uint32_t base              : 32;
+  } Merge;
+}SD;
+make_helper(movsreg) {
+  int len=decode_rm2r_l(eip+1);
+  sreg(op_dest->sreg)=op_src->val;
+  SegDesc tmp;
+  int x=swaddr_read(sreg_index(op_dest->sreg), 4, R_DS);
+  memcpy((void*)&tmp, (void*)&x, 4);
+  x=swaddr_read(sreg_index(op_dest->sreg)+4, 4, R_DS);
+  memcpy((void*)&tmp+4, (void*)&x, 4);
+  SD.Split.limit_15_0=tmp.limit_15_0;
+  SD.Split.limit_19_16=tmp.limit_19_16;
+  SD.Split.base_15_0=tmp.base_15_0;
+  SD.Split.base_23_16=tmp.base_23_16;
+  SD.Split.base_31_24=tmp.base_31_24;
+  sreg_limit(op_dest->reg)=SD.Merge.limit;
+  sreg_base(op_dest->reg)=SD.Merge.base;
+  return len+1;
+}
+#endif

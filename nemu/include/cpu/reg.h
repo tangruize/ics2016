@@ -8,7 +8,7 @@ enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
 
 enum { R_ES, R_CS, R_SS, R_DS };
-enum { CR0, CR1, CR2, CR3 };
+enum { R_CR0, R_CR1, R_CR2, R_CR3 };
 
 /* done */
 /* TODO: Re-organize the `CPU_state' structure to match the register
@@ -93,39 +93,64 @@ typedef union {
 				uint64_t gdtr;
 			};
 			union {
-				unsigned sreg[4];
 				struct {
 					union {
 						struct {
-							unsigned RPL   :2;
-							unsigned TI    :1;
-							unsigned INDEX :13;
+							uint16_t RPL   :2;
+							uint16_t TI    :1;
+							uint16_t INDEX :13;
+						} SREG[4];
+						uint16_t sreg[4];
+					};
+					struct {
+						uint64_t limit :20;
+						uint64_t base  :32;
+					} SREG_INV[4];
+				};
+				struct {
+					struct {
+						struct {
+							uint16_t RPL   :2;
+							uint16_t TI    :1;
+							uint16_t INDEX :13;
 						} ES;
-						unsigned es;
-					};
-					union {
 						struct {
-							unsigned RPL   :2;
-							unsigned TI    :1;
-							unsigned INDEX :13;
+							uint64_t limit :20;
+							uint64_t base  :32;
+						} ES_INV;
+					};
+					struct {
+						struct {
+							uint16_t RPL   :2;
+							uint16_t TI    :1;
+							uint16_t INDEX :13;
 						} CS;
-						unsigned cs;
-					};
-					union {
 						struct {
-							unsigned RPL   :2;
-							unsigned TI    :1;
-							unsigned INDEX :13;
+							uint64_t limit :20;
+							uint64_t base  :32;
+						} CS_INV;
+					};
+					struct {
+						struct {
+							uint16_t RPL   :2;
+							uint16_t TI    :1;
+							uint16_t INDEX :13;
 						} SS;
-						unsigned ss;
-					};
-					union {
 						struct {
-							unsigned RPL   :2;
-							unsigned TI    :1;
-							unsigned INDEX :13;
+							uint64_t limit :20;
+							uint64_t base  :32;
+						} SS_INV;
+					};
+					struct {
+						struct {
+							uint16_t RPL   :2;
+							uint16_t TI    :1;
+							uint16_t INDEX :13;
 						} DS;
-						unsigned ds;
+						struct {
+							uint64_t limit :20;
+							uint64_t base  :32;
+						} DS_INV;
 					};
 				};
 			};
@@ -144,9 +169,14 @@ static inline int check_reg_index(int index) {
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
+#ifdef IA32_SEG
 #define eflags(name) (cpu.eflags.name)
 #define sreg(index) (cpu.sreg[index])
+#define sreg_index(i) (cpu.SREG[i].INDEX)
+#define sreg_limit(index) (cpu.SREG_INV[index].limit)
+#define sreg_base(index) (cpu.SREG_INV[index].base)
 #define creg(index) (cpu.CR[index])
+#endif
 
 extern const char* regsl[];
 extern const char* regsw[];

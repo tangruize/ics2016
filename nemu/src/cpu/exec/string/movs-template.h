@@ -11,7 +11,7 @@ make_helper(concat(movs_, SUFFIX)) {
   #else
   op_src->addr=(swaddr_t)cpu.gpr[R_ESI]._32;
   #endif
-  op_src->val=swaddr_read(op_src->addr, op_src->size);
+  op_src->val=swaddr_read(op_src->addr, op_src->size, R_DS);
 
   op_dest->type=OP_TYPE_MEM;
   op_dest->size=DATA_BYTE;

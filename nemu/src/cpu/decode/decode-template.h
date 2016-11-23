@@ -217,16 +217,16 @@ make_helper(concat(decode_rm_imm_, SUFFIX)) {
 
 void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	if(op->type == OP_TYPE_REG) { REG(op->reg) = src; }
-	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src); }
+	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src, R_DS); }
 	else { assert(0); }
 }
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(decode_m_, SUFFIX)) {
 	op_src->type = OP_TYPE_MEM;
-	op_src->addr = (uint32_t)swaddr_read(eip, DATA_BYTE);
+	op_src->addr = (uint32_t)swaddr_read(eip, DATA_BYTE, R_DS);
 	op_src->size = DATA_BYTE;
-	op_src->val = swaddr_read(op_src->addr, op_src->size);
+	op_src->val = swaddr_read(op_src->addr, op_src->size, R_DS);
 	#ifdef DEBUG
 	snprintf(op_src->str, OP_STR_SIZE, "0x%x", op_src->val);
 	#endif

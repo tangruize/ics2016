@@ -10,11 +10,11 @@ static void do_execute() {
   #if DATA_BYTE == 2
   cpu.gpr[R_ESP]._16 -= 2;
   op_dest->addr = cpu.gpr[R_ESP]._16;
-  swaddr_write(op_dest->addr, 2, op_src->val);
+  swaddr_write(op_dest->addr, 2, op_src->val, R_SS);
   #else
   cpu.gpr[R_ESP]._32 -= 4;
   op_dest->addr = cpu.gpr[R_ESP]._32;
-  swaddr_write(op_dest->addr, 4, op_src->val);
+  swaddr_write(op_dest->addr, 4, op_src->val, R_SS);
   #endif
 
   //OPERAND_W(op_dest, op_src->val); //jukeng!

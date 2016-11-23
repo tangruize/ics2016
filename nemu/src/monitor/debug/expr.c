@@ -227,7 +227,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 						tokens[nr_token].value=-tokens[nr_token].value;
 					}
 					else if(is_neg_or_der==2){
-						tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4);
+						tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4, R_DS);
 					}
 					break;
 				case RULE_HEX:
@@ -253,7 +253,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 						tokens[nr_token].value=-tokens[nr_token].value;
 					}
 					else if(is_neg_or_der==2){
-						tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4);
+						tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4,R_DS);
 					}
 					break;
 				case RULE_ALPHA:
@@ -314,10 +314,10 @@ bool make_token(char *e, bool *is_match, int prompt) {
 						}
 						else if(is_neg_or_der==2) {
 							if (tmp_var<VAR_MAX) {
-								tokens[nr_token].value=(int)swaddr_read((swaddr_t)var[tmp_var].key,4);
+								tokens[nr_token].value=(int)swaddr_read((swaddr_t)var[tmp_var].key,4, R_DS);
 							}
 							else {
-								tokens[nr_token].value=(int)swaddr_read((swaddr_t)all_elf_funcs[tmp_var%VAR_MAX].start,4);
+								tokens[nr_token].value=(int)swaddr_read((swaddr_t)all_elf_funcs[tmp_var%VAR_MAX].start,4, R_DS);
 							}
 						}
 					}
@@ -359,7 +359,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 						tokens[nr_token].value=-tokens[nr_token].value;
 					}
 					else if(is_neg_or_der==2) {
-						tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4);
+						tokens[nr_token].value=(int)swaddr_read((swaddr_t)tokens[nr_token].value,4,R_DS);
 					}
 					break;
 				case RULE_NOTYPE:--nr_token;break;
@@ -863,7 +863,7 @@ static int eval(int p, int q, bool *success) {
 					tokens[max_pre_pos].value=(-tokens[next].value);
 					break;
 				case RULE_DER:
-					tokens[max_pre_pos].value=(int)swaddr_read((swaddr_t)tokens[next].value,4);
+					tokens[max_pre_pos].value=(int)swaddr_read((swaddr_t)tokens[next].value,4,R_DS);
 					break;
 				case RULE_BIT_NOT:
 					tokens[max_pre_pos].value=(~tokens[next].value);

@@ -10,7 +10,7 @@ make_helper(concat(scas_, SUFFIX))  {
   #else
   op_src->addr=(swaddr_t)cpu.gpr[R_EDI]._32;
   #endif
-  op_src->val=swaddr_read(op_src->addr, op_src->size);
+  op_src->val=swaddr_read(op_src->addr, op_src->size, R_DS);
 
   op_dest->type=OP_TYPE_REG;
   op_dest->size=DATA_BYTE;

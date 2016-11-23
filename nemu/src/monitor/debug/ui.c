@@ -373,7 +373,7 @@ static int print_addr(int n, swaddr_t addr) {
 		if (i % 4 == 0) {
 			printf("0x%x:\t", (uint32_t)addr);
 		}
-		printf("0x%08x\t", (uint32_t)swaddr_read(addr, 4));
+		printf("0x%08x\t", (uint32_t)swaddr_read(addr, 4, R_DS));
 		if (i % 4 == 3) {
 			fputc('\n', stdout);
 		}
@@ -545,7 +545,7 @@ static int cmd_set(char *args) {
 				fprintf(stderr, "%s\n", "Bad expression!");
 				return 0;
 			}
-			swaddr_write((swaddr_t)tokens[0].value, 4, result2);
+			swaddr_write((swaddr_t)tokens[0].value, 4, result2, R_DS);
 		}
 		else if (nr_token==1) {
 			if (tokens[0].type==260) {
@@ -560,7 +560,7 @@ static int cmd_set(char *args) {
 				}
 			}
 			else if (tokens[0].type==257 ||tokens[0].type== 258) {
-				swaddr_write((swaddr_t)tokens[0].value, 4, result2);
+				swaddr_write((swaddr_t)tokens[0].value, 4, result2, R_DS);
 			}
 		}
 	}

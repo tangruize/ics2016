@@ -11,7 +11,7 @@ static void do_execute() {
   #endif
   op_dest->size = DATA_BYTE;
   snprintf(op_dest->str, OP_STR_SIZE, "%s", REG_NAME(R_ESP));
-  OPERAND_W(op_src, (uint32_t)swaddr_read(op_dest->addr, DATA_BYTE));
+  OPERAND_W(op_src, (uint32_t)swaddr_read(op_dest->addr, DATA_BYTE, R_SS));
   #if DATA_BYTE == 2
   cpu.gpr[R_ESP]._16 += 2;
   #else

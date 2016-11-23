@@ -9,7 +9,7 @@ static void do_execute() {
   op_src->type = OP_TYPE_REG;
   op_src->reg = R_EBP;
   op_src->size = DATA_BYTE;
-  OPERAND_W(op_src, (uint32_t)swaddr_read((swaddr_t)REG(R_ESP), DATA_BYTE));
+  OPERAND_W(op_src, (uint32_t)swaddr_read((swaddr_t)REG(R_ESP), DATA_BYTE, R_SS));
   #if DATA_BYTE == 2
   cpu.gpr[R_ESP]._16 += 2;
   #else
