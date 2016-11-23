@@ -30,6 +30,7 @@ make_helper(movsreg) {
   SD.Split.base_31_24=tmp.base_31_24;
   sreg_limit(op_dest->reg)=SD.Merge.limit;
   sreg_base(op_dest->reg)=SD.Merge.base;
+  printf("sreg: %x %x %x\n",op_dest->sreg,  SD.Merge.limit, SD.Merge.base);
   return len+1;
 }
 #endif
