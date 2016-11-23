@@ -7,7 +7,7 @@ make_helper(lgdt) {
   decode_rm_l(eip+1);
   cpu.GDTR.limit=lnaddr_read(op_src->val, 2);
   cpu.GDTR.base=lnaddr_read(op_src->val+2, 4);
-  printf("gdtr: %x %x\n", cpu.GDTR.limit, cpu.GDTR.base);
+  printf("gdtr:%x %x %x\n", op_src->val, cpu.GDTR.limit, cpu.GDTR.base);
   return 6;
 }
 
