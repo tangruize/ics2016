@@ -19,9 +19,9 @@ make_helper(movsreg) {
   int len=decode_rm2r_l(eip+1);
   sreg(op_dest->sreg)=op_src->val;
   SegDesc tmp;
-  int x=lnaddr_read(sreg_index(op_dest->sreg)+cpu.GDTR.base, 4);
+  int x=lnaddr_read(sreg_index(op_dest->sreg)*8+cpu.GDTR.base, 4);
   memcpy((void*)&tmp, (void*)&x, 4);
-  x=lnaddr_read(sreg_index(op_dest->sreg)+cpu.GDTR.base+4, 4);
+  x=lnaddr_read(sreg_index(op_dest->sreg)*8+cpu.GDTR.base+4, 4);
   memcpy((void*)&tmp+4, (void*)&x, 4);
   SD.Split.limit_15_0=tmp.limit_15_0;
   SD.Split.limit_19_16=tmp.limit_19_16;
