@@ -30,11 +30,12 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 
 lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg) {
 	if (cpu.CR0.PE) {
-		return sreg_base(sreg)+addr;
+		//return sreg_base(sreg)+addr;
 	}
 	else {
 		return addr;
 	}
+	return addr;
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
