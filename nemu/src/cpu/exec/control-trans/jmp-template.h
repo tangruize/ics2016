@@ -55,14 +55,14 @@ make_helper(jmp_ptr)  {
   }SD;
   SegDesc tmp;
   int x=swaddr_read(((int32_t)op_src->val+cpu.GDTR.base), 4, R_DS);
-  memcpy((void*)&tmp+4, (void*)&x, 4);
-  x=swaddr_read(((int32_t)op_src->val+cpu.GDTR.base)+4, 4, R_DS);
   memcpy((void*)&tmp, (void*)&x, 4);
+  x=swaddr_read(((int32_t)op_src->val+cpu.GDTR.base)+4, 4, R_DS);
+  memcpy((void*)&tmp+4, (void*)&x, 4);
   SD.Split.base_15_0=tmp.base_15_0;
   SD.Split.base_23_16=tmp.base_23_16;
   SD.Split.base_31_24=tmp.base_31_24;
   cpu.eip += SD.Merge.base;
-  printf("%x\n", SD.Merge.base);
+  printf("%x\n", cpu.GDTR.base);
   return 7;
 }
 #endif
