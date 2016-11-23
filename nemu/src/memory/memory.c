@@ -30,7 +30,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 
 lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg) {
 	if (cpu.CR0.PE) {
-		printf("%x %x\n",sreg, sreg_base(sreg));
+		//printf("%x %x\n",sreg, sreg_base(sreg));
 		//return sreg_base(sreg)+addr;
 	}
 	else {
