@@ -39,30 +39,6 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
 make_helper(jmp_ptr)  {
   decode_i_l(cpu.eip+1);
   cpu.eip = (int32_t)op_src->val - 7;
-  decode_i_w(cpu.eip+5);
-  static union {
-    struct {
-      uint32_t limit_15_0        : 16;
-      uint32_t limit_19_16       : 4;
-      uint32_t base_15_0         : 16;
-  	  uint32_t base_23_16        : 8;
-      uint32_t base_31_24        : 8;
-    } Split;
-    struct {
-    	uint32_t limit             : 20;
-      uint32_t base              : 32;
-    } Merge;
-  }SD;
-  SegDesc tmp;
-  int x=swaddr_read(((int32_t)op_src->val+cpu.GDTR.base), 4, R_DS);
-  memcpy((void*)&tmp, (void*)&x, 4);
-  x=swaddr_read(((int32_t)op_src->val+cpu.GDTR.base)+4, 4, R_DS);
-  memcpy((void*)&tmp+4, (void*)&x, 4);
-  SD.Split.base_15_0=tmp.base_15_0;
-  SD.Split.base_23_16=tmp.base_23_16;
-  SD.Split.base_31_24=tmp.base_31_24;
-  cpu.eip += SD.Merge.base;
-  printf("%x\n", cpu.GDTR.base);
   return 7;
 }
 #endif
