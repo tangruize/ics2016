@@ -6,7 +6,6 @@
 make_helper(lgdt) {
   cpu.GDTR.limit=instr_fetch(eip+1, 1);
   cpu.GDTR.base=instr_fetch(eip+2, 4);
-  printf("%x\n", cpu.GDTR.base);
   return 6;
 }
 
