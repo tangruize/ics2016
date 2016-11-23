@@ -18,6 +18,22 @@ enum { R_CR0, R_CR1, R_CR2, R_CR3 };
  * For more details about the register encoding scheme, see i386 manual.
  */
 
+ typedef struct SegmentDescriptor {
+ 	uint32_t limit_15_0          : 16;
+ 	uint32_t base_15_0           : 16;
+ 	uint32_t base_23_16          : 8;
+ 	uint32_t type                : 4;
+ 	uint32_t segment_type        : 1;
+ 	uint32_t privilege_level     : 2;
+ 	uint32_t present             : 1;
+ 	uint32_t limit_19_16         : 4;
+ 	uint32_t soft_use            : 1;
+ 	uint32_t operation_size      : 1;
+ 	uint32_t pad0                : 1;
+ 	uint32_t granularity         : 1;
+ 	uint32_t base_31_24          : 8;
+ } SegDesc;
+
 typedef union {
 	union {
 		uint32_t _32;
