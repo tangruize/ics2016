@@ -77,7 +77,7 @@ typedef union {
 			union {
 				unsigned CR[4];
 				struct {
-					union {
+					/*union {
 						struct {
 							unsigned PE :1;
 							unsigned MP :1;
@@ -88,17 +88,47 @@ typedef union {
 							unsigned PG :1;
 						}CR0;
 						unsigned cr0;
-					};
+					};*/
+          union {
+          	struct {
+          		uint32_t protect_enable      : 1;
+          		uint32_t monitor_coprocessor : 1;
+          		uint32_t emulation           : 1;
+          		uint32_t task_switched       : 1;
+          		uint32_t extension_type      : 1;
+          		uint32_t numeric_error       : 1;
+          		uint32_t pad0                : 10;
+          		uint32_t write_protect       : 1;
+          		uint32_t pad1                : 1;
+          		uint32_t alignment_mask      : 1;
+          		uint32_t pad2                : 10;
+          		uint32_t no_write_through    : 1;
+          		uint32_t cache_disable       : 1;
+          		uint32_t paging              : 1;
+          	} CR0;
+          	uint32_t cr0;
+          };
+
 
 					uint32_t cr1;
 					uint32_t cr2;
-					union {
+					/*union {
 						struct {
 							unsigned      :12;
 							unsigned PDBR :20;
 						}CR3;
 						uint32_t cr3;
-					};
+					};*/
+          union {
+          	struct {
+          		uint32_t pad0                : 3;
+          		uint32_t page_write_through  : 1;
+          		uint32_t page_cache_disable  : 1;
+          		uint32_t pad1                : 7;
+          		uint32_t page_directory_base : 20;
+          	} CR3;
+          	uint32_t cr3;
+          };
 				};
 			};
 			union {
