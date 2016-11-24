@@ -119,8 +119,8 @@ typedef union {
 						uint16_t sreg[4];
 					};
 					struct {
-						uint64_t limit :20;
-						uint64_t base  :32;
+						uint32_t limit;
+						uint32_t base;
 					} SREG_INV[4];
 				};
 				struct {
@@ -130,10 +130,10 @@ typedef union {
 							uint16_t TI    :1;
 							uint16_t INDEX :13;
 						} ES;
-						struct {
-							uint64_t limit :20;
-							uint64_t base  :32;
-						} ES_INV;
+            struct {
+  						uint32_t limit;
+  						uint32_t base;
+  					} ES_INV;
 					};
 					struct {
 						struct {
@@ -141,10 +141,10 @@ typedef union {
 							uint16_t TI    :1;
 							uint16_t INDEX :13;
 						} CS;
-						struct {
-							uint64_t limit :20;
-							uint64_t base  :32;
-						} CS_INV;
+            struct {
+  						uint32_t limit;
+  						uint32_t base;
+  					} CS_INV;
 					};
 					struct {
 						struct {
@@ -152,10 +152,10 @@ typedef union {
 							uint16_t TI    :1;
 							uint16_t INDEX :13;
 						} SS;
-						struct {
-							uint64_t limit :20;
-							uint64_t base  :32;
-						} SS_INV;
+            struct {
+  						uint32_t limit;
+  						uint32_t base;
+  					} SS_INV;
 					};
 					struct {
 						struct {
@@ -163,10 +163,10 @@ typedef union {
 							uint16_t TI    :1;
 							uint16_t INDEX :13;
 						} DS;
-						struct {
-							uint64_t limit :20;
-							uint64_t base  :32;
-						} DS_INV;
+            struct {
+  						uint32_t limit;
+  						uint32_t base;
+  					} DS_INV;
 					};
 				};
 			};

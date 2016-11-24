@@ -28,9 +28,10 @@ make_helper(movsreg) {
   SD.Split.base_15_0=tmp.base_15_0;
   SD.Split.base_23_16=tmp.base_23_16;
   SD.Split.base_31_24=tmp.base_31_24;
-  sreg_limit(op_dest->reg)=SD.Merge.limit;
+  sreg_limit(op_dest->reg)=SD.Merge.limit+1;
+  sreg_limit(op_dest->reg)<<=12;
   sreg_base(op_dest->reg)=SD.Merge.base;
-  //printf("sreg:%x %x %x %x %x\n",sreg(op_dest->sreg), sreg_index(op_dest->sreg),  SD.Merge.limit, SD.Merge.base, cpu.GDTR.base);
+  printf("sreg:%x %x %x %x %x\n",sreg(op_dest->sreg), sreg_index(op_dest->sreg),  SD.Merge.limit, SD.Merge.base, cpu.GDTR.base);
   return len+1;
 }
 #endif
