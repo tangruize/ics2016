@@ -30,8 +30,6 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	if (cpu.CR0.protect_enable==0||cpu.CR0.paging==0) {
 		return lnaddr;
 	}
-	printf("%d %d\n", cpu.CR0.protect_enable,  cpu.CR0.paging);
-	
 	addr.val=lnaddr;
 	uint32_t pdb=cpu.CR3.page_directory_base;
 	#define MSB_20 0xfffff000
