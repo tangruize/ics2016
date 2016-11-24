@@ -5,8 +5,7 @@
 //22
 make_helper(movcr_r2rm) {
 	int len=decode_r2rm_l(eip+1);
-	creg(op_dest->reg)=op_src->val;
-	printf("%x %x %x %x\n",op_dest->reg,op_dest->val,op_src->reg, op_src->val);
+	creg(op_src->reg)=op_dest->val;
 	return len+1;
 }
 
