@@ -32,11 +32,10 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	}
 	addr.val=lnaddr;
 	uint32_t pdb=cpu.CR3.page_directory_base;
-	#define MSB_20 0xfffff000
 	printf("%x\n", pdb);
-	uint32_t PDE_page_frame=hwaddr_read(pdb+(addr.dir<<2), 4)&MSB_20;
+	uint32_t PDE_page_frame=hwaddr_read(pdb+(addr.dir<<2), 4);
 	printf("%x\n", PDE_page_frame);
-	uint32_t PTE_page_frame=hwaddr_read(PDE_page_frame+(addr.page<<2),4)&MSB_20;
+	uint32_t PTE_page_frame=hwaddr_read(PDE_page_frame+(addr.page<<2),4);
 	printf("%x %x %x %x\n",pdb, PDE_page_frame, PTE_page_frame, PTE_page_frame+addr.off);
 	return PTE_page_frame+addr.off;
 }
