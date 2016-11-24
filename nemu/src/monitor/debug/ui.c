@@ -142,7 +142,7 @@ static int cmd_page(char *args) {
 	if(arg != NULL) {
 		page_dry_run=true;
 		errno=0;
-		lnaddr_t addr=(lnaddr_t)strtol(arg,NULL,0);
+		lnaddr_t addr=(lnaddr_t)strtoll(arg,NULL,0);
 		if (errno!=0) {
 			fputs("Bad addr\n", stderr);
 			return 1;
