@@ -46,6 +46,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 
 	//printf("addr : %x\n", (PTE_page_frame&0xfffff000)+addr.off);
 
+	Log_write("ln %x, ad %x\n", lnaddr, (PTE_page_frame&0xfffff000)+addr.off);
 	return (PTE_page_frame&0xfffff000)+addr.off;
 }
 
