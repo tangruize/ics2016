@@ -6,7 +6,7 @@
 #define instr std
 
 make_helper(std) {
-  cpu.eflags.DF=1;
+  cpu.eflags.DF=0;
   return 1;
 }
 
