@@ -33,10 +33,10 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	addr.val=lnaddr;
 	uint32_t pdb=cpu.CR3.page_directory_base;
 	uint32_t PDE_page_frame=hwaddr_read((pdb<<12)+(addr.dir<<2), 4);
-	printf("%x %x\n",pdb, PDE_page_frame);
-	//assert(PDE_page_frame&0x1);
+	printf("page : %x %x\n",pdb, PDE_page_frame);
+	assert(PDE_page_frame&0x1);
 	uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(addr.page<<2),4);
-	//assert(PTE_page_frame&0x1);
+	assert(PTE_page_frame&0x1);
 	return PTE_page_frame+addr.off;
 }
 
