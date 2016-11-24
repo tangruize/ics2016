@@ -18,6 +18,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_L1_write(addr, len, data);
 }
 
+bool page_dry_run=false;
 hwaddr_t page_translate(lnaddr_t lnaddr) {
 	union {
 		struct {
@@ -39,15 +40,28 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	//printf("lnaddr: %x\n", lnaddr);
 	//printf("page : %x %x\n",pdb, PDE_page_frame);
 
-	assert(PDE_page_frame&0x1);
-	tmp=addr.page;
-	uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
-	assert(PTE_page_frame&0x1);
+	if (!page_dry_run) {
+		assert(PDE_page_frame&0x1);
+		tmp=addr.page;
+		uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
+		assert(PTE_page_frame&0x1);
 
 	//printf("addr : %x\n", (PTE_page_frame&0xfffff000)+addr.off);
-
 	//Log_write("ln %x, ad %x\n", lnaddr, (PTE_page_frame&0xfffff000)+addr.off);
-	return (PTE_page_frame&0xfffff000)+addr.off;
+		return (PTE_page_frame&0xfffff000)+addr.off;
+	}
+	else {
+		if (PDE_page_frame&0x1) {
+			tmp=addr.page;
+			uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
+			if (PTE_page_frame&0x1) {
+				printf("hwaddr: 0x%x\n", (PTE_page_frame&0xfffff000)+addr.off);
+				return 0;
+			}
+		}
+		printf("No such page!\n");
+		return 1;
+	}
 }
 
 /*uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
@@ -58,6 +72,9 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 		assert(0);
 	}*/
 	hwaddr_t hwaddr = page_translate(addr);
+	if (page_dry_run) {
+		return 0;
+	}
 	return hwaddr_read(hwaddr, len);
 }
 

@@ -65,6 +65,8 @@ static int cmd_r(char *args);
 
 static int cmd_cache(char *args);
 
+static int cmd_page(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -84,7 +86,8 @@ static struct {
 { "bt", "Print backtrace of all stack frames", cmd_bt},
 { "fin", "Execute until selected stack frame returns.", cmd_fin},
 { "r", "Start debugged program.", cmd_r},
-{ "cache", "Search a specified ADDE in cache L1 and cache L2.", cmd_cache},
+{ "cache", "Search a specified ADDR in cache L1 and cache L2.", cmd_cache},
+{ "page", "Search a specified ADDR in page.", cmd_page},
 
 
 
@@ -107,6 +110,7 @@ static int my_help(const char *args) {
 }
 
 extern bool cache_dry_run;
+extern bool page_dry_run;
 extern unsigned long long cache_L1_ac_cnt;
 extern unsigned cache_L1_miss_cnt;
 extern unsigned long long cache_L2_ac_cnt;
@@ -129,6 +133,25 @@ static int cmd_cache(char *args) {
 		printf("Cache L2 hit rate: %f\n", (double)(cache_L2_ac_cnt*2-cache_L2_miss_cnt*200)/(cache_L2_ac_cnt*2));
 		printf("Total hit rate   : %f\n",
 			(double)(cache_L1_ac_cnt*2+cache_L2_ac_cnt*2-cache_L1_miss_cnt*200-cache_L2_miss_cnt*200)/(cache_L1_ac_cnt*2+cache_L2_ac_cnt*2));
+	}
+	return 0;
+}
+
+static int cmd_page(char *args) {
+	char *arg = strtok(NULL, " ");
+	if(arg != NULL) {
+		page_dry_run=true;
+		errno=0;
+		lnaddr_t addr=(lnaddr_t)strtol(arg,NULL,0);
+		if (errno!=0) {
+			fputs("Bad addr\n", stderr);
+			return 1;
+		}
+		lnaddr_read(addr, 4);
+		page_dry_run=false;
+	}
+	else {
+		my_help("page");
 	}
 	return 0;
 }
