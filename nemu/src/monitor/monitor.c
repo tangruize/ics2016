@@ -109,4 +109,5 @@ void restart() {
 	clear_cache_L2();
 
 	cpu.CR0.protect_enable=0;
+	cpu.CR0.paging=0;
 }

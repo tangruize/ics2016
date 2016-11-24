@@ -18,12 +18,46 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_L1_write(addr, len, data);
 }
 
-uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	return hwaddr_read(addr, len);
+hwaddr_t page_translate(lnaddr_t lnaddr) {
+	union {
+		struct {
+			uint32_t off   :12;
+			uint32_t page  :10;
+			uint32_t dir   :10;
+		};
+		uint32_t val;
+	} addr;
+	if (!cpu.CR0.protect_enable||!cpu.CR0.paging) {
+		return lnaddr;
+	}
+	addr.val=lnaddr;
+	uint32_t pdb=cpu.CR3.page_directory_base;
+	#define MSB_20 0xfffff000
+	uint32_t PDE_page_frame=hwaddr_read((pdb<<12)+(addr.dir<<2), 4)&MSB_20;
+	uint32_t PTE_page_frame=hwaddr_read(PDE_page_frame+(addr.page<<2),4)&MSB_20;
+	return PTE_page_frame+=addr.off;
 }
 
-void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
+/*uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
+	return hwaddr_read(addr, len);
+}*/
+uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
+	/*if (data cross the page boundary) {
+		assert(0);
+	}*/
+	hwaddr_t hwaddr = page_translate(addr);
+	return hwaddr_read(hwaddr, len);
+}
+
+/*void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	hwaddr_write(addr, len, data);
+}*/
+void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
+	/*if (data cross the page boundary) {
+		assert(0);
+	}*/
+	hwaddr_t hwaddr = page_translate(addr);
+	hwaddr_write(hwaddr, len, data);
 }
 
 #ifdef IA32_SEG
