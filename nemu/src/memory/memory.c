@@ -51,7 +51,6 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 		return (PTE_page_frame&0xfffff000)+addr.off;
 	}
 	else {
-		printf("paging\n" );
 		if (PDE_page_frame&0x1) {
 			tmp=addr.page;
 			uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
