@@ -35,6 +35,8 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	#define MSB_20 0xfffff000
 	uint32_t PDE_page_frame=hwaddr_read((pdb<<12)+(addr.dir<<2), 4)&MSB_20;
 	uint32_t PTE_page_frame=hwaddr_read(PDE_page_frame+(addr.page<<2),4)&MSB_20;
+	printf("%x %x %x %x\n",pdb, PDE_page_frame, PTE_page_frame, PTE_page_frame+addr.off);
+	panic("hhh\n");
 	return PTE_page_frame+=addr.off;
 }
 
