@@ -64,7 +64,9 @@ make_helper(jmp_ptr)  {
   SD.Split.base_15_0=tmp.base_15_0;
   SD.Split.base_23_16=tmp.base_23_16;
   SD.Split.base_31_24=tmp.base_31_24;
-  sreg_limit(R_CS)=SD.Merge.limit;
+  sreg_limit(R_CS)=SD.Merge.limit+1;
+  sreg_limit(R_CS)<<=12;
+  sreg_limit(R_CS)-=1;
   sreg_base(R_CS)=SD.Merge.base;
   cpu.eip += sreg_base(R_CS);
   return 7;
