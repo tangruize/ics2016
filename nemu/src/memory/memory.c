@@ -29,6 +29,9 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 		uint32_t val;
 	} addr;
 	if (cpu.CR0.protect_enable==0||cpu.CR0.paging==0) {
+		if (page_dry_run) {
+			printf("Page is not enabled.\n");
+		}
 		return lnaddr;
 	}
 	addr.val=lnaddr;
