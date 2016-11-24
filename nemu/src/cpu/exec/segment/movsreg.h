@@ -32,7 +32,7 @@ make_helper(movsreg) {
   sreg_limit(op_dest->reg)<<=12;
   sreg_limit(op_dest->reg)-=1;
   sreg_base(op_dest->reg)=SD.Merge.base;
-  printf("sreg:%x %x %x %x %x\n",sreg(op_dest->sreg), sreg_index(op_dest->sreg),  sreg_limit(op_dest->reg), SD.Merge.base, cpu.GDTR.base);
+  //printf("sreg:%x %x %x %x %x\n",sreg(op_dest->sreg), sreg_index(op_dest->sreg),  sreg_limit(op_dest->reg), SD.Merge.base, cpu.GDTR.base);
   return len+1;
 }
 #endif
