@@ -27,7 +27,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 		};
 		uint32_t val;
 	} addr;
-	if (cpu.CR0.paging==0) {
+	if (cpu.CR0.protect_enable==0||cpu.CR0.paging==0) {
 		return lnaddr;
 	}
 	addr.val=lnaddr;
@@ -45,7 +45,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 
 	printf("addr : %x\n", PTE_page_frame+addr.off);
 
-	return PTE_page_frame+addr.off-7;
+	return PTE_page_frame+addr.off;
 }
 
 /*uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
