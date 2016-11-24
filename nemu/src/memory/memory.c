@@ -44,9 +44,9 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
 	assert(PTE_page_frame&0x1);
 
-	printf("addr : %x\n", PTE_page_frame+addr.off);
+	printf("addr : %x\n", (PTE_page_frame&0xfffff000)+addr.off);
 
-	return PTE_page_frame+addr.off;
+	return (PTE_page_frame&0xfffff000)+addr.off;
 }
 
 /*uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
