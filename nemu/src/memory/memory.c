@@ -31,8 +31,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	if (cpu.CR0.protect_enable==0||cpu.CR0.paging==0) {
 		return lnaddr;
 	}
-		printf("%x\n", lnaddr);
-	panic("hhh\n");
+	printf("%x\n", lnaddr);
 	addr.val=lnaddr;
 	uint32_t pdb=cpu.CR3.page_directory_base;
 	#define MSB_20 0xfffff000
@@ -40,7 +39,6 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	uint32_t PDE_page_frame=hwaddr_read((pdb<<12)+(addr.dir<<2), 4)&MSB_20;
 	uint32_t PTE_page_frame=hwaddr_read(PDE_page_frame+(addr.page<<2),4)&MSB_20;
 	printf("%x %x %x %x\n",pdb, PDE_page_frame, PTE_page_frame, PTE_page_frame+addr.off);
-	panic("hhh\n");
 	return PTE_page_frame+addr.off;
 }
 
