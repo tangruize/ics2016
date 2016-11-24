@@ -27,10 +27,11 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 		};
 		uint32_t val;
 	} addr;
-	printf("%x\n", lnaddr);
+
 	if (cpu.CR0.protect_enable==0||cpu.CR0.paging==0) {
 		return lnaddr;
 	}
+		printf("%x\n", lnaddr);
 	panic("hhh\n");
 	addr.val=lnaddr;
 	uint32_t pdb=cpu.CR3.page_directory_base;
@@ -40,7 +41,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	uint32_t PTE_page_frame=hwaddr_read(PDE_page_frame+(addr.page<<2),4)&MSB_20;
 	printf("%x %x %x %x\n",pdb, PDE_page_frame, PTE_page_frame, PTE_page_frame+addr.off);
 	panic("hhh\n");
-	return PTE_page_frame+=addr.off;
+	return PTE_page_frame+addr.off;
 }
 
 /*uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
