@@ -120,7 +120,7 @@ static int cmd_cache(char *args) {
 	if(arg != NULL) {
 		cache_dry_run=true;
 		errno=0;
-		hwaddr_t addr=(hwaddr_t)strtol(arg,NULL,0);
+		hwaddr_t addr=(hwaddr_t)strtoll(arg,NULL,0);
 		if (errno!=0) {
 			fputs("Bad addr\n", stderr);
 			return 1;
