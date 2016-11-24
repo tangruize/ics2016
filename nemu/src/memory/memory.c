@@ -39,7 +39,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	//printf("lnaddr: %x\n", lnaddr);
 	//printf("page : %x %x\n",pdb, PDE_page_frame);
 
-	assert(PDE_page_frame&0x1);
+	//assert(PDE_page_frame&0x1);
 	tmp=addr.page;
 	uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
 	assert(PTE_page_frame&0x1);
