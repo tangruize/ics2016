@@ -27,6 +27,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 		};
 		uint32_t val;
 	} addr;
+	printf("%x\n", lnaddr);
 	if (cpu.CR0.protect_enable==0||cpu.CR0.paging==0) {
 		return lnaddr;
 	}
