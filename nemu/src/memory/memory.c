@@ -34,6 +34,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	uint32_t pdb=cpu.CR3.page_directory_base;
 	uint32_t PDE_page_frame=hwaddr_read((pdb<<12)+(addr.dir<<2), 4);
 
+	printf("%x\n", cpu.CR0.protect_enable);
 	printf("lnaddr: %x\n", lnaddr);
 
 	printf("page : %x %x\n",pdb, PDE_page_frame);
