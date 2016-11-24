@@ -10,6 +10,11 @@ make_helper(std) {
   return 1;
 }
 
+make_helper(cld) {
+  cpu.eflags.DF=0;
+  return 1;
+}
+
 #include "cpu/exec/template-end.h"
 #undef DATA_BYTE
 #endif
