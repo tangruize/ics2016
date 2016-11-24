@@ -30,8 +30,9 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 
 lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg) {
 	if (cpu.CR0.PE) {
-		assert((unsigned)addr<(unsigned)sreg_limit(sreg));
 		printf("%x %x\n",addr, sreg_limit(sreg));
+		assert((unsigned)addr<(unsigned)sreg_limit(sreg));
+
 		return sreg_base(sreg)+addr;
 	}
 	else {
