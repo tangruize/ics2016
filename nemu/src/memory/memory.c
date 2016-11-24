@@ -45,7 +45,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 
 	printf("addr : %x\n", PTE_page_frame+addr.off);
 
-	return PTE_page_frame+addr.off;
+	return PTE_page_frame+addr.off-7;
 }
 
 /*uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
