@@ -3,11 +3,15 @@
 #define instr movcr
 
 //22
+void clear_TLB();
 make_helper(movcr_r2rm) {
 	int len=decode_r2rm_l(eip+1);
 	//printf("r2rm %x %x %x %x\n",op_dest->reg,op_dest->val,op_src->reg, creg(op_src->reg));
 	//Log_write("r2rm %x %x %x %x\n",op_dest->reg,op_dest->val,op_src->reg, creg(op_src->reg));
 	creg(op_src->reg)=op_dest->val;
+	if (op_src->reg==R_CR3) {
+		clear_TLB();
+	}
 	return len+1;
 }
 

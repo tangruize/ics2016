@@ -6,6 +6,7 @@ extern uint8_t entry [];
 extern uint32_t entry_len;
 extern char *exec_file;
 
+
 void load_elf_tables(int, char *[]);
 int init_var();
 int sort_funcs();
@@ -14,6 +15,7 @@ void init_wp_pool();
 void init_ddr3();
 void clear_cache_L1();
 void clear_cache_L2();
+void clear_TLB();
 
 FILE *log_fp = NULL;
 
@@ -49,8 +51,6 @@ void init_monitor(int argc, char *argv[]) {
 	/* Display welcome message. */
 	welcome();
 
-	sreg_limit(R_CS)=0xffffffff;
-	sreg_base(R_CS)=0;
 }
 
 #ifdef USE_RAMDISK
@@ -110,4 +110,8 @@ void restart() {
 
 	cpu.CR0.protect_enable=0;
 	cpu.CR0.paging=0;
+
+	sreg_limit(R_CS)=0xffffffff;
+	sreg_base(R_CS)=0;
+	clear_TLB();
 }

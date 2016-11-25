@@ -1,4 +1,6 @@
 #include "common.h"
+#include <time.h>
+#include <stdlib.h>
 #include "cpu/reg.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
@@ -18,6 +20,21 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_L1_write(addr, len, data);
 }
 
+#define TLB_SIZE 64
+static struct {
+  uint32_t hw;
+	uint32_t tag;
+	uint8_t  valid;
+} TLB[TLB_SIZE];
+
+
+void clear_TLB() {
+	int i;
+	for (i=0;i<TLB_SIZE;++i) {
+		TLB[i].valid=0;
+	}
+}
+
 bool page_dry_run=false;
 hwaddr_t page_translate(lnaddr_t lnaddr) {
 	union {
@@ -26,15 +43,40 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 			uint32_t page  :10;
 			uint32_t dir   :10;
 		};
+		struct {
+			uint32_t       :12;
+			uint32_t tag   :20;
+		};
 		uint32_t val;
 	} addr;
+	addr.val=lnaddr;
 	if (cpu.CR0.protect_enable==0||cpu.CR0.paging==0) {
 		if (page_dry_run) {
 			printf("Page is not enabled.\n");
 		}
 		return lnaddr;
 	}
-	addr.val=lnaddr;
+	int i=0;
+	bool TLB_miss=true;
+	int not_valid=-1;
+	for (i=0;i<TLB_SIZE;++i) {
+		if (TLB[i].valid) {
+			if (TLB[i].tag==addr.tag) {
+				TLB_miss=false;
+				break;
+			}
+		}
+		else if (not_valid==-1){
+			not_valid=i;
+		}
+	}
+	if (!TLB_miss) {
+		if (page_dry_run) {
+			printf("hwaddr: 0x%x\n", TLB[i].hw+addr.off);
+			return 0;
+		}
+		return TLB[i].hw+addr.off;
+	}
 	uint32_t pdb=cpu.CR3.page_directory_base;
 	uint32_t tmp=addr.dir;
 	uint32_t PDE_page_frame=hwaddr_read((pdb<<12)+(tmp<<2), 4);
@@ -51,6 +93,13 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 
 	//printf("addr : %x\n", (PTE_page_frame&0xfffff000)+addr.off);
 	//Log_write("ln %x, ad %x\n", lnaddr, (PTE_page_frame&0xfffff000)+addr.off);
+		if (not_valid==-1) {
+			srandom(time(NULL));
+      not_valid=random()%TLB_SIZE;
+		}
+		TLB[not_valid].valid=1;
+		TLB[not_valid].tag=addr.tag;
+		TLB[not_valid].hw=PTE_page_frame&0xfffff000;
 		return (PTE_page_frame&0xfffff000)+addr.off;
 	}
 	else {
