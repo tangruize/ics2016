@@ -9,6 +9,7 @@
 
 #define IA32_SEG
 #define IA32_PAGE
+#define IA32_INTR
 
 #ifndef __ASSEMBLER__
 /* The following code will be included if the source file is a "*.c" file. */
