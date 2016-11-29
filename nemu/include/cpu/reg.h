@@ -185,6 +185,13 @@ typedef union {
 				}GDTR;
 				uint64_t gdtr;
 			};
+      union {
+        struct {
+          uint16_t limit;
+          uint32_t base;
+        }IDTR;
+        uint64_t idtr;
+      };
 			union {
 				struct {
 					union {

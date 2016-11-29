@@ -10,5 +10,12 @@ make_helper(lgdt) {
   //printf("gdtr:%x %x %x\n", op_src->addr, cpu.GDTR.limit, cpu.GDTR.base);
   return len+1;
 }
+make_helper(lidt) {
+  int len=decode_rm_l(eip+1);
+  cpu.IDTR.limit=lnaddr_read(op_src->addr, 2);
+  cpu.IDTR.base=lnaddr_read(op_src->addr+2, 4);
+  //printf("gdtr:%x %x %x\n", op_src->addr, cpu.GDTR.limit, cpu.GDTR.base);
+  return len+1;
+}
 
 #endif
