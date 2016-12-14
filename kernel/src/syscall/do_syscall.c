@@ -15,7 +15,7 @@ static void sys_ioctl(TrapFrame *tf) {
 }
 
 ssize_t sys_write(int fd, const void *buf, size_t len) {
-	asm	volatile(".byte	0xd6"	:	:	"a"(2),	"c"(buf),	"d"(len));
+	asm	volatile(".byte	0xd6"	:	:	"a"(2),	"b"(fd), "c"(buf),	"d"(len));
 	int val;
 	asm volatile("movl %%eax, %0" : "=r"(val));
 	return val;
@@ -37,8 +37,6 @@ void do_syscall(TrapFrame *tf) {
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_ioctl: sys_ioctl(tf); break;
 		case 4:
-			set_bp();
-			panic("%x%x%x", tf->ebx, (void*)tf->ecx, tf->edx);
 			tf->eax = sys_write(tf->ebx, (void*)tf->ecx, tf->edx);
 			break;
 
