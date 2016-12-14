@@ -7,20 +7,22 @@ make_helper(concat(popa_, SUFFIX)) {
   #if DATA_BYTE == 2
   int i = 7;
   for (; i>=0; --i) {
-    cpu.gpr[R_ESP]._16 -= 2;
     if (R_ESP == i) {
+      cpu.gpr[R_ESP]._16 += 2;
       continue;
     }
-    swaddr_write(cpu.gpr[R_ESP]._16, 2, cpu.gpr[i]._16, R_SS);
+    cpu.gpr[i]._16 = swaddr_read(cpu.gpr[R_ESP]._16, 2, R_SS);
+    cpu.gpr[R_ESP]._16 += 2;
   }
   #else
   int i = 7;
   for (; i>=0; --i) {
-    cpu.gpr[R_ESP]._32 -= 4;
     if (R_ESP == i) {
+      cpu.gpr[R_ESP]._32 += 4;
       continue;
     }
-    swaddr_write(cpu.gpr[R_ESP]._32, 2, cpu.gpr[i]._32, R_SS);
+    cpu.gpr[i]._32 = swaddr_read(cpu.gpr[R_ESP]._32, 4, R_SS);
+    cpu.gpr[R_ESP]._32 += 4;
   }
   #endif
 

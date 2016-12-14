@@ -38,7 +38,7 @@ make_helper(nemu_trap) {
 					buf = _buf;
 				}
 				else {
-					buf = malloc(cpu.edx);
+					buf = malloc(cpu.edx+4);
 				}
 				int i =0;
 				for (;i<cpu.edx;i+=4) {
