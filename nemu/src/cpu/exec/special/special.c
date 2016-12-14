@@ -45,11 +45,11 @@ make_helper(nemu_trap) {
 					unsigned x = swaddr_read(cpu.ecx + i, 4, R_DS);
 					memcpy(buf+i, &x, 4);
 				}
-				write(cpu.ebx, buf, cpu.edx);
+				unsigned r = write(cpu.ebx, buf, cpu.edx);
 				if (cpu.edx >= 252) {
 					free(buf);
 				}
-		   	break;
+				return r;
 		}
 
 		default:
