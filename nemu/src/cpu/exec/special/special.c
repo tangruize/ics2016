@@ -35,7 +35,7 @@ make_helper(nemu_trap) {
 				char *buf = malloc(cpu.edx);
 				int i =0;
 				for (;i<cpu.edx;++i) {
-					uint8_t x = swaddr_read(cpu.ecx, 1, R_DS);
+					uint8_t x = swaddr_read(cpu.ecx + i, 1, R_DS);
 					buf[i] = x;
 				}
 				write(cpu.ebx, buf, cpu.edx);
