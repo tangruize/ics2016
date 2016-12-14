@@ -14,7 +14,6 @@ make_helper(concat(popa_, SUFFIX)) {
     cpu.gpr[i]._16 = swaddr_read(cpu.gpr[R_ESP]._16, 2, R_SS);
     cpu.gpr[R_ESP]._16 += 2;
   }
-  cpu.gpr[R_ESP]._16 += 2;
   #else
   int i = 7;
   for (; i>=0; --i) {
@@ -25,7 +24,6 @@ make_helper(concat(popa_, SUFFIX)) {
     cpu.gpr[i]._32 = swaddr_read(cpu.gpr[R_ESP]._32, 4, R_SS);
     cpu.gpr[R_ESP]._32 += 4;
   }
-  cpu.gpr[R_ESP]._32 += 4;
   #endif
 
   return 1;
