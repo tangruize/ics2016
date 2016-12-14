@@ -276,6 +276,7 @@ static inline int check_reg_index(int index) {
 #define sreg_limit(index) (cpu.SREG_INV[index].limit)
 #define sreg_base(index) (cpu.SREG_INV[index].base)
 #define creg(index) (cpu.CR[index])
+#define idtr_base (cpu.IDTR.base)
 #endif
 
 extern const char* regsl[];
