@@ -1,7 +1,7 @@
 #include "cpu/exec/helper.h"
 #include "monitor/monitor.h"
-#include "../../../../../lib-common/trap.h"
 #include <unistd.h>
+#include <malloc.h>
 
 make_helper(inv) {
 	/* invalid opcode */
@@ -32,10 +32,14 @@ make_helper(nemu_trap) {
 	switch(cpu.eax) {
 		case 2:
 		{
-				void *ad = (void *)seg_translate((swaddr_t)cpu.ecx, R_DS);
-				ad = (void *)page_translate((lnaddr_t)ad);
-				set_bp();
-				write(cpu.ebx, ad, cpu.edx);
+				char *buf = malloc(cpu.edx);
+				int i =0;
+				for (;i<cpu.edx;++i) {
+					uint8_t x = swaddr_read(cpu.ecx, 1, R_DS);
+					buf[i] = x;
+				}
+				write(cpu.ebx, buf, cpu.edx);
+				free(buf);
 		   	break;
 		}
 
