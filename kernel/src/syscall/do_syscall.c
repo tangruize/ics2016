@@ -37,7 +37,7 @@ void do_syscall(TrapFrame *tf) {
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_ioctl: sys_ioctl(tf); break;
 		case 4:
-			panic("hhh");
+			panic("%x%x%x", tf->ebx, (void*)tf->ecx, tf->edx);
 			tf->eax = sys_write(tf->ebx, (void*)tf->ecx, tf->edx);
 			break;
 
