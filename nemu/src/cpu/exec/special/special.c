@@ -1,5 +1,6 @@
 #include "cpu/exec/helper.h"
 #include "monitor/monitor.h"
+#include "../../../../../lib-common/trap.h"
 #include <unistd.h>
 
 make_helper(inv) {
@@ -33,7 +34,7 @@ make_helper(nemu_trap) {
 		{
 				void *ad = (void *)seg_translate((swaddr_t)cpu.ecx, R_DS);
 				ad = (void *)page_translate((lnaddr_t)ad);
-				printf("%d\n",cpu.ebx);
+				set_bp();
 				write(cpu.ebx, ad, cpu.edx);
 		   	break;
 		}
