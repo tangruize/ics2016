@@ -220,11 +220,14 @@ typedef union {
   					} ES_INV;
 					};
 					struct {
-						struct {
-							uint16_t RPL   :2;
-							uint16_t TI    :1;
-							uint16_t INDEX :13;
-						} CS;
+            union {
+						  struct {
+							  uint16_t RPL   :2;
+				        uint16_t TI    :1;
+							  uint16_t INDEX :13;
+			        } CS;
+              uint16_t cs_init;
+            };
             struct {
   						uint32_t limit;
   						uint32_t base;
