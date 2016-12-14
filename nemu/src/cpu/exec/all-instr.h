@@ -54,3 +54,5 @@
 #include "segment/lgdt.h"
 #include "segment/movcr.h"
 #include "segment/movsreg.h"
+
+#include "pa4/int.h"
