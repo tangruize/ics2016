@@ -57,3 +57,4 @@
 
 #include "pa4/int.h"
 #include "pa4/pusha.h"
+#include "pa4/popa.h"
