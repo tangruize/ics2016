@@ -37,7 +37,7 @@ void raise_intr(uint8_t	NO)	{
    SD.Split.base_23_16=tmp.base_23_16;
    SD.Split.base_31_24=tmp.base_31_24;
 
-   printf("%d\t%d\n", offset, SD.Merge.base);
+   printf("%x\t%d\n", offset, SD.Merge.base);
    panic("hhh");
    offset += SD.Merge.base;
 	 /*	Jump	back	to	cpu_exec()	*/
