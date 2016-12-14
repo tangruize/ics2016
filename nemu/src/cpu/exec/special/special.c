@@ -32,14 +32,22 @@ make_helper(nemu_trap) {
 	switch(cpu.eax) {
 		case 2:
 		{
-				char *buf = malloc(cpu.edx);
+			  char _buf[256];
+				char *buf;
+				if (cpu.edx < 252) {
+					buf = _buf;
+				}
+				else {
+					buf = malloc(cpu.edx);
+				}
 				int i =0;
-				for (;i<cpu.edx;++i) {
-					uint8_t x = swaddr_read(cpu.ecx + i, 1, R_DS);
-					buf[i] = x;
+				for (;i<cpu.edx;i+=4) {
+					*(buf+i) = swaddr_read(cpu.ecx + i, 4, R_DS);
 				}
 				write(cpu.ebx, buf, cpu.edx);
-				free(buf);
+				if (cpu.edx < 256) {
+					free(buf);
+				}
 		   	break;
 		}
 
