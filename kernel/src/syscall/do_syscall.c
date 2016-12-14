@@ -14,6 +14,14 @@ static void sys_ioctl(TrapFrame *tf) {
 	tf->eax = fs_ioctl(tf->ebx, tf->ecx, (void *)tf->edx);
 }
 
+ssize_t sys_write(int fd, const void *buf, size_t len) {
+	asm	volatile	(".byte	0xd6"	:	:	"a"(2),	"c"(buf),	"d"(len));
+}
+
+static void sys_ioctl(TrapFrame *tf) {
+	tf->eax = sys_write(tf->ebx, tf->ecx, tf->edx);
+}
+
 void do_syscall(TrapFrame *tf) {
 	switch(tf->eax) {
 		/* The `add_irq_handle' system call is artificial. We use it to
@@ -21,7 +29,7 @@ void do_syscall(TrapFrame *tf) {
 		 * very dangerous in a real operating system. Therefore such a
 		 * system call never exists in GNU/Linux.
 		 */
-		case 0: 
+		case 0:
 			cli();
 			add_irq_handle(tf->ebx, (void*)tf->ecx);
 			sti();
@@ -35,4 +43,3 @@ void do_syscall(TrapFrame *tf) {
 		default: panic("Unhandled system call: id = %d, eip = 0x%08x", tf->eax, tf->eip);
 	}
 }
-
