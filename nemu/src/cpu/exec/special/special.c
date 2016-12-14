@@ -30,8 +30,12 @@ make_helper(nemu_trap) {
 
 	switch(cpu.eax) {
 		case 2:
-				write(cpu.ebx, (void*)cpu.ecx, cpu.edx);
+		{
+				void *ad = (void *)seg_translate((swaddr_t)cpu.ecx, R_DS);
+				ad = (void *)page_translate((lnaddr_t)ad);
+				write(cpu.ebx, ad, cpu.edx);
 		   	break;
+		}
 
 		default:
 			printf("\n\33[1;31mnemu: HIT %s TRAP\33[0m at eip = 0x%08x\n",
