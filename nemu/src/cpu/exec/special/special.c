@@ -42,7 +42,7 @@ make_helper(nemu_trap) {
 				}
 				int i =0;
 				for (;i<cpu.edx;i+=4) {
-					*(buf+i) = swaddr_read(cpu.ecx + i, 4, R_DS);
+					memcpy(buf+i, (void*)swaddr_read(cpu.ecx + i, 4, R_DS), 4);
 				}
 				write(cpu.ebx, buf, cpu.edx);
 				if (cpu.edx < 256) {
