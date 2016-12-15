@@ -249,7 +249,7 @@ void cpu_exec(volatile uint32_t n) {
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);
 		strcat(asm_buf, assembly);
-		Log_write("%s, si %d\n", asm_buf, till_now_si);
+		Log_write("%-110s, si %d\n", asm_buf, till_now_si);
 		if(n_temp < MAX_INSTR_TO_PRINT || is_changed==true) {
 			printf("%-110s si %d\n", asm_buf, till_now_si);
 		}
