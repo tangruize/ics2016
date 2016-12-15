@@ -103,7 +103,8 @@ extern int nemu_state;
 	if (!page_dry_run) {
 		if (!(PDE_page_frame&0x1)) {
 			fprintf(stderr, "lnaddr: 0x%x, page_frame: 0x%x, eip: 0x%x, si: %d\n", lnaddr, PDE_page_frame, cpu.eip, till_now_si);
-			nemu_state = 2;
+			nemu_state = 0;
+			return 0;
 			fprintf(stderr, "You should exit\n");
 			//assert(PDE_page_frame&0x1);
 		}
