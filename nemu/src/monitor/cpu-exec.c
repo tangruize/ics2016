@@ -157,7 +157,7 @@ void print_bin_instr(swaddr_t eip, int len) {
 	for(i = 0; i < len; i ++) {
 		l += sprintf(asm_buf + l, "%02x ", instr_fetch(eip + i, 1));
 	}
-	sprintf(asm_buf + l, "%*.s, si %d", 50 - (12 + 3 * len), "", till_now_si);
+	sprintf(asm_buf + l, "%*.s", 50 - (12 + 3 * len), "");
 }
 
 /* This function will be called when an `int3' instruction is being executed. */
@@ -249,9 +249,9 @@ void cpu_exec(volatile uint32_t n) {
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);
 		strcat(asm_buf, assembly);
-		Log_write("%s\n", asm_buf);
+		Log_write("%s, si %d\n", asm_buf, till_now_si);
 		if(n_temp < MAX_INSTR_TO_PRINT || is_changed==true) {
-			printf("%s\n", asm_buf);
+			printf("%s, si %d\n", asm_buf, till_now_si);
 		}
 #endif
 
