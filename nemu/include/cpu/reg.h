@@ -257,6 +257,7 @@ typedef union {
 					};
 				};
 			};
+      bool INTR;
 			#endif
     };
 
