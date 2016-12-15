@@ -27,7 +27,7 @@ void create_video_mapping() {
 		ptable->val = make_pte(pframe_addr);
 		ptable --;
 	}
-	set_bp();
+	//set_bp();
 	//panic("please implement me");
 }
 
