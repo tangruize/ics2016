@@ -7,7 +7,7 @@ make_helper(iret) {
   cpu.eip = swaddr_read(cpu.gpr[R_ESP]._32, 4, R_SS);
   cpu.gpr[R_ESP]._32 += 4;
   cpu.cs_init = (uint16_t)swaddr_read(cpu.gpr[R_ESP]._32, 4, R_SS);
-  cpu.gpr[R_ESP]._32 += 12;
+  cpu.gpr[R_ESP]._32 += 8;
   return 1;
 }
 
