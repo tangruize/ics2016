@@ -8,25 +8,24 @@
 /* Use the function to get the start address of user page directory. */
 PDE* get_updir();
 
+static PTE kptable[NR_PTE] align_to_page;		// kernel page tables
 void create_video_mapping() {
 	/* TODO: create an identical mapping from virtual memory area
 	 * [0xa0000, 0xa0000 + SCR_SIZE) to physical memory area
 	 * [0xa0000, 0xa0000 + SCR_SIZE) for user program. You may define
 	 * some page tables to create this mapping.
 	 */
-	uint32_t pdir_idx;
-	PDE *pdir = (PDE*)(((unsigned)get_updir() & ~PAGE_MASK) + 4096);
-	PTE *ptable = (PTE *)pdir + 4096;
- 	for (pdir_idx = 0; pdir_idx < SCR_SIZE / PT_SIZE; pdir_idx ++) {
- 		pdir[pdir_idx].val = make_pde(ptable);
- 		ptable += NR_PTE;
- 	}
-	asm volatile ("std;\
-	 1: stosl;\
-		subl %0, %%eax;\
-		jge 1b;\
-		cld" : :
-		"i"(PAGE_SIZE), "a"((VMEM_ADDR + SCR_SIZE - PAGE_SIZE) | 0x7), "D"(ptable - 1));
+	uint32_t pdir_idx = 0;
+	PDE *pdir = (PDE *)va_to_pa(get_updir());
+	PTE *ptable = (PTE *)va_to_pa(kptable);
+	ptable += NR_PTE;
+ 	pdir[pdir_idx].val = make_pde(ptable);
+	int32_t pframe_addr = VMEM_ADDR - PAGE_SIZE;
+	ptable --;
+	for (; pframe_addr >= 0; pframe_addr -= PAGE_SIZE) {
+		ptable->val = make_pte(pframe_addr);
+		ptable --;
+	}
 
 	//panic("please implement me");
 }
