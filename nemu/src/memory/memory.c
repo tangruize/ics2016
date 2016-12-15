@@ -98,9 +98,10 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	//printf("lnaddr: %x\n", lnaddr);
 	//printf("page : %x %x\n",pdb, PDE_page_frame);
 
+extern unsigned till_now_si;
 	if (!page_dry_run) {
 		if (!(PDE_page_frame&0x1)) {
-			fprintf(stderr, "lnaddr: 0x%x, page_frame: 0x%x, eip: 0x%x\n", lnaddr, PDE_page_frame, cpu.eip);
+			fprintf(stderr, "lnaddr: 0x%x, page_frame: 0x%x, eip: 0x%x, si: %d\n", lnaddr, PDE_page_frame, cpu.eip, till_now_si);
 			assert(PDE_page_frame&0x1);
 		}
 		tmp=addr.page;
