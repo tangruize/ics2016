@@ -46,11 +46,9 @@ make_helper(nemu_trap) {
 					memcpy(buf+i, &x, 4);
 				}
 				cpu.eax = write(cpu.ebx, buf, cpu.edx);
-				// write(cpu.ebx, buf, cpu.edx);
 				if (cpu.edx >= 252) {
 					free(buf);
 				}
-				//return r;
 				break;
 		}
 
