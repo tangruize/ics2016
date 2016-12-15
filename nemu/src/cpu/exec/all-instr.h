@@ -62,3 +62,4 @@
 #include "pa4/iret.h"
 #include "pa4/in.h"
 #include "pa4/out.h"
+#include "pa4/hlt.h"
