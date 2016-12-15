@@ -217,7 +217,7 @@ static int cmd_si(char *args) {
 	uint32_t n = 1;
 	char *arg = strtok(NULL, " ");
 	if(arg != NULL) {
-		uint32_t getNum = (uint32_t) strtol(arg, NULL, 0);
+		uint32_t getNum = (uint32_t) strtoll(arg, NULL, 0);
 		if ((int)getNum <= 0) {
 			fputs("expected a number greater than 0.\n", stderr);
 			return 1;
@@ -237,7 +237,7 @@ static int cmd_bt(char *args) {
   uint32_t getNum;
 	bool print_return=1;
 	if(arg != NULL) {
-    getNum = (uint32_t) strtol(arg, NULL, 0);
+    getNum = (uint32_t) strtoll(arg, NULL, 0);
 		if (getNum==0 && strcmp(arg, "-c")==0) {
 			print_return=0;
 			getNum = -1;
@@ -423,7 +423,7 @@ static int cmd_x(char *args) {
 	}
 	else if (arg2 != NULL)
 	{
-		int getNum = (int) strtol(arg1, NULL, 0);
+		int getNum = (int) strtoll(arg1, NULL, 0);
 		bool is_success=true;
 		getAddr = (uint32_t) express(arg2, &is_success);
 		//printf("%s\n", arg2);
@@ -491,7 +491,7 @@ static int cmd_d(char *args) {
 		my_help("d");
 		return 0;
 	}
-	int getNum = (int) strtol(arg, NULL, 0);
+	int getNum = (int) strtoll(arg, NULL, 0);
 	if (getNum <= 0) {
 		fputs("expected numbers greater than 0.\n", stderr);
 		return 1;

@@ -222,7 +222,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 					tokens[nr_token].type=RULE_DIGIT;
 					strncpy(tokens[nr_token].str,substr_start,substr_len);
 					tokens[nr_token].str[substr_len]='\0';
-					tokens[nr_token].value=strtol(tokens[nr_token].str,NULL,0);
+					tokens[nr_token].value=strtoll(tokens[nr_token].str,NULL,0);
 					if (is_neg_or_der==1) {
 						tokens[nr_token].value=-tokens[nr_token].value;
 					}
@@ -248,7 +248,7 @@ bool make_token(char *e, bool *is_match, int prompt) {
 					tokens[nr_token].type=RULE_HEX;
 					strncpy(tokens[nr_token].str,substr_start,substr_len);
 					tokens[nr_token].str[substr_len]='\0';
-					tokens[nr_token].value=strtol(tokens[nr_token].str,NULL,0);
+					tokens[nr_token].value=strtoll(tokens[nr_token].str,NULL,0);
 					if (is_neg_or_der==1) {
 						tokens[nr_token].value=-tokens[nr_token].value;
 					}
