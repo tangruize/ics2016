@@ -50,6 +50,7 @@ void irq_handle(TrapFrame *tf) {
 
 		while (f != NULL) { /* call handlers one by one */
 			f->routine();
+			Log("hhh, %p\n", f);
 			f = f->next;
 		}
 	}
