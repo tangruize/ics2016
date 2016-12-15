@@ -13,12 +13,24 @@ void cache_L1_write(hwaddr_t addr, size_t len, uint32_t data);
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	//return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
-	return cache_L1_read(addr, len) & (~0u >> ((4 - len) << 3));
+	int i = is_mmio(addr);
+	if (i == -1) {
+		return cache_L1_read(addr, len) & (~0u >> ((4 - len) << 3));
+	}
+	else {
+		return mmio_read(addr, len, i) & (~0u >> ((4 - len) << 3));
+	}
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	//dram_write(addr, len, data);
-	cache_L1_write(addr, len, data);
+	int i = is_mmio(addr);
+	if (i == -1) {
+		cache_L1_write(addr, len, data);
+	}
+	else {
+		mmio_write(addr, len, data, i);
+	}
 }
 
 #define TLB_SIZE 64
