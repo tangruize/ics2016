@@ -51,6 +51,7 @@ make_helper(nemu_trap) {
 					free(buf);
 				}
 				//return r;
+				break;
 		}
 
 		default:
