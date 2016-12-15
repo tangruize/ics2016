@@ -251,7 +251,7 @@ void cpu_exec(volatile uint32_t n) {
 		strcat(asm_buf, assembly);
 		Log_write("%s, si %d\n", asm_buf, till_now_si);
 		if(n_temp < MAX_INSTR_TO_PRINT || is_changed==true) {
-			printf("%120s, si %d\n", asm_buf, till_now_si);
+			printf("%120.s, si %d\n", asm_buf, till_now_si);
 		}
 #endif
 
