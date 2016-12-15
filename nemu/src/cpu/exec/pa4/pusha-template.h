@@ -20,7 +20,7 @@ make_helper(concat(pusha_, SUFFIX)) {
   }
   cpu.gpr[R_ESP]._32 = temp;
   #endif
-
+  print_asm("pusha");
   return 1;
 }
 

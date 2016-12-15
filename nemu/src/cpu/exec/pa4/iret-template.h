@@ -9,6 +9,7 @@ make_helper(iret) {
   cpu.gpr[R_ESP]._32 += 4;
   cpu.eflags_init = swaddr_read(cpu.gpr[R_ESP]._32, 4, R_SS);
   cpu.gpr[R_ESP]._32 += 4;
+  print_asm("iret");
   return 1;
 }
 

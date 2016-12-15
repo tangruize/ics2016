@@ -12,6 +12,7 @@ make_helper(movcr_r2rm) {
 	if (op_src->reg==R_CR3) {
 		clear_TLB();
 	}
+	print_asm("movcr");
 	return len+1;
 }
 
@@ -21,6 +22,7 @@ make_helper(movcr_rm2r) {
 	//printf("%x %x %x %x\n",op_dest->reg,op_dest->val,op_src->reg, creg(op_src->reg));
 	//Log_write("%x %x %x %x\n",op_dest->reg,op_dest->val,op_src->reg, creg(op_src->reg));
 	REG(op_dest->reg)=creg(op_src->reg);
+	print_asm("movcr");
 	return len+1;
 }
 

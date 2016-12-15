@@ -2,6 +2,7 @@
 
 make_helper(concat(out_,SUFFIX)) {
   pio_write(cpu.gpr[R_EDX]._16, DATA_BYTE, REG(R_EAX));
+  print_asm("out");
   return 1;
 }
 

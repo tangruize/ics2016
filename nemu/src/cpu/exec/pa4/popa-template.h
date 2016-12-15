@@ -25,7 +25,7 @@ make_helper(concat(popa_, SUFFIX)) {
     cpu.gpr[R_ESP]._32 += 4;
   }
   #endif
-
+  print_asm("popa");
   return 1;
 }
 

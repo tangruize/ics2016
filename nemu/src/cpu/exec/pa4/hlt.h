@@ -3,6 +3,7 @@
 
 make_helper(hlt) {
   while (cpu.INTR == 0);
+  print_asm("hlt");
   return 1;
 }
 
