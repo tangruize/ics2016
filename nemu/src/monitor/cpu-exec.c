@@ -157,7 +157,7 @@ void print_bin_instr(swaddr_t eip, int len) {
 	for(i = 0; i < len; i ++) {
 		l += sprintf(asm_buf + l, "%02x ", instr_fetch(eip + i, 1));
 	}
-	sprintf(asm_buf + l, "%*.s", 50 - (12 + 3 * len), "");
+	sprintf(asm_buf + l, "%*.s, si %d", 50 - (12 + 3 * len), "", till_now_si);
 }
 
 /* This function will be called when an `int3' instruction is being executed. */
