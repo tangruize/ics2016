@@ -55,6 +55,7 @@ uint32_t loader() {
 			#else
 				ramdisk_read((uint8_t*)addr,ph->p_offset,ph->p_filesz);
 			#endif
+			set_bp();
 
 
 			/* TODO: zero the memory region
