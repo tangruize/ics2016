@@ -5,6 +5,7 @@
 void add_irq_handle(int, void (*)(void));
 uint32_t mm_brk(uint32_t);
 int fs_ioctl(int, uint32_t, void *);
+void serial_printc(char);
 
 static void sys_brk(TrapFrame *tf) {
 	tf->eax = mm_brk(tf->ebx);
@@ -15,10 +16,16 @@ static void sys_ioctl(TrapFrame *tf) {
 }
 
 ssize_t sys_write(int fd, const void *buf, size_t len) {
-	asm	volatile(".byte	0xd6"	:	:	"a"(2),	"b"(fd), "c"(buf),	"d"(len));
+	/*asm	volatile(".byte	0xd6"	:	:	"a"(2),	"b"(fd), "c"(buf),	"d"(len));
 	int val;
 	asm volatile("movl %%eax, %0" : "=r"(val));
-	return val;
+	return val;*/
+	int i =0;
+	const char *p = buf;
+	for (;i<len;++i) {
+		serial_printc(p[i]);
+	}
+	return len;
 }
 
 void do_syscall(TrapFrame *tf) {

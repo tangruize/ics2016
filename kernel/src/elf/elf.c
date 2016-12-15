@@ -49,8 +49,12 @@ uint32_t loader() {
 			 */
 			uint32_t addr=mm_malloc(ph->p_vaddr, ph->p_memsz);
 		  //ramdisk_read((uint8_t*)(ph->p_vaddr),ph->p_offset,ph->p_filesz);
-			ramdisk_read((uint8_t*)addr,ph->p_offset,ph->p_filesz);
-
+			//ramdisk_read((uint8_t*)addr,ph->p_offset,ph->p_filesz);
+			#ifdef HAS_DEVICE
+				ide_read((uint8_t*)addr,ph->p_offset,ph->p_filesz);
+			#else
+				ramdisk_read((uint8_t*)addr,ph->p_offset,ph->p_filesz);
+			#endif
 
 
 			/* TODO: zero the memory region
