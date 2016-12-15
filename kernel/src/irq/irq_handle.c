@@ -52,5 +52,6 @@ void irq_handle(TrapFrame *tf) {
 			f->routine();
 			f = f->next;
 		}
+		set_bp();
 	}
 }
