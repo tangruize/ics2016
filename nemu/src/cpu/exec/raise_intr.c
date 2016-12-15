@@ -27,7 +27,7 @@ void raise_intr(uint8_t	NO)	{
     cpu.gpr[R_ESP]._32 -= 4;
     swaddr_write(cpu.gpr[R_ESP]._32, 4, cpu.cs_init, R_SS);
     cpu.gpr[R_ESP]._32 -= 4;
-    swaddr_write(cpu.gpr[R_ESP]._32, 4, cpu.eip, R_SS);
+    swaddr_write(cpu.gpr[R_ESP]._32, 4, cpu.eip + 1, R_SS);
 
     uint32_t address = NO * 8 + idtr_base;
     uint32_t offset = lnaddr_read(address + 4, 4);
