@@ -100,7 +100,7 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 
 	if (!page_dry_run) {
 		if (!(PDE_page_frame&0x1)) {
-			fprintf(stderr, "lnaddr: 0x%x, page_frame: 0x%x\n", lnaddr, PDE_page_frame);
+			fprintf(stderr, "lnaddr: 0x%x, page_frame: 0x%x, eip: 0x%x\n", lnaddr, PDE_page_frame, cpu.eip);
 			assert(PDE_page_frame&0x1);
 		}
 		tmp=addr.page;
