@@ -15,7 +15,7 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
 	uint32_t pdir_idx;
-	PDE *pdir = get_updir();
+	PDE *pdir = (PDE*)(((unsigned)get_updir() & ~PAGE_MASK) + 4096);
 	PTE *ptable = (PTE *)pdir + 4096;
  	for (pdir_idx = 0; pdir_idx < SCR_SIZE / PT_SIZE; pdir_idx ++) {
  		pdir[pdir_idx].val = make_pde(ptable);
