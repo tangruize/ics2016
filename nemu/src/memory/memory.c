@@ -99,7 +99,10 @@ hwaddr_t page_translate(lnaddr_t lnaddr) {
 	//printf("page : %x %x\n",pdb, PDE_page_frame);
 
 	if (!page_dry_run) {
-		assert(PDE_page_frame&0x1);
+		if (!(PDE_page_frame&0x1)) {
+			fprintf(stderr, "lnaddr: 0x%x, page_frame: 0x%x\n", lnaddr, PDE_page_frame);
+			assert(PDE_page_frame&0x1);
+		}
 		tmp=addr.page;
 		uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
 		assert(PTE_page_frame&0x1);
