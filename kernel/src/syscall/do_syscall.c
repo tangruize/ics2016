@@ -16,16 +16,19 @@ static void sys_ioctl(TrapFrame *tf) {
 }
 
 ssize_t sys_write(int fd, const void *buf, size_t len) {
-	/*asm	volatile(".byte	0xd6"	:	:	"a"(2),	"b"(fd), "c"(buf),	"d"(len));
+	#ifndef HAS_DEVICE
+	asm	volatile(".byte	0xd6"	:	:	"a"(2),	"b"(fd), "c"(buf),	"d"(len));
 	int val;
 	asm volatile("movl %%eax, %0" : "=r"(val));
-	return val;*/
+	return val;
+	#else
 	int i =0;
 	const char *p = buf;
 	for (;i<len;++i) {
 		serial_printc(p[i]);
 	}
 	return len;
+	#endif
 }
 
 void do_syscall(TrapFrame *tf) {
