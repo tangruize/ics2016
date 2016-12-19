@@ -118,7 +118,14 @@ extern int nemu_state;
 		}
 		tmp=addr.page;
 		uint32_t PTE_page_frame=hwaddr_read((PDE_page_frame&0xfffff000)+(tmp<<2),4);
-		assert(PTE_page_frame&0x1);
+		//assert(PTE_page_frame&0x1);
+		if (!(PTE_page_frame&0x1)) {
+			fprintf(stderr, "2 lnaddr: 0x%x, page_frame: 0x%x, eip: 0x%x, si: %d\n", lnaddr, PTE_page_frame, cpu.eip, till_now_si);
+			nemu_state = 2;
+			fprintf(stderr, "You should exit\n");
+			return 0;
+			//assert(PDE_page_frame&0x1);
+		}
 
 	//printf("addr : %x\n", (PTE_page_frame&0xfffff000)+addr.off);
 	//Log_write("ln %x, ad %x\n", lnaddr, (PTE_page_frame&0xfffff000)+addr.off);
