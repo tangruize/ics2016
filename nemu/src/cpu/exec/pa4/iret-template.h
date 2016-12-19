@@ -3,7 +3,7 @@
 #define instr iret
 
 make_helper(iret) {
-  cpu.eip = swaddr_read(cpu.gpr[R_ESP]._32, 4, R_SS) - 1;
+  cpu.eip = swaddr_read(cpu.gpr[R_ESP]._32, 4, R_SS) + 1;
   cpu.gpr[R_ESP]._32 += 4;
   cpu.cs_init = (uint16_t)swaddr_read(cpu.gpr[R_ESP]._32, 2, R_SS);
   cpu.gpr[R_ESP]._32 += 4;
