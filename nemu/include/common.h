@@ -8,7 +8,7 @@
 #define IA32_SEG
 //#define DEBUG
 #define LOG_FILE
-//#define USE_CACHE
+#define USE_CACHE
 
 #include "debug.h"
 #include "macro.h"
