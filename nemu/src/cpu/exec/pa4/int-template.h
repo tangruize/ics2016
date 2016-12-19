@@ -4,6 +4,7 @@
 
 static void do_execute() {
   //printf("%hhx\n", op_src->val);
+  cpu.eip += 2;
   raise_intr(op_src->val);
   print_asm("int");
 }
