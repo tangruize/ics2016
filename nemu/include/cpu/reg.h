@@ -257,7 +257,7 @@ typedef union {
 					};
 				};
 			};
-      bool INTR;
+      volatile bool INTR;
 			#endif
     };
 
