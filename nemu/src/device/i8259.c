@@ -52,6 +52,8 @@ static void do_i8259() {
 	}
 
 	intr_NO = master_irq + IRQ_BASE;
+	Log("%d\n",intr_NO);
+	panic("get irq");
 	/* TODO: Uncomment the following line after the `INTR' member
 	 * is added to the CPU_state structure.
 	 */
