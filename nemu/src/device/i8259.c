@@ -35,6 +35,7 @@ static const char ffo_table[] = {
 	4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 };
 
+int test_irq;
 /* i8259 internal */
 static void do_i8259() {
 	int8_t master_irq = master.highest_irq;
@@ -52,8 +53,10 @@ static void do_i8259() {
 	}
 
 	intr_NO = master_irq + IRQ_BASE;
+	if (test_irq) {
 	Log("%d\n",intr_NO);
 	panic("get irq");
+	}
 	/* TODO: Uncomment the following line after the `INTR' member
 	 * is added to the CPU_state structure.
 	 */

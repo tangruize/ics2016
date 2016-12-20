@@ -11,6 +11,8 @@ static bool newkey;
 void keyboard_intr(uint8_t scancode) {
 	if(nemu_state == RUNNING && newkey == false) {
 		i8042_data_port_base[0] = scancode;
+		extern int test_irq;
+		test_irq = 1;
 		i8259_raise_intr(KEYBOARD_IRQ);
 		newkey = true;
 	}
@@ -26,4 +28,3 @@ void init_i8042() {
 	i8042_data_port_base = add_pio_map(I8042_DATA_PORT, 1, i8042_io_handler);
 	newkey = false;
 }
-
