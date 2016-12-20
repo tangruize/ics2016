@@ -39,8 +39,6 @@ main_loop(void) {
 	int now = 0, target;
 	int num_draw = 0;
 	bool redraw;
-	unsigned a = 0;
-	srand((unsigned)*(&a+4));
 
 	while (true) {
 		wait_intr();
