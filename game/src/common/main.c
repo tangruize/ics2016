@@ -3,6 +3,7 @@
 #include "FLOAT.h"
 
 #include <unistd.h>
+#include <stdlib.h>
 
 void init_timer();
 void main_loop();
@@ -20,6 +21,8 @@ main(void) {
 	add_irq_handle(1, keyboard_event);
 
 	init_FLOAT_vfprintf();
+
+	srand(time(NULL));
 
 	Log("game start!");
 
