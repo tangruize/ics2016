@@ -22,7 +22,9 @@ main(void) {
 
 	init_FLOAT_vfprintf();
 
-	srand(time(NULL));
+	volatile unsigned a;
+
+	srand(a);
 
 	Log("game start!");
 
