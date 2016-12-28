@@ -1,5 +1,6 @@
 #include "common.h"
 #include <sys/ioctl.h>
+#include <string.h>
 
 typedef struct {
 	char *name;
@@ -31,7 +32,7 @@ static const file_info file_table[] __attribute__((used)) = {
 	{"word.dat", 5650, 28155717},
 };
 
-static const Fstate file_state[] __attribute__((used)) = {
+static Fstate file_state[] __attribute__((used)) = {
 	{false, 0}, {false, 0}, {false, 0}, {false, 0},
 	{false, 0}, {false, 0}, {false, 0}, {false, 0},
 	{false, 0}, {false, 0}, {false, 0}, {false, 0},
@@ -72,7 +73,7 @@ int	fs_read(int	fd,	void	*buf,	int	len) {
 	}
 	return len;
 }
-int	fs_write(int	fd,	void	*buf,	int	len) {
+int fs_write(int fd, void *buf, int len) {
 	ide_write(buf, file_table[fd - 3].disk_offset + file_state[fd - 3].offset, len);
 	file_state[fd - 3].offset += len;
 	return len;

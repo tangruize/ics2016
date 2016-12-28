@@ -16,7 +16,7 @@ static void sys_ioctl(TrapFrame *tf) {
 }
 
 int	fs_write(int	fd,	void	*buf,	int	len);
-ssize_t sys_write(int fd, const void *buf, size_t len) {
+ssize_t sys_write(int fd, void *buf, size_t len) {
 	#ifndef HAS_DEVICE
 	asm	volatile(".byte	0xd6"	:	:	"a"(2),	"b"(fd), "c"(buf),	"d"(len));
 	int val;
