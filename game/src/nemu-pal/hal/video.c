@@ -11,8 +11,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 		SDL_Surface *dst, SDL_Rect *dstrect) {
 	assert(dst && src);
 
-	//int sx = (srcrect == NULL ? 0 : srcrect->x);
-	//int sy = (srcrect == NULL ? 0 : srcrect->y);
+	int sx = (srcrect == NULL ? 0 : srcrect->x);
+	int sy = (srcrect == NULL ? 0 : srcrect->y);
 	int dx = (dstrect == NULL ? 0 : dstrect->x);
 	int dy = (dstrect == NULL ? 0 : dstrect->y);
 	int w = (srcrect == NULL ? src->w : srcrect->w);
@@ -23,12 +23,12 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 		dstrect->w = w;
 		dstrect->h = h;
 	}
-	/*int i;
+	int i;
 	for (i=0; i<h; ++i) {
 		memcpy(dst->pixels + dx + dy * dst->w, src->pixels + sx + sy * src->w, w);
 		dst->pixels += dst->w;
 		src->pixels += src->w;
-	}*/
+	}
 
 	/* TODO: copy pixels from position (`sx', `sy') with size
 	 * `w' X `h' of `src' surface to position (`dx', `dy') of
