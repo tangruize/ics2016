@@ -1,7 +1,7 @@
 #ifndef __SET_ELF_VAR_H__
 #define __SET_ELF_VAR_H__
 
-#define VAR_MAX 256
+#define VAR_MAX 1024
 #define MAX_LEN 128
 #define NO_NAME "UNKNOWN"
 
