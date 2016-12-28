@@ -17,7 +17,7 @@ static int key_state[NR_KEYS];
 void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
-	assert(0);
+	//assert(0);
 }
 
 static inline int
@@ -44,7 +44,7 @@ clear_key(int index) {
 	key_state[index] = KEY_STATE_EMPTY;
 }
 
-bool 
+bool
 process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int)) {
 	cli();
 	/* TODO: Traverse the key states. Find a key just pressed or released.
@@ -55,7 +55,7 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
 	 * Remember to enable interrupts before returning from the function.
 	 */
 
-	assert(0);
+	//assert(0);
 	sti();
 	return false;
 }
