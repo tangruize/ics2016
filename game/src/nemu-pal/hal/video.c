@@ -42,6 +42,15 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	assert(dst);
 	assert(color <= 0xff);
 
+	int w = (dstrect) ? dstrect->w : dst->w;
+	int h = (dstrect) ? dstrect->h : dst->h;
+	uint8_t *p = dst->pixels + ((dstrect) ? dstrect->x + dstrect->y * dst->w : 0);
+	int i = 0 ;
+	for (;i<h;++i) {
+		memset(p, color, w);
+		p += dst->w;
+	}
+
 	/* TODO: Fill the rectangle area described by `dstrect'
 	 * in surface `dst' with color `color'. If dstrect is
 	 * NULL, fill the whole surface.
