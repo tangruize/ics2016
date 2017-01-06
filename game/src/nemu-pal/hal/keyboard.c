@@ -14,12 +14,6 @@ static const int keycode_array[] = {
 
 static int key_state[NR_KEYS];
 
-void
-keyboard_event(void) {
-	/* TODO: Fetch the scancode and update the key states. */
-	//assert(0);
-}
-
 static inline int
 get_keycode(int index) {
 	assert(index >= 0 && index < NR_KEYS);
@@ -42,6 +36,25 @@ static inline void
 clear_key(int index) {
 	assert(index >= 0 && index < NR_KEYS);
 	key_state[index] = KEY_STATE_EMPTY;
+}
+
+void
+keyboard_event(void) {
+	/* TODO: Fetch the scancode and update the key states. */
+	int key = in_byte(0x60), i = 0;
+	while (i++ < NR_KEYS) {
+		if (key == get_keycode(i)) {
+			int state = query_key(i);
+			if (state == KEY_STATE_WAIT_RELEASE) {
+				key_state[i] = state;
+			}
+			else {
+				key_state[i] = KEY_STATE_PRESS;
+			}
+			break;
+		}
+	}
+	//assert(0);
 }
 
 bool
