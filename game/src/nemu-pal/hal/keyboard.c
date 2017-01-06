@@ -79,7 +79,9 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
 			return 1;
 		}
 		else if (query_key(i) == KEY_STATE_RELEASE) {
-			
+			key_release_callback(get_keycode(i));
+			clear_key(i);
+			return 1;
 		}
 	}
 	//assert(0);
