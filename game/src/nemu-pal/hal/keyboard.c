@@ -42,7 +42,7 @@ void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
 	int key = in_byte(0x60), i = 0;
-	while (i++ < NR_KEYS) {
+	for (i = 0; i < NR_KEYS; ++i) {
 		if (key == get_keycode(i)) {
 			int state = query_key(i);
 			if (state == KEY_STATE_WAIT_RELEASE) {
@@ -51,6 +51,10 @@ keyboard_event(void) {
 			else {
 				key_state[i] = KEY_STATE_PRESS;
 			}
+			break;
+		}
+		else if (key == get_keycode(i) + 0x80) {
+			key_state[i] = KEY_STATE_RELEASE;
 			break;
 		}
 	}
