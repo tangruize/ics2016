@@ -19,10 +19,10 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 	int h = (srcrect == NULL ? src->h : srcrect->h);
 	//if(dst->w - dx < w) { w = dst->w - dx; }
 	//if(dst->h - dy < h) { h = dst->h - dy; }
-	if(dstrect != NULL) {
+	/*if(dstrect != NULL) {
 		dstrect->w = w;
 		dstrect->h = h;
-	}
+	}*/
 	int i;
 	for (i=0; i<h; ++i) {
 		memcpy(dst->pixels + dx + dy * dst->w, src->pixels + sx + sy * src->w, w);
