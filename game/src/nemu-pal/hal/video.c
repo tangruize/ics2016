@@ -17,8 +17,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 	int dy = (dstrect == NULL ? 0 : dstrect->y);
 	int w = (srcrect == NULL ? src->w : srcrect->w);
 	int h = (srcrect == NULL ? src->h : srcrect->h);
-	if(dst->w - dx < w) { w = dst->w - dx; }
-	if(dst->h - dy < h) { h = dst->h - dy; }
+	//if(dst->w - dx < w) { w = dst->w - dx; }
+	//if(dst->h - dy < h) { h = dst->h - dy; }
 	if(dstrect != NULL) {
 		dstrect->w = w;
 		dstrect->h = h;
