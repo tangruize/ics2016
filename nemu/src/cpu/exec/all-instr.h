@@ -9,6 +9,7 @@
 #include "data-mov/movzx.h"
 #include "data-mov/cwdq.h"
 #include "data-mov/cmovcc.h"
+#include "data-mov/cbw.h"
 
 
 #include "arith/dec.h"
